@@ -313,3 +313,6 @@ dialog::backdrop{background:#15362969}
 @media(min-width:901px){.pick-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .knowledge-card.compact .edition{display:block;margin-bottom:8px}
 
+
+/* Focused administrative-law recitation */
+.essay-more{width:100%;border-top:1px solid #dbe6d7;margin-top:8px;padding-top:8px}.essay-more>summary{cursor:pointer;color:#6a7e6c;font-size:12px;padding:5px 2px}.essay-more .theme-navigation{margin-top:8px}.recite-label{display:block;color:#216c61;font-size:12px;font-weight:600;margin-bottom:7px}.reader .recite-label+.summary{margin-top:0;white-space:pre-wrap}

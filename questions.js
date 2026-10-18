@@ -1,4 +1,4 @@
-import {saveQuestion,saveAnswerNote,saveQuestionDraft} from './storage.js?v=20261018-11';
+import {saveQuestion,saveAnswerNote,saveQuestionDraft} from './storage.js?v=20261018-14';
 
 const $=s=>document.querySelector(s);
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
@@ -6,6 +6,7 @@ const fields=['paper','number','subject','source','myAnswer','doubt','stem'];
 const blank=()=>({paper:'',number:'',subject:'行测',source:'',myAnswer:'',doubt:'',stem:''});
 const label=q=>`${q.paper} · 第 ${q.number.replace(/^第\s*|\s*题$/g,'')} 题`;
 const identity=q=>[q.paper,q.number,q.subject,q.source].join('\n');
+const validQuestion=q=>q&&typeof q==='object'&&!Array.isArray(q)&&typeof q.stem==='string'&&q.stem.trim()&&['prompt','versionNote','sourceUrl'].every(k=>typeof q[k]==='string')&&Array.isArray(q.options)&&q.options.length<=8&&q.options.every(o=>o&&typeof o.label==='string'&&/^[A-H]$/.test(o.label)&&typeof o.text==='string'&&o.text.trim())&&new Set(q.options.map(o=>o.label)).size===q.options.length;
 
 // Copy only fields the learner explicitly entered for this question.
 export function questionMessage(id,q){
@@ -39,6 +40,7 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
   try{const response=await fetch('./answers.json',{cache:'no-cache'});if(!response.ok)throw Error('解析暂时无法加载');const data=await response.json();
    const ids=new Set();if(data.schema!==1||!Array.isArray(data.answers))throw Error('解析文件格式不正确');
    for(const a of data.answers){if(!/^[a-z0-9-]{1,64}$/.test(a.id)||['constructor','prototype','__proto__'].includes(a.id)||ids.has(a.id)||!Array.isArray(a.requestIds)||!a.requestIds.every(id=>/^qa-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id))||!['paper','number','subject','sourceVersion','title','summary','answer','reviewedAt'].every(k=>typeof a[k]==='string')||!Array.isArray(a.sections)||!a.sections.every(s=>typeof s.heading==='string'&&typeof s.body==='string')||!Array.isArray(a.sources)||!a.sources.every(s=>typeof s.title==='string'&&typeof s.url==='string'))throw Error('解析内容格式不正确');ids.add(a.id);}
+   if(data.answers.some(a=>a.question!==undefined&&!validQuestion(a.question)))throw Error('题目内容格式不正确');
    if(seq!==requestSequence)return;answers=data.answers;loadState='ready';
   }catch{if(seq!==requestSequence)return;loadState='error';}render();
  }
@@ -57,7 +59,7 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
    if(!filtered.length)target.append(empty(mine.length?'没有符合条件的错题':'把不会的，留在这里',mine.length?'试试试卷名、题号或错因，也可以切回“全部状态”。':'先记下试卷和题号，存进自己的错题库。复习时回来记错因，弄懂后做个标记。',mine.length?null:newQuestion));
    for(const[id,q]of filtered){const b=button('','knowledge-card qa-card',()=>openQuestion(id)),meta=el('div','qa-meta'),s=requestStatus(id,q);meta.append(el('span','',q.subject),el('span','qa-badge '+s,loadState!=='ready'&&!q.mastered?'待核对解析':statusLabel[s]));b.append(meta,el('h3','',label(q)),paragraph(q.doubt||'截图和疑问可在微信补充'),el('span','card-state',[q.source,q.note?'有复盘笔记':'点开记录自己的思路'].filter(Boolean).join(' · ')));target.append(b);}
   }else{
-   const filtered=answers.filter(a=>(status==='all'||(status==='unmastered'?!publicNote(a.id).mastered:status==='understood'?publicNote(a.id).mastered:true))&&words.every(w=>[a.title,a.paper,a.number,a.subject,a.summary,a.answer,...a.sections.map(s=>s.heading+' '+s.body),publicNote(a.id).note].join(' ').toLowerCase().includes(w)));
+   const filtered=answers.filter(a=>(status==='all'||(status==='unmastered'?!publicNote(a.id).mastered:status==='understood'?publicNote(a.id).mastered:true))&&words.every(w=>[a.title,a.paper,a.number,a.subject,a.summary,a.answer,a.question?.stem,a.question?.prompt,...(a.question?.options||[]).map(o=>o.text),...a.sections.map(s=>s.heading+' '+s.body),publicNote(a.id).note].join(' ').toLowerCase().includes(w)));
    if(!filtered.length&&loadState==='ready')target.append(empty(answers.length?'没有符合条件的错题':'还没有收录错题',answers.length?'试试试卷名、题号或错因，或切回“全部状态”。':'把试卷名称和题号发给张菁伟，必要时附上截图。核对原题后，错题与解析会一起更新在这里。你回来复习、记错因就好。'));
    for(const a of filtered){const b=button('','knowledge-card qa-card',()=>openAnswer(a)),meta=el('div','qa-meta');meta.append(el('span','',a.subject),el('span','qa-badge answered',publicNote(a.id).mastered?'已弄懂':'已发布解析'));b.append(meta,el('h3','',a.title),paragraph(label(a)),el('span','card-state','核对日期 '+a.reviewedAt+' · 查看讲解与记笔记'));target.append(b);}
   }
@@ -127,10 +129,18 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
   noteEditor(content,q.note,(note,feedback)=>saveNote('question',id,note,feedback),{mastered:q.mastered,onMastered:(mastered,feedback)=>{const ok=commit(()=>saveQuestion(localStorage,id,{mastered}),feedback);render();return ok;}});
  }
  function openAnswer(a,requestId){
-  const content=openModal('题目解析');if(requestId)content.append(button('‹ 返回临时记题','text-btn',()=>openQuestion(requestId)));
-  content.append(el('h3','qa-title',a.title),paragraph(label(a)+' · '+a.subject,'muted'),paragraph('核对日期 '+a.reviewedAt+' · 学习解析，非官方标准答案','muted'));
-  if(a.summary)content.append(paragraph(a.summary,'qa-notice'));
-  content.append(el('h3','','答案 / 作答要点'),paragraph(a.answer));for(const s of a.sections)content.append(el('h3','',s.heading),paragraph(s.body));
+  const content=openModal('题目与解析');if(requestId)content.append(button('‹ 返回临时记题','text-btn',()=>openQuestion(requestId)));
+  content.append(el('h3','qa-title',a.question?label(a):a.title),paragraph(a.question?a.subject:label(a)+' · '+a.subject,'muted'),paragraph('核对日期 '+a.reviewedAt+' · 学习解析，非官方标准答案','muted'));
+  let explanation=content;
+  if(a.question){
+   const q=a.question,question=el('section','qa-original');question.append(el('h3','','题目'),paragraph(q.stem,'qa-copy qa-original-stem'));
+   if(q.prompt)question.append(paragraph(q.prompt,'qa-copy qa-question-prompt'));
+   if(q.options.length){const options=el('ol','qa-options');options.setAttribute('aria-label','题目选项');for(const option of q.options){const item=el('li','qa-option');item.append(el('span','qa-option-label',option.label),el('span','qa-option-text',option.text));options.append(item);}question.append(options);}
+   if(q.versionNote)question.append(paragraph(q.versionNote,'muted qa-version-note'));
+   content.append(question);explanation=el('details','qa-explanation');explanation.append(el('summary','','查看答案与解析'));content.append(explanation);
+  }
+  if(a.summary)explanation.append(paragraph(a.summary,'qa-notice'));
+  explanation.append(el('h3','','答案 / 作答要点'),paragraph(a.answer));for(const s of a.sections)explanation.append(el('h3','',s.heading),paragraph(s.body));
   if(a.sources.length){const details=el('details','reader-sources');details.append(el('summary','','原题与核对来源'));for(const s of a.sources){if(!/^https?:\/\//.test(s.url))continue;const link=el('a','qa-source-link',s.title+' ↗');link.href=s.url;link.target='_blank';link.rel='noopener noreferrer';details.append(link);}content.append(details);}
   // When opened from a local question, keep its existing reflection beside the explanation.
   if(requestId){const q=state().questions[requestId];noteEditor(content,q.note,(note,feedback)=>saveNote('question',requestId,note,feedback),{mastered:q.mastered,onMastered:(mastered,feedback)=>{const ok=commit(()=>saveQuestion(localStorage,requestId,{mastered}),feedback);render();return ok;}});}

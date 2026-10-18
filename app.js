@@ -1,5 +1,5 @@
-import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261018-11';
-import {createQuestionBoard} from './questions.js?v=20261018-11';
+import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261018-14';
+import {createQuestionBoard} from './questions.js?v=20261018-14';
 const $=s=>document.querySelector(s);
 const categories=['词语辨析','申论','政治理论','法律常识','科技常识','资料分析','判断推理','言语理解','数量关系'];
 const browseCategories=['词语辨析','申论','政治理论','常识','资料分析','判断推理','言语理解','数量关系'];

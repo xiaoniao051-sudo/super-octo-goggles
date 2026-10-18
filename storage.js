@@ -17,7 +17,7 @@ function safeId(id,pattern=entryId){if(typeof id!=='string'||!pattern.test(id)||
 function normalizeDraft(draft){if(draft==null)return null;safeRecord(draft);const result={};for(const key of draftKeys)result[key]=text(draft[key],questionLimits[key]);return result;}
 function normalizeQuestion(item){
  safeRecord(item);const result={};
- for(const[key,limit]of Object.entries(questionLimits))result[key]=text(item[key],limit,['paper','number','doubt'].includes(key));
+ for(const[key,limit]of Object.entries(questionLimits))result[key]=text(item[key],limit,['paper','number'].includes(key));
  result.mastered=bool(item.mastered);result.createdAt=time(item.createdAt);result.updatedAt=time(item.updatedAt);return result;
 }
 function validate(state){

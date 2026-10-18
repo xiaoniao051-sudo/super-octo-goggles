@@ -334,3 +334,11 @@ dialog::backdrop{background:#15362969}
 .qa-check{display:flex;gap:10px;align-items:center;min-height:48px;margin-top:8px;font-size:14px}.qa-check input{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0}.qa-source-link{display:block;margin:10px 0}.qa-copy-box{min-height:290px;margin-bottom:14px}.qa-note-section{margin-top:25px}.qa-note-section .note-heading{margin-top:0}
 #qa-loading:not(:empty){margin-bottom:18px}
 @media(max-width:680px){.qa-heading{align-items:flex-start}.qa-heading .primary-btn{margin-top:10px;padding:10px 12px;font-size:13px}.qa-intro{padding:17px 16px;margin-bottom:20px}.qa-steps{flex-direction:column;gap:5px;font-size:13px}.qa-intro p{font-size:12px;margin-top:11px}.qa-toolbar{gap:5px}.qa-tabs{flex:1}.qa-tabs .filter-chip{flex:1;padding:9px 8px;font-size:12px}.qa-toolbar>.text-btn{font-size:12px;white-space:nowrap}.qa-form-grid{gap:14px 10px}.qa-actions{flex-direction:column}.qa-actions>button{width:100%;font-size:14px}.qa-title{font-size:19px}.qa-copy{font-size:16px}.qa-id{font-size:10px}.qa-notice{font-size:12px}.qa-home-entry{margin-top:20px}}
+
+/* Quick question entry: two required fields, one optional disclosure. */
+.qa-quick-hint{font-size:14px;color:var(--muted);margin:0 0 18px;line-height:1.8}
+.qa-optional{margin:17px 0 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.qa-optional>summary{padding:11px 2px;min-height:46px;font-size:13px;color:var(--muted);cursor:pointer}
+.qa-optional[open]>.qa-form-grid{padding:8px 0 18px}
+.qa-optional-filled{font-size:11px;color:var(--accent)}
+.qa-quick-actions{display:flex;flex-direction:column;margin:12px 0 0;gap:4px}.qa-quick-actions .primary-btn{width:100%}.qa-quick-actions .text-btn{align-self:center;font-size:12px}

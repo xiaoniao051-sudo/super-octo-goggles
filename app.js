@@ -1,5 +1,5 @@
-import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261018-10';
-import {createQuestionBoard} from './questions.js?v=20261018-10';
+import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261018-11';
+import {createQuestionBoard} from './questions.js?v=20261018-11';
 const $=s=>document.querySelector(s);
 const categories=['词语辨析','申论','政治理论','法律常识','科技常识','资料分析','判断推理','言语理解','数量关系'];
 const browseCategories=['词语辨析','申论','政治理论','常识','资料分析','判断推理','言语理解','数量关系'];
@@ -107,7 +107,7 @@ async function exportNotes(){try{await flush();study=loadStudy(localStorage);dow
 function helpModal(){const target=openModal('怎样用得顺手');for(const[title,body]of[
  ['像 App 一样打开','用 iPhone 的 Safari 打开本站，在“共享”中选择“添加到主屏幕”，再点“添加”。建议固定从这个入口使用。'],
  ['每天积累一点，再主动回忆','从“词语辨析”说清一组词的区别；从“执法申论”先背一个人物、几句背景句和名言，再结合题目改写。原有五位一体案例放在拓展素材里。练习先想再看答案，收藏不熟悉的，到“复习”集中回忆。'],
- ['题目答疑，记下来一起弄懂','点“记一道题”，填好试卷名称、卷型、题号和疑问。点“给张菁伟发微信~qaq”会复制文字，请自己到微信粘贴发送，题目截图另外附上。解析更新后，按答疑编号出现在原问题下，也可从“已发布解析”查看。个人问题和复盘仅存本机，解析公开。'],
+ ['错题库，题目和解析一起看','把试卷名称、题号或截图发给张菁伟，他转交后核对原题并整理解析，再统一更新到这里。打开“错题与解析”即可复习，按“未弄懂”筛选，在题目里记错因、标记已弄懂；无需自己录入。想先记住题号，可用“临时记题”。题目与解析公开，自己的笔记和掌握记录只存本机。'],
  ['笔记属于你自己','笔记和进度只存当前设备的浏览器，不上传，也不会让其他访客看到。不同设备不会自动同步。'],
  ['备份，放在“我的”','在“我的 → 备份笔记”保存文件。更换设备、浏览器或入口前先备份，再导入。清除网站数据会影响笔记，无痕浏览不适合长期保存。'],
  ['其他模块，也在知识库','资料分析、判断推理、言语理解和数量关系仍可从“知识库”进入。精选卡帮助积累与理解，完整备考还需配合考试大纲和历年真题。']])target.append(el('h3','',title),el('p','modal-caption',body));const a=el('a','','Apple 官方主屏幕操作说明 ↗');a.href='https://support.apple.com/zh-cn/guide/iphone/iph42ab2f3a7/ios';a.target='_blank';a.rel='noopener noreferrer';target.append(a);}

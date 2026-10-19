@@ -343,3 +343,8 @@ dialog::backdrop{background:#15362969}
 .qa-optional[open]>.qa-form-grid{padding:8px 0 18px}
 .qa-optional-filled{font-size:11px;color:var(--accent)}
 .qa-quick-actions{display:flex;flex-direction:column;margin:12px 0 0;gap:4px}.qa-quick-actions .primary-btn{width:100%}.qa-quick-actions .text-btn{align-self:center;font-size:12px}
+
+.prediction-home-entry{margin-top:22px;background:#fcf7e9;border-color:#eadfbd}
+.prediction-home-entry>svg{color:#9b7d36}
+.prediction-note,.prediction-reader-note{background:#fcf7e9;border:1px solid #eadfbd;border-radius:13px;color:#725e2d}
+.prediction-reader-note{padding:12px 16px;font-size:13px;line-height:1.85}

@@ -1,5 +1,5 @@
-import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261018-14';
-import {createQuestionBoard} from './questions.js?v=20261018-14';
+import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261019-15';
+import {createQuestionBoard} from './questions.js?v=20261019-15';
 const $=s=>document.querySelector(s);
 const categories=['词语辨析','申论','政治理论','法律常识','科技常识','资料分析','判断推理','言语理解','数量关系'];
 const browseCategories=['词语辨析','申论','政治理论','常识','资料分析','判断推理','言语理解','数量关系'];
@@ -121,3 +121,4 @@ async function init(){try{[library,study]=await Promise.all([api('/api/library')
  }catch(e){showScreen('reading');$('#reader').replaceChildren(el('h2','','资料库暂时无法读取'),el('p','text',e.message));$('#reader-progress').textContent='加载失败';$('#jump-note').hidden=true;$('#next-card').hidden=true;$('#back-list').onclick=()=>location.reload();const b=el('button','quiet-btn','导出当前设备原始笔记');b.onclick=()=>{try{const raw=localStorage.getItem('guokao-2027-study-v1');if(raw)downloadBackup(raw);else toast('当前设备没有已保存笔记');}catch(err){toast('浏览器暂时不允许读取笔记');}};$('#reader').append(b);}
 }
 init();
+

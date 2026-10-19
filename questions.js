@@ -1,4 +1,4 @@
-import {saveQuestion,saveAnswerNote,saveQuestionDraft} from './storage.js?v=20261018-14';
+import {saveQuestion,saveAnswerNote,saveQuestionDraft} from './storage.js?v=20261019-15';
 
 const $=s=>document.querySelector(s);
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
@@ -41,15 +41,18 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
    const ids=new Set();if(data.schema!==1||!Array.isArray(data.answers))throw Error('解析文件格式不正确');
    for(const a of data.answers){if(!/^[a-z0-9-]{1,64}$/.test(a.id)||['constructor','prototype','__proto__'].includes(a.id)||ids.has(a.id)||!Array.isArray(a.requestIds)||!a.requestIds.every(id=>/^qa-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id))||!['paper','number','subject','sourceVersion','title','summary','answer','reviewedAt'].every(k=>typeof a[k]==='string')||!Array.isArray(a.sections)||!a.sections.every(s=>typeof s.heading==='string'&&typeof s.body==='string')||!Array.isArray(a.sources)||!a.sources.every(s=>typeof s.title==='string'&&typeof s.url==='string'))throw Error('解析内容格式不正确');ids.add(a.id);}
    if(data.answers.some(a=>a.question!==undefined&&!validQuestion(a.question)))throw Error('题目内容格式不正确');
-   if(seq!==requestSequence)return;answers=data.answers;loadState='ready';
+   if(data.answers.some(a=>a.addedAt!==undefined&&(typeof a.addedAt!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(a.addedAt))))throw Error('收录日期格式不正确');
+   // Stable sorting preserves same-day and undated legacy order; revisions do not move a question.
+   if(seq!==requestSequence)return;answers=[...data.answers].sort((a,b)=>(b.addedAt||'').localeCompare(a.addedAt||''));loadState='ready';
   }catch{if(seq!==requestSequence)return;loadState='error';}render();
  }
  function render(){
-  const mine=Object.entries(state().questions||{}).sort((a,b)=>(b[1].updatedAt||'').localeCompare(a[1].updatedAt||''));
+  const mine=Object.entries(state().questions||{}).sort((a,b)=>(b[1].createdAt||'').localeCompare(a[1].createdAt||''));
   $('#qa-mine-count').textContent=mine.length;$('#qa-answer-count').textContent=loadState==='ready'?answers.length:'—';
   document.querySelectorAll('[data-qa-tab]').forEach(b=>{b.classList.toggle('active',b.dataset.qaTab===tab);b.setAttribute('aria-pressed',String(b.dataset.qaTab===tab));});
   $('#qa-status').hidden=false;const target=$('#qa-list');target.replaceChildren();
   $('#qa-new').hidden=tab!=='mine';$('#qa-draft-hint').hidden=tab!=='mine'||!state().questionDraft;
+  $('#qa-order-hint').textContent=tab==='mine'?'新记录的题目在前':'新收录的题目在前';
   const loading=$('#qa-loading');loading.replaceChildren();
   if(loadState==='error'){loading.append(paragraph('公开解析暂时没加载出来。错题仍可记录、复习；已有解析的状态暂不判断。','warning'),button('重新加载解析','quiet-btn',loadAnswers));}
   else if(loadState==='loading')loading.append(paragraph('正在核对已发布解析…','muted'));
@@ -151,3 +154,4 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
  $('#qa-search').oninput=e=>{query=e.target.value;render();};$('#qa-status').onchange=e=>{status=e.target.value;render();};
  loadAnswers();return {render,newQuestion,flush,snapshot,hasUnsaved:()=>unsaved.size>0};
 }
+

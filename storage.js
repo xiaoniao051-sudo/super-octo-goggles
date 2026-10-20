@@ -1,4 +1,4 @@
-import {gradeAnswer,reviewEvidenceKey,localDate,compareAttempts} from './review.js?v=20261020-review1';
+import {gradeAnswer,reviewEvidenceKey,localDate,compareAttempts} from './review.js?v=20261020-review2';
 
 // Keep the existing key: changing it would strand notes on this browser.
 export const STATE_KEY='guokao-2027-study-v1';

@@ -1,5 +1,5 @@
-import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261020-review1';
-import {createQuestionBoard} from './questions.js?v=20261020-review1';
+import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261020-review2';
+import {createQuestionBoard} from './questions.js?v=20261020-review2';
 const $=s=>document.querySelector(s);
 const categories=['词语辨析','申论','政治理论','法律常识','科技常识','资料分析','判断推理','言语理解','数量关系'];
 const browseCategories=['预测','词语辨析','申论','政治理论','常识','资料分析','判断推理','言语理解','数量关系'];
@@ -158,7 +158,7 @@ function helpModal(){const target=openModal('怎样用得顺手');for(const[titl
  ['备份，放在“我的”','在“我的 → 备份笔记”保存文件。更换设备、浏览器或入口前先备份，再导入。清除网站数据会影响笔记，无痕浏览不适合长期保存。'],
  ['其他模块，也在知识库','资料分析、判断推理、言语理解和数量关系仍可从“知识库”进入。精选卡帮助积累与理解，完整备考还需配合考试大纲和历年真题。']])target.append(el('h3','',title),el('p','modal-caption',body));const a=el('a','','Apple 官方主屏幕操作说明 ↗');a.href='https://support.apple.com/zh-cn/guide/iphone/iph42ab2f3a7/ios';a.target='_blank';a.rel='noopener noreferrer';target.append(a);}
 async function init(){try{[library,study]=await Promise.all([api('/api/library'),api('/api/state')]);library.cards.sort((a,b)=>categories.indexOf(a.category)-categories.indexOf(b.category)||(a.category==='申论'?(Number(b.kind==='recitation')*2+Number(b.kind==='material'))-(Number(a.kind==='recitation')*2+Number(a.kind==='material')):0)||a.priority-b.priority);$('#updated-at').textContent=library.reviewedAt.replaceAll('-','.');$('#total-cards').textContent=library.cards.length;$('#intro-text').textContent=library.cards.length+' 张精选积累卡：词语辨析、行政执法背诵、政治理论与常识。';
- questionBoard=createQuestionBoard({getStudy:()=>study,setStudy:value=>{study=value;},openModal,toast,navigate});
+ questionBoard=createQuestionBoard({getStudy:()=>study,setStudy:value=>{study=value;},openModal,closeModal,toast,navigate});
  document.querySelectorAll('[data-screen]').forEach(b=>b.onclick=()=>navigate(b.dataset.screen));document.querySelectorAll('a[href="#home"]').forEach(a=>a.onclick=e=>{e.preventDefault();navigate('home');});document.querySelectorAll('[data-review]').forEach(b=>b.onclick=()=>{review=b.dataset.review;rememberPanel();nav();renderReview();});
  $('#search').oninput=()=>{rememberPanel();list(matching());};$('#filter').onchange=()=>{rememberPanel();list(matching());};$('#library-reset').onclick=resetLibrary;$('#help-btn').onclick=helpModal;$('#sources-btn').onclick=sourceModal;$('#scratchpad-btn').onclick=scratchModal;$('#back-list').onclick=backFromReader;$('#jump-note').onclick=()=>{$('#card-note').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});$('#card-note').focus({preventScroll:true});};
  $('#export-btn').onclick=exportNotes;$('#import-btn').onclick=()=>$('#import-file').click();$('#import-file').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{await flush();const result=await api('/api/import',JSON.parse(await file.text()));study=result.state;renderPanels();toast('已合并 '+result.count+' 条知识记录、'+(result.questionCount||0)+' 道问题、'+(result.answerNoteCount||0)+' 条解析复盘、'+(result.reviewAttemptCount||0)+' 次复测');if(result.warnings?.length){const box=openModal('备份合并说明');result.warnings.forEach(t=>box.append(el('p','modal-caption',t)));}}catch(e){toast('导入失败：'+e.message);}finally{$('#import-file').value='';}};

@@ -21,13 +21,13 @@ const values=new Map();let quota=false;
 globalThis.localStorage={getItem:key=>values.get(key)??null,setItem:(key,value)=>{if(quota)throw Error('Quota');values.set(key,value);}};
 const id='qa-12345678-1234-4234-8234-123456789abc';
 saveQuestion(localStorage,id,{paper:'2025 国考行政执法卷',number:'32',source:'粉笔回忆版',doubt:'为什么不选 B？',note:'绝不分享的私人笔记'});
-let study=loadStudy(localStorage),modal,modalTitle,modalTools,modalFooter,modalOptions;const toasts=[];
+let study=loadStudy(localStorage),modal,modalTitle,modalTools,modalFooter,modalOptions,modalClosed=false;const toasts=[];
 let publicData={schema:1,answers:[
  {id:'answer-01',requestIds:[id],paper:study.questions[id].paper,number:'32',subject:'行测',sourceVersion:'粉笔回忆版',title:'正确对应的解析',summary:'逐项比对',answer:'选 D',reviewedAt:'2026-10-18',sections:[],sources:[]},
  {id:'answer-wrong',requestIds:[id],paper:'2024 国考行政执法卷',number:'32',subject:'行测',sourceVersion:'粉笔回忆版',title:'不应关联到原题的解析',summary:'其他试卷',answer:'选 A',reviewedAt:'2026-10-18',sections:[],sources:[]}
 ]};
 globalThis.fetch=async()=>({ok:true,json:async()=>structuredClone(publicData)});
-const board=createQuestionBoard({getStudy:()=>study,setStudy:value=>{study=value;},openModal:(title,options={})=>{modalTitle=title;modalOptions=options;modalTools=options.tools;modalFooter=options.footer;modal=new Node();return modal;},toast:value=>toasts.push(value)});
+const board=createQuestionBoard({getStudy:()=>study,setStudy:value=>{study=value;},openModal:(title,options={})=>{modalClosed=false;modalTitle=title;modalOptions=options;modalTools=options.tools;modalFooter=options.footer;modal=new Node();return modal;},closeModal:()=>{modalClosed=true;},toast:value=>toasts.push(value)});
 const settle=()=>new Promise(resolve=>setImmediate(resolve));await settle();
 
 // Full questions appear before an initially closed explanation, and remain searchable.
@@ -381,7 +381,9 @@ assert.doesNotMatch(textOf(modal),/SPOILER/);
 assert.equal(find(modal,n=>n.tagName==='TEXTAREA'),undefined);
 assert.equal(find(modal,n=>n.className==='qa-explanation'),undefined);
 let practiceForm=find(modal,n=>n.className==='qa-practice-form');
-const practiceSubmit=find(practiceForm,n=>n.type==='submit');
+const practiceSubmit=find(modalFooter,n=>n.type==='submit');
+assert.ok(practiceSubmit,'practice submission is available in the fixed footer');
+assert.equal(practiceSubmit.attributes.form,practiceForm.id);
 assert.equal(practiceSubmit.disabled,true);
 practiceForm.onsubmit({preventDefault(){}});
 assert.equal(study.reviewAttempts[practiceAnswer.id],undefined);
@@ -417,4 +419,79 @@ assert.match(textOf(nodes.get('#qa-today')),/有效作答 1\/1 正确/);
 nodes.get('#qa-search').oninput({target:{value:'SPOILER_ANSWER_B'}});
 assert.equal(nodes.get('#qa-results').textContent,'0 道 / 共 4 道','practice search does not match hidden explanations');
 console.log('PASS neutral practice DOM and search, optional confidence, required selection, failed-save reveal guard, retry deduplication, subjective mastery preservation, all pending statuses excluded from grading');
+
+// A new-question entry starts the whole eligible queue, which survives live filter changes.
+const continuousAnswers=[1,2,3].map(number=>({...practiceAnswer,id:'continuous-'+number,number:String(number),paper:'连续练习测试卷'}));
+publicData={schema:1,answers:[...continuousAnswers,{...continuousAnswers[0],id:'continuous-pending',number:'4',verification:{status:'pending',note:'待核对'},correctOption:undefined}]};
+await nodes.get('#qa-refresh').onclick();
+tabs[2].onclick();
+find(nodes.get('#qa-today'),n=>n.tagName==='BUTTON'&&n.textContent==='连续做新题').onclick();
+assert.equal(modal.dataset.answerId,'continuous-1');
+assert.equal(find(modalFooter,n=>n.className==='qa-reader-position').textContent,'1 / 3');
+const submitChoice=(option='B',confidence='')=>{
+ const form=find(modal,n=>n.className==='qa-practice-form');
+ const submit=find(modalFooter,n=>n.type==='submit');
+ assert.equal(submit.attributes.form,form.id);
+ assert.equal(submit.disabled,true);
+ assert.doesNotMatch(textOf(modal),/SPOILER/);
+ assert.equal(find(modal,n=>n.className==='qa-explanation'),undefined);
+ assert.ok(walk(form).filter(n=>n.name==='practice-option').every(n=>!n.checked));
+ assert.equal(find(form,n=>n.name==='practice-confidence'&&n.value==='').checked,true);
+ find(form,n=>n.name==='practice-option'&&n.value===option).onchange();
+ if(confidence)find(form,n=>n.name==='practice-confidence'&&n.value===confidence).onchange();
+ assert.equal(submit.disabled,false);
+ form.onsubmit({preventDefault(){}});
+};
+submitChoice('B','sure');
+assert.equal(study.reviewAttempts['continuous-1'].length,1);
+let continueButton=find(modalFooter,n=>n.tagName==='BUTTON'&&n.textContent==='继续下一题');
+assert.ok(continueButton&&!continueButton.disabled);
+const firstResult=modal,firstNote=find(modal,n=>n.tagName==='TEXTAREA');
+quota=true;firstNote.value='连续做题也不能丢失未保存笔记';firstNote.oninput();
+continueButton.onclick();
+assert.equal(modal,firstResult);
+assert.match(textOf(modalFooter),/尚未切换/);
+quota=false;continueButton.onclick();
+assert.equal(modal.dataset.answerId,'continuous-2');
+assert.equal(find(modalFooter,n=>n.className==='qa-reader-position').textContent,'2 / 3');
+assert.equal(loadStudy(localStorage).answerNotes['continuous-1'].note,firstNote.value);
+assert.doesNotMatch(textOf(modal),/SPOILER/);
+assert.equal(find(modal,n=>n.className==='qa-explanation'),undefined);
+assert.equal(find(modal,n=>n.name==='practice-confidence'&&n.value==='').checked,true);
+assert.ok(walk(modal).filter(n=>n.name==='practice-option').every(n=>!n.checked));
+find(modal,n=>n.name==='practice-option'&&n.value==='A').onchange();
+find(modalFooter,n=>n.tagName==='BUTTON'&&n.textContent==='跳过此题').onclick();
+assert.equal(study.reviewAttempts['continuous-2'],undefined,'skipping a selected but unsubmitted choice does not record an attempt');
+assert.equal(modal.dataset.answerId,'continuous-3');
+assert.equal(find(modalFooter,n=>n.className==='qa-reader-position').textContent,'3 / 3');
+submitChoice();
+assert.equal(study.reviewAttempts['continuous-3'][0].confidence,null);
+const finish=find(modalFooter,n=>n.tagName==='BUTTON'&&n.textContent==='完成本轮');
+assert.ok(finish&&!finish.disabled);
+const finalResult=modal,lastNote=find(modal,n=>n.tagName==='TEXTAREA');
+quota=true;lastNote.value='完成本轮前保留这段复盘';lastNote.oninput();finish.onclick();
+assert.equal(modalClosed,false);
+assert.equal(modal,finalResult);
+assert.match(textOf(modalFooter),/尚未切换/);
+quota=false;finish.onclick();
+assert.equal(modalClosed,true);
+assert.equal(loadStudy(localStorage).answerNotes['continuous-3'].note,lastNote.value);
+assert.equal(study.reviewAttempts['continuous-pending'],undefined);
+assert.match(textOf(nodes.get('#qa-today')),/1 道未开始.*1 道待核/);
+
+// Starting from the filtered practice list respects the selected subset and does not grow.
+nodes.get('#qa-status').onchange({target:{value:'new'}});
+const visiblePracticeIds=()=>nodes.get('#qa-list').children.filter(n=>n.dataset.answerId).map(n=>n.dataset.answerId);
+assert.deepEqual(visiblePracticeIds(),['continuous-2']);
+const listStart=[...nodes.values()].map(n=>find(n,x=>x.tagName==='BUTTON'&&x.textContent==='开始连续做题')).find(Boolean);
+assert.ok(listStart,'the filtered practice list has a continuous-start action');
+listStart.onclick();
+assert.equal(modal.dataset.answerId,'continuous-2');
+assert.equal(find(modalFooter,n=>n.className==='qa-reader-position').textContent,'1 / 1');
+submitChoice();
+assert.deepEqual(visiblePracticeIds(),[]);
+find(modalFooter,n=>n.tagName==='BUTTON'&&n.textContent==='完成本轮').onclick();
+assert.equal(modalClosed,true);
+assert.equal(study.reviewAttempts['continuous-2'].length,1);
+console.log('PASS complete new-question queue, fixed-footer submit, continuous next/reset, skipped choices unrecorded, filtered session stability, failed-note-save guards for next and finish, final return to list');
 console.log('PASS exact numeric question search, paper/note filters and counts, clear filters, fixed filtered reading queue, mastery-safe paging, collapsed answers, jump navigation and original note focus, failed-save paging guard, retained reflection, newest-added order, stable note IDs, shared/local progress isolation, minimal record/copy, draft precedence, message privacy, exact association, failed snapshots and retry, stable failed-create IDs, public ID limits, offline filtering');

@@ -1,4 +1,4 @@
-import {STATE_KEY,loadStudy} from './storage.js?v=20261020-review1';
+import {STATE_KEY,loadStudy} from './storage.js?v=20261020-review2';
 
 // Read one snapshot only. Inspection must never initialize, repair or save storage.
 export function inspectNotes(storage,cards=[],answers=[]){

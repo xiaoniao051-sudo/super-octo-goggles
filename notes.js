@@ -1,4 +1,4 @@
-import {inspectNotes,inspectionSummary} from './note-inspection.js?v=20261020-review1';
+import {inspectNotes,inspectionSummary} from './note-inspection.js?v=20261020-review2';
 const $=s=>document.querySelector(s);
 const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
 const labels={cards:'知识卡笔记',answers:'错题解析笔记',questions:'临时记题',scratchpad:'随手记',draft:'记题草稿'};

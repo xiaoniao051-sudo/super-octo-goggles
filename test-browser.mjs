@@ -19,6 +19,11 @@ const candidates=[
 let playwright;
 for(const candidate of candidates){try{playwright=require(candidate);break;}catch{}}
 if(!playwright)throw Error('Playwright is required. Install it locally or set PLAYWRIGHT_MODULE.');
+const engine=process.env.GUOKAO_BROWSER||'chromium';
+if(!['chromium','webkit'].includes(engine))throw Error('GUOKAO_BROWSER must be chromium or webkit.');
+const environment=engine==='webkit'?'Playwright WebKit with iPhone touch emulation on mobile viewports; not real iOS or Safari':'Desktop Chrome with responsive viewports; not real iOS';
+const requestedViewport=process.env.GUOKAO_TEST_VIEWPORT;
+if(requestedViewport&&!['desktop','mobile','mobile-narrow'].includes(requestedViewport))throw Error('Unknown GUOKAO_TEST_VIEWPORT.');
 const browserPath=[
  process.env.BROWSER_EXECUTABLE,
  'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -28,7 +33,7 @@ const remoteTarget=process.env.GUOKAO_TEST_URL;
 if(remoteTarget&&remoteTarget!=='https://xiaoniao051-sudo.github.io/super-octo-goggles'){
  throw Error('GUOKAO_TEST_URL must be the existing authorized GitHub Pages site without a trailing slash.');
 }
-const artifacts=path.join(root,'artifacts',...(remoteTarget?['online']:[]));
+const artifacts=path.join(root,'artifacts',...(remoteTarget?['online']:[]),...(engine==='webkit'?['webkit']:[]));
 await fs.mkdir(artifacts,{recursive:true});
 const answers=JSON.parse(await fs.readFile(path.join(root,'answers.json'),'utf8')).answers;
 const library=JSON.parse(await fs.readFile(path.join(root,'library.json'),'utf8'));
@@ -56,9 +61,16 @@ const server=createServer(async(req,res)=>{
 });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const base=remoteTarget||`http://127.0.0.1:${server.address().port}`;
-const browser=await playwright.chromium.launch({headless:true,...(browserPath?{executablePath:browserPath}:{})});
+const browser=await playwright[engine].launch({headless:true,...(engine==='chromium'&&browserPath?{executablePath:browserPath}:{})});
 const results=[];
 
+function contextOptions(viewport){
+ return {
+  ...(engine==='webkit'&&viewport.name!=='desktop'?playwright.devices['iPhone 13']:{}),
+  viewport:{width:viewport.width,height:viewport.height},
+  timezoneId:viewport.timezoneId,acceptDownloads:true
+ };
+}
 async function readState(page){return page.evaluate(k=>JSON.parse(localStorage.getItem(k)||'null'),key);}
 async function closeModal(page){await page.locator('#close-modal').click();await page.locator('#modal').waitFor({state:'hidden'});}
 async function noOverflow(page,where){
@@ -67,6 +79,15 @@ async function noOverflow(page,where){
   modal:document.querySelector('#modal')?.open&&document.querySelector('#modal').getBoundingClientRect().right>innerWidth+1,
   modalContent:document.querySelector('#modal')?.open&&document.querySelector('#modal-content').scrollWidth>document.querySelector('#modal-content').clientWidth+1
  }));
+ if(overflow.page||overflow.modal||overflow.modalContent){
+  const details=await page.evaluate(()=>({
+   width:innerWidth,documentWidth:document.documentElement.scrollWidth,visualViewportWidth:visualViewport?.width,visualViewportScale:visualViewport?.scale,
+   offenders:[...document.querySelectorAll('body *')].map(node=>({node:node.tagName,id:node.id,className:node.className,rect:node.getBoundingClientRect().toJSON()})).filter(item=>item.rect.width>0&&(item.rect.right>innerWidth+1||item.rect.left< -1)).slice(0,20),
+   scrollOverflowing:[...document.querySelectorAll('body *')].filter(node=>node.clientWidth&&node.scrollWidth>node.clientWidth+1).map(node=>({node:node.tagName,id:node.id,className:node.className,scrollWidth:node.scrollWidth,clientWidth:node.clientWidth,overflow:getComputedStyle(node).overflow})).slice(0,20)
+  }));
+  await page.screenshot({path:path.join(artifacts,`overflow-${where.replace(/[^a-z0-9-]/gi,'-')}.png`),animations:'disabled'});
+  console.error(JSON.stringify({where,overflow,details},null,2));
+ }
  assert.equal(overflow.page,false,`${where}: document horizontal overflow`);
  assert.equal(!!overflow.modal,false,`${where}: dialog exceeds viewport`);
  assert.equal(!!overflow.modalContent,false,`${where}: dialog content horizontal overflow`);
@@ -82,13 +103,91 @@ function preserveLegacy(state){
  assert.deepEqual(state.questionDraft,draft);
 }
 
+async function verifyContinuousFlow(viewport){
+ const context=await browser.newContext(contextOptions(viewport)),page=await context.newPage(),errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ try{
+  await page.goto(base+'/index.html#qa');
+  await page.locator('[data-qa-tab="practice"]').click();
+  await page.locator('#qa-status').selectOption('new');
+  await page.locator('#qa-results').filter({hasText:'15 道 / 共 18 道'}).waitFor();
+  const queue=await page.locator('#qa-list [data-answer-id]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-answer-id')));
+  assert.equal(queue.length,15);
+  assert.ok(queue.every(id=>answers.find(a=>a.id===id)?.verification.status==='checked'),'new queue excludes paused questions');
+  await page.locator('#qa-today').getByRole('button',{name:'连续做新题',exact:true}).click();
+  for(const [index,id]of queue.entries()){
+   const answer=answers.find(a=>a.id===id);
+   assert.equal(await page.locator('#modal-content').getAttribute('data-answer-id'),id);
+   assert.equal(await page.locator('.qa-reader-position').innerText(),`${index+1} / ${queue.length}`);
+   const content=await page.locator('#modal-content').textContent();
+   for(const spoiler of [answer.title,answer.summary,answer.answer,answer.question?.versionNote]){
+    if(spoiler)assert.ok(!content.includes(spoiler),`${viewport.name}/${id}: continuous question leaks ${spoiler.slice(0,25)}`);
+   }
+   assert.equal(await page.locator('#modal-content .qa-explanation').count(),0);
+   assert.equal(await page.locator('input[name="practice-option"]:checked').count(),0);
+   assert.equal(await page.locator('input[name="practice-confidence"]:checked').inputValue(),'');
+   const submit=page.locator('#modal-footer').getByRole('button',{name:'提交并查看解析',exact:true});
+   assert.equal(await submit.isDisabled(),true);
+   const footerBounds=await submit.evaluate(button=>{const rect=button.getBoundingClientRect();return {top:rect.top,bottom:rect.bottom,height:innerHeight};});
+   assert.ok(footerBounds.top>=0&&footerBounds.bottom<=footerBounds.height+1,`${viewport.name}: fixed submit must be visible without scrolling`);
+   await page.locator(`input[name="practice-option"][value="${answer.correctOption}"]`).check();
+   if(index===0)await page.locator('input[name="practice-confidence"][value="sure"]').check();
+   await submit.click();
+   await page.locator('.qa-attempt-result').waitFor();
+   const current=await readState(page);
+   assert.equal(current.reviewAttempts[id].length,1);
+   assert.equal(current.reviewAttempts[id][0].confidence,index===0?'sure':null);
+   assert.equal(current.reviewAttempts[id][0].correct,true);
+   if(index===0){
+    await page.locator('.qa-note-section textarea').fill('连续做题时保留的测试笔记');
+    await page.screenshot({path:path.join(artifacts,`${viewport.name}-continuous-result.png`),animations:'disabled'});
+   }
+   await noOverflow(page,`${viewport.name}/continuous/${index}`);
+   const last=index===queue.length-1;
+   const next=page.locator('#modal-footer').getByRole('button',{name:last?'完成本轮':'继续下一题',exact:true});
+   assert.equal(await next.isEnabled(),true);
+   await next.click();
+  }
+  await page.locator('#modal').waitFor({state:'hidden'});
+  const completed=await readState(page);
+  assert.equal(Object.values(completed.reviewAttempts).flat().length,15);
+  assert.equal(completed.answerNotes[queue[0]].note,'连续做题时保留的测试笔记');
+  assert.match(await page.locator('#qa-today').innerText(),/0 道未开始/);
+  assert.match(await page.locator('#qa-today').innerText(),/有效作答 15\/15 正确/);
+  assert.equal(await page.locator('#qa-screen').isVisible(),true);
+
+  // The direct list entry follows the current paper filter and skip never submits.
+  await page.locator('#qa-status').selectOption('all');
+  const paper=answers.find(a=>a.id===queue[0]).paper;
+  await page.locator('#qa-paper').selectOption(paper);
+  assert.equal(await page.locator('#qa-paper').inputValue(),paper);
+  await noOverflow(page,viewport.name+' long paper filter');
+  const filtered=await page.locator('#qa-list [data-answer-id]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-answer-id')));
+  assert.ok(filtered.length>1&&filtered.length<answers.length);
+  assert.ok(filtered.every(id=>answers.find(a=>a.id===id).paper===paper));
+  await page.getByRole('button',{name:'开始连续做题',exact:true}).click();
+  assert.equal(await page.locator('#modal-content').getAttribute('data-answer-id'),filtered[0]);
+  assert.equal(await page.locator('.qa-reader-position').innerText(),`1 / ${filtered.length}`);
+  await page.locator('input[name="practice-option"][value="A"]').check();
+  await page.locator('#modal-footer').getByRole('button',{name:'跳过此题',exact:true}).click();
+  assert.equal(await page.locator('#modal-content').getAttribute('data-answer-id'),filtered[1]);
+  assert.equal(await page.locator('input[name="practice-option"]:checked').count(),0);
+  assert.equal(await page.locator('#modal-content .qa-explanation').count(),0);
+  assert.deepEqual((await readState(page)).reviewAttempts,completed.reviewAttempts);
+  await noOverflow(page,viewport.name+' filtered continuous');
+  await closeModal(page);
+  assert.deepEqual(errors,[],`${viewport.name}: continuous browser errors`);
+  return {continuousNewQueue:queue.length,continuousFinished:true,continuousChoiceReset:true,filteredContinuous:true,skipUnrecorded:true,fixedSubmitVisible:true};
+ }finally{await context.close();}
+}
+
 try{
  for(const viewport of [
   {name:'desktop',width:1280,height:900,timezoneId:'Asia/Shanghai'},
   {name:'mobile',width:390,height:844,timezoneId:'America/Los_Angeles'},
   {name:'mobile-narrow',width:320,height:740,timezoneId:'America/Los_Angeles'}
- ]){
-  const context=await browser.newContext({viewport:{width:viewport.width,height:viewport.height},timezoneId:viewport.timezoneId,acceptDownloads:true});
+ ].filter(viewport=>!requestedViewport||viewport.name===requestedViewport)){
+  const context=await browser.newContext(contextOptions(viewport));
   const page=await context.newPage(),errors=[];
   page.on('pageerror',error=>errors.push(error.message));
   await page.clock.install({time:new Date('2026-10-20T16:30:00.000Z')});
@@ -186,7 +285,7 @@ try{
   const downloaded=JSON.parse(await fs.readFile(backupPath,'utf8'));
   assert.equal(downloaded.schema,2);preserveLegacy(downloaded);
   assert.deepEqual(downloaded.reviewAttempts,state.reviewAttempts);
-  const restoredContext=await browser.newContext({viewport:{width:viewport.width,height:viewport.height}});
+  const restoredContext=await browser.newContext(contextOptions(viewport));
   const restoredPage=await restoredContext.newPage();
   await restoredPage.goto(base+'/index.html#me');
   await restoredPage.locator('#export-btn').waitFor();
@@ -231,11 +330,12 @@ try{
   await closeModal(page);
   await noOverflow(page,viewport.name);
   assert.deepEqual(errors,[],`${viewport.name} has browser errors`);
-  results.push({viewport:viewport.name,size:`${viewport.width}×${viewport.height}`,timezone:viewport.timezoneId,questionsChecked:answers.length,legacyImport:true,backupRoundtrip:true,neutralPracticeDOM:true,pausedUnscored:3,nextLocalDayQueue:true,browserErrors:errors});
   await context.close();
+  const continuous=await verifyContinuousFlow(viewport);
+  results.push({viewport:viewport.name,size:`${viewport.width}×${viewport.height}`,timezone:viewport.timezoneId,questionsChecked:answers.length,legacyImport:true,backupRoundtrip:true,neutralPracticeDOM:true,pausedUnscored:3,nextLocalDayQueue:true,...continuous,browserErrors:errors});
  }
- await fs.writeFile(path.join(artifacts,'browser-results.json'),JSON.stringify({base,browser:await browser.version(),results},null,2));
- console.log(JSON.stringify({base,browser:await browser.version(),results},null,2));
+ await fs.writeFile(path.join(artifacts,'browser-results.json'),JSON.stringify({base,engine,environment,browser:await browser.version(),results},null,2));
+ console.log(JSON.stringify({base,engine,environment,browser:await browser.version(),results},null,2));
 }finally{
  await browser.close();
  await new Promise(resolve=>server.close(resolve));

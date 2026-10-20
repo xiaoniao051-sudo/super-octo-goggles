@@ -40,8 +40,14 @@ const library=JSON.parse(await fs.readFile(path.join(root,'library.json'),'utf8'
 const key='guokao-2027-study-v1';
 const cardId=library.cards[0].id;
 const questionId='qa-11111111-2222-4333-8444-555555555555';
-const checked=answers.find(a=>a.verification?.status==='checked'&&a.correctOption);
+const checkedAnswers=answers.filter(a=>a.verification?.status==='checked'&&a.correctOption);
+const pausedAnswers=answers.filter(a=>a.verification?.status!=='checked');
+const checkedIds=checkedAnswers.map(answer=>answer.id);
+const checked=checkedAnswers[0];
 assert.ok(checked,'At least one explicitly checked answer is required');
+assert.equal(checkedAnswers.length,16);
+assert.equal(pausedAnswers.length,3);
+assert.equal(answers.length,checkedAnswers.length+pausedAnswers.length);
 const draft={paper:'未完成测试草稿',number:'21',subject:'行测',source:'',myAnswer:'',doubt:'保留草稿疑问',stem:''};
 const legacy={
  schema:1,cards:{[cardId]:{note:'旧版知识笔记，请完整保留',starred:true,mastered:true}},
@@ -110,9 +116,9 @@ async function verifyContinuousFlow(viewport){
   await page.goto(base+'/index.html#qa');
   await page.locator('[data-qa-tab="practice"]').click();
   await page.locator('#qa-status').selectOption('new');
-  await page.locator('#qa-results').filter({hasText:'15 道 / 共 18 道'}).waitFor();
+  await page.locator('#qa-results').filter({hasText:`${checkedAnswers.length} 道 / 共 ${answers.length} 道`}).waitFor();
   const queue=await page.locator('#qa-list [data-answer-id]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('data-answer-id')));
-  assert.equal(queue.length,15);
+  assert.deepEqual([...queue].sort(),[...checkedIds].sort());
   assert.ok(queue.every(id=>answers.find(a=>a.id===id)?.verification.status==='checked'),'new queue excludes paused questions');
   await page.locator('#qa-today').getByRole('button',{name:'连续做新题',exact:true}).click();
   for(const [index,id]of queue.entries()){
@@ -150,15 +156,17 @@ async function verifyContinuousFlow(viewport){
   }
   await page.locator('#modal').waitFor({state:'hidden'});
   const completed=await readState(page);
-  assert.equal(Object.values(completed.reviewAttempts).flat().length,15);
+  assert.equal(Object.values(completed.reviewAttempts).flat().length,checkedAnswers.length);
   assert.equal(completed.answerNotes[queue[0]].note,'连续做题时保留的测试笔记');
   assert.match(await page.locator('#qa-today').innerText(),/0 道未开始/);
-  assert.match(await page.locator('#qa-today').innerText(),/有效作答 15\/15 正确/);
+  assert.ok((await page.locator('#qa-today').innerText()).includes(`有效作答 ${checkedAnswers.length}/${checkedAnswers.length} 正确`));
   assert.equal(await page.locator('#qa-screen').isVisible(),true);
 
   // The direct list entry follows the current paper filter and skip never submits.
   await page.locator('#qa-status').selectOption('all');
-  const paper=answers.find(a=>a.id===queue[0]).paper;
+  const paper=[...new Set(answers.map(answer=>answer.paper))]
+   .filter(name=>answers.filter(answer=>answer.paper===name).length>1)
+   .sort((a,b)=>b.length-a.length)[0];
   await page.locator('#qa-paper').selectOption(paper);
   assert.equal(await page.locator('#qa-paper').inputValue(),paper);
   await noOverflow(page,viewport.name+' long paper filter');
@@ -208,8 +216,8 @@ try{
   await page.locator('#qa-results').filter({hasText:`${answers.length} 道 / 共 ${answers.length} 道`}).waitFor();
   const initialToday=await page.locator('#qa-today').innerText();
   assert.match(initialToday,/0 道到期/);
-  assert.match(initialToday,/15 道未开始/);
-  assert.match(initialToday,/3 道待核/);
+  assert.ok(initialToday.includes(`${checkedAnswers.length} 道未开始`));
+  assert.ok(initialToday.includes(`${pausedAnswers.length} 道待核`));
   assert.match(initialToday,/还没有有效复测记录/);
   const listText=await page.locator('#qa-list').textContent();
   for(const answer of answers){
@@ -254,7 +262,7 @@ try{
   const scoredSummary=await page.locator('#qa-today').innerText();
   assert.match(scoredSummary,/复测通过 1 题/);
   assert.match(scoredSummary,/有效作答 1\/1 正确/);
-  for(const answer of answers.filter(a=>a.verification.status!=='checked')){
+  for(const answer of pausedAnswers){
    await page.locator(`#qa-list [data-answer-id="${answer.id}"]`).click();
    await page.locator('input[name="practice-option"][value="A"]').check();
    await page.getByRole('button',{name:'提交并查看解析',exact:true}).click();
@@ -267,7 +275,7 @@ try{
    await closeModal(page);
   }
   assert.match(await page.locator('#qa-today').innerText(),/有效作答 1\/1 正确/);
-  assert.match(await page.locator('#qa-today').innerText(),/3 道待核/);
+  assert.ok((await page.locator('#qa-today').innerText()).includes(`${pausedAnswers.length} 道待核`));
 
   // Reimporting the old backup twice must not erase or duplicate new attempts.
   await page.goto(base+'/index.html#me');
@@ -277,7 +285,7 @@ try{
   state=await readState(page);
   preserveLegacy(state);
   assert.equal(state.reviewAttempts[checked.id].length,1);
-  assert.equal(Object.values(state.reviewAttempts).flat().length,4);
+  assert.equal(Object.values(state.reviewAttempts).flat().length,1+pausedAnswers.length);
   const downloadEvent=page.waitForEvent('download');
   await page.locator('#export-btn').click();
   const download=await downloadEvent,backupPath=path.join(artifacts,`${viewport.name}-roundtrip-backup.json`);
@@ -320,7 +328,7 @@ try{
   await page.clock.setFixedTime(new Date('2026-10-21T16:30:00.000Z'));
   await page.goto(base+'/index.html#review');
   await page.locator('#review-today .qa-today-count').filter({hasText:'1 道到期'}).waitFor();
-  assert.match(await page.locator('#review-today').innerText(),/14 道未开始/);
+  assert.ok((await page.locator('#review-today').innerText()).includes(`${checkedAnswers.length-1} 道未开始`));
   assert.match(await page.locator('#review-today').innerText(),/有效作答 1\/2 正确/);
   await page.clock.runFor(4000);
   await page.screenshot({path:path.join(artifacts,`${viewport.name}-queue.png`),fullPage:true,animations:'disabled'});
@@ -332,7 +340,7 @@ try{
   assert.deepEqual(errors,[],`${viewport.name} has browser errors`);
   await context.close();
   const continuous=await verifyContinuousFlow(viewport);
-  results.push({viewport:viewport.name,size:`${viewport.width}×${viewport.height}`,timezone:viewport.timezoneId,questionsChecked:answers.length,legacyImport:true,backupRoundtrip:true,neutralPracticeDOM:true,pausedUnscored:3,nextLocalDayQueue:true,...continuous,browserErrors:errors});
+  results.push({viewport:viewport.name,size:`${viewport.width}×${viewport.height}`,timezone:viewport.timezoneId,questionsChecked:answers.length,legacyImport:true,backupRoundtrip:true,neutralPracticeDOM:true,pausedUnscored:pausedAnswers.length,nextLocalDayQueue:true,...continuous,browserErrors:errors});
  }
  await fs.writeFile(path.join(artifacts,'browser-results.json'),JSON.stringify({base,engine,environment,browser:await browser.version(),results},null,2));
  console.log(JSON.stringify({base,engine,environment,browser:await browser.version(),results},null,2));

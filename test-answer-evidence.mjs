@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {getVerification,gradeAnswer,getReviewSummary} from './review.js';
 
 const data=JSON.parse(readFileSync(new URL('./answers.json',import.meta.url),'utf8'));
 const answers=new Map(data.answers.map(answer=>[answer.id,answer]));
@@ -27,15 +28,22 @@ const unresolved={
  'fenbi-2027-s39-enforcement-126':'pending',
  'gk-2023-enforcement-059':'disputed'
 };
+const addedId='gk-2023-enforcement-024';
+const originalIds=[...Object.keys(expectedOptions),...Object.keys(unresolved)];
 
 test('review rollout only adds metadata: original IDs, questions, explanations and sources are unchanged',()=>{
  const original=structuredClone(data);
+ original.answers=original.answers.filter(answer=>answer.id!==addedId);
+ assert.equal(original.answers.length,18);
+ assert.deepEqual(original.answers.map(answer=>answer.id).sort(),[...originalIds].sort());
  for(const answer of original.answers){delete answer.verification;delete answer.correctOption;}
  const digest=createHash('sha256').update(JSON.stringify(original)).digest('hex');
  // Fingerprint of answers.json at a0dd859, before the review rollout.
- // An intentional later content revision should explicitly review/update this fixture.
+ // Exclude only the explicitly added question; never refresh the old-content fingerprint.
  assert.equal(digest,'d6b7301f9372784ccabbc655cf1276f49cef3e637faafd4c85711c91f603a834');
- assert.equal(answers.size,18);
+ assert.equal(data.answers.length,19);
+ assert.equal(answers.size,19,'IDs remain unique');
+ assert.deepEqual([...answers.keys()].sort(),[...originalIds,addedId].sort());
 });
 
 test('all checked answers use explicit letters matching the manually verified option text',()=>{
@@ -46,7 +54,31 @@ test('all checked answers use explicit letters matching the manually verified op
   assert.equal(answer.question.options.find(option=>option.label===letter)?.text,text,id);
   assert.match(answer.verification.note,/参考解析.*并非官方标准答案/,id);
  }
- assert.equal(data.answers.filter(answer=>answer.verification.status==='checked').length,15);
+ assert.deepEqual(data.answers.filter(answer=>answer.verification.status==='checked').map(answer=>answer.id).sort(),[...Object.keys(expectedOptions),addedId].sort());
+});
+
+test('2023 enforcement question 24 keeps A–D option order and grades only B as correct',()=>{
+ const answer=answers.get(addedId);
+ assert.ok(answer,'new stable ID is present');
+ assert.equal(answer.number,'24');
+ assert.equal(answer.paper,'2023年国考行政执法卷');
+ assert.deepEqual(answer.question.options.map(option=>[option.label,...option.text.trim().split(/\s+/)]),[
+  ['A','突破','扭转'],
+  ['B','摒弃','校正'],
+  ['C','摆脱','规划'],
+  ['D','忽略','调整']
+ ]);
+ assert.equal(answer.verification.status,'checked');
+ assert.equal(answer.correctOption,'B');
+ assert.match(answer.verification.note,/参考解析.*并非官方标准答案/);
+ assert.equal(getVerification(answer).canGrade,true);
+ assert.equal(gradeAnswer(answer,'B'),true);
+ for(const option of ['A','C','D'])assert.equal(gradeAnswer(answer,option),false,option);
+ assert.equal(gradeAnswer(answer,'E'),null);
+ const summary=getReviewSummary(data.answers,{});
+ assert.deepEqual(summary.newItems.map(item=>item.id).sort(),[...Object.keys(expectedOptions),addedId].sort());
+ assert.deepEqual(summary.paused.map(item=>item.id).sort(),Object.keys(unresolved).sort());
+ assert.equal(summary.due.length,0);
 });
 
 test('missing material, ambiguous readings and disputed answers have no grading key',()=>{
@@ -64,6 +96,7 @@ test('missing material, ambiguous readings and disputed answers have no grading 
 test('pre-answer verification notices are neutral and contain no answer letters or solution hints',()=>{
  const allowedNotes=new Set([
   '按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。',
+  '已按公开整理资料核对题面及本页选项顺序，采用本站参考解析进行复测；不同资料顺序有差异，并非官方标准答案。',
   '原卷统计材料页缺失；现有补充来源不能替代原材料。暂不自动判分，不计入正确率。',
   '原材料照片中的关键读数尚待清晰原题核实。暂不自动判分，不计入正确率。',
   '现有参考解析之间存在争议，未核验到命题机关公开标准答案。暂不自动判分，不计入正确率。'

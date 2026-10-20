@@ -77,7 +77,12 @@
         }
       ],
       "reviewedAt": "2026-10-20",
-      "addedAt": "2026-10-20"
+      "addedAt": "2026-10-20",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "A"
     },
     {
       "requestIds": [],
@@ -150,7 +155,12 @@
           "title": "赵精武：《强化平台治理 筑牢网络安全法治根基》（光明网，2025年12月31日）",
           "url": "https://legal.gmw.cn/2025-12/31/content_38510137.htm"
         }
-      ]
+      ],
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "C"
     },
     {
       "requestIds": [],
@@ -227,7 +237,12 @@
           "title": "《别把非遗音乐的烟火气弄丢》全文（光明网转载浙江日报）",
           "url": "https://wenyi.neamco.com/2026-06/05/content_38812534.htm"
         }
-      ]
+      ],
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "D"
     },
     {
       "requestIds": [],
@@ -287,7 +302,11 @@
           "body": "这张照片的2月同比第二位不够清楚。代入288.56%时约为－2.32%；代入268.56%时约为－7.34%。因此不是小数末位的舍入问题，而是关键数字需确认。速算方法可以先学，最终选项暂不作为已核实的粉笔答案。"
         }
       ],
-      "sources": []
+      "sources": [],
+      "verification": {
+        "status": "pending",
+        "note": "原材料照片中的关键读数尚待清晰原题核实。暂不自动判分，不计入正确率。"
+      }
     },
     {
       "requestIds": [],
@@ -356,7 +375,11 @@
           "title": "《2024中国茶叶进出口贸易分析报告》原始PDF（图3、表11、表19，公开索引核对）",
           "url": "https://6d65-member-5gxnjq7a9336dfff-1301875770.tcb.qcloud.la/cloudbase-cms/upload/2025-10-16/02xj3lqq7rawr9jakq92lvk17e2l03p3_.pdf?sign=217c8d109cad0564c41c7815dbe902ca&t=1760599300"
         }
-      ]
+      ],
+      "verification": {
+        "status": "incomplete",
+        "note": "原卷统计材料页缺失；现有补充来源不能替代原材料。暂不自动判分，不计入正确率。"
+      }
     },
     {
       "id": "verbal-marriage-customs-sentence",
@@ -437,7 +460,12 @@
         "sourceUrl": "https://upload.xingguanggongkao.com/pdf/2021%E5%B9%B4%E6%96%B0%E7%96%86%E5%85%B5%E5%9B%A2%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E7%9C%9F%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7-%E8%80%83%E7%94%9F%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.pdf?time=1733729943",
         "versionNote": "已匹配2021年7月24日新疆兵团行政执法类《行测》公开考生回忆版第48题；未取得官方原卷。题干和A—D顺序保留用户截图版本，A项“愚俗”、B项“生动实现”不擅自改写；不同转录本可能有个别字词差异。"
       },
-      "addedAt": "2026-10-19"
+      "addedAt": "2026-10-19",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "D"
     },
     {
       "id": "gk-2023-enforcement-037",
@@ -510,7 +538,12 @@
         "sourceUrl": "https://www.eoffcn.com/kszx/detail/1189855.html",
         "versionNote": "按与你提问一致的D选项版本展示；中公网校该页例3保留这一顺序，另有网络整理版将该词组排在B。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "D"
     },
     {
       "id": "gk-2023-enforcement-039",
@@ -587,7 +620,12 @@
         "sourceUrl": "https://m.ha.huatu.com/2023/1115/5467462.html",
         "versionNote": "已与行政执法卷PDF回忆整理版第39题交叉核对，题干及选项顺序一致。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "B"
     },
     {
       "id": "gk-2023-enforcement-059",
@@ -672,7 +710,11 @@
         "sourceUrl": "https://yxjy666.com/index/arc/3591",
         "versionNote": "题面按该页第4题整理，并与华图、星光公考及整卷PDF核对。不同整理版个别文字有转录差异，四个选项一致；答案仍保留A/D争议。原文的“目标防护挑战严峻”不属于考试节选，未加入题干。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "disputed",
+        "note": "现有参考解析之间存在争议，未核验到命题机关公开标准答案。暂不自动判分，不计入正确率。"
+      }
     },
     {
       "id": "gk-2023-enforcement-066",
@@ -749,7 +791,12 @@
         "sourceUrl": "https://gz.huatu.com/2023/0830/1810433.html",
         "versionNote": "按公开回忆整理版核对题干及选项顺序；另与PDF整理版交叉核对。为便于阅读，将原题连续句中的设问单独显示。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "D"
     },
     {
       "id": "gk-2023-enforcement-067",
@@ -822,7 +869,12 @@
         "sourceUrl": "https://m.zunyi.huatu.com/2023/0830/1810445.html",
         "versionNote": "按公开回忆整理版核对题干及选项顺序；另与PDF整理版交叉核对。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "C"
     },
     {
       "id": "gk-2023-enforcement-068",
@@ -895,7 +947,12 @@
         "sourceUrl": "https://m.zunyi.huatu.com/2023/0830/1810445.html",
         "versionNote": "按公开回忆整理版核对题干及选项顺序；另与PDF整理版交叉核对。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "A"
     },
     {
       "id": "gk-2023-enforcement-097",
@@ -968,7 +1025,12 @@
         "sourceUrl": "https://www.sohu.com/a/728429232_120050739",
         "versionNote": "按与你提问一致的C选项版本展示，来源为政道公考该页第2题；另有整卷整理版将家电组排在B，并将“预定”写作“预订”。设问采用该卷类比推理统一作答说明。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "C"
     },
     {
       "id": "gk-2023-enforcement-003",
@@ -1033,7 +1095,12 @@
         "sourceUrl": "https://m.ah.huatu.com/2023/0911/2715787.html",
         "versionNote": "题目据华图发布的考生回忆整理版核对，选项顺序与本页解析一致；按原题引用的2022年党的二十大报告作答。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "C"
     },
     {
       "id": "gk-2023-enforcement-004",
@@ -1094,7 +1161,12 @@
         "sourceUrl": "https://m.ah.huatu.com/2023/0911/2715787.html",
         "versionNote": "题目据华图发布的考生回忆整理版核对，选项顺序与本页解析一致；本题选错误项，按2022年报告时点判断。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "A"
     },
     {
       "id": "gk-2023-enforcement-005",
@@ -1155,7 +1227,12 @@
         "sourceUrl": "https://m.ah.huatu.com/2023/0911/2715787.html",
         "versionNote": "题目据华图发布的考生回忆整理版核对，选项顺序与本页解析一致；本题选错误项，依据原题所引2021年《纲要》。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "D"
     },
     {
       "id": "gk-2023-enforcement-006",
@@ -1228,7 +1305,12 @@
         "sourceUrl": "https://m.ah.huatu.com/2023/0911/2715787.html",
         "versionNote": "题目据华图发布的考生回忆整理版核对，选项顺序与本页解析一致；本题选错误项。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "D"
     },
     {
       "id": "gk-2023-enforcement-007",
@@ -1289,7 +1371,12 @@
         "sourceUrl": "https://m.ah.huatu.com/2023/0911/2715787.html",
         "versionNote": "题目据华图发布的考生回忆整理版核对，选项顺序与本页解析一致；按2021年通过的原题时点法律文本复盘，保留错误选项原文。"
       },
-      "addedAt": "2026-10-18"
+      "addedAt": "2026-10-18",
+      "verification": {
+        "status": "checked",
+        "note": "按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。"
+      },
+      "correctOption": "B"
     }
   ]
 }

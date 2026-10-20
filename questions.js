@@ -1,4 +1,5 @@
-import {saveQuestion,saveAnswerNote,saveQuestionDraft} from './storage.js?v=20261019-15';
+import {saveQuestion,saveAnswerNote,saveQuestionDraft,recordReviewAttempt} from './storage.js?v=20261020-review1';
+import {getVerification,getReviewSummary,reviewProgress,localDate} from './review.js?v=20261020-review1';
 
 const $=s=>document.querySelector(s);
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
@@ -19,7 +20,7 @@ export function questionMessage(id,q){
   '解析整理好后，请按这个答疑编号更新到网站“错题库”；私人复盘笔记不要公开。'].filter(Boolean).join('\n');
 }
 
-export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
+export function createQuestionBoard({getStudy,setStudy,openModal,toast,navigate=()=>{}}){
  let answers=[],loadState='loading',tab='published',status='all',query='',paper='all',requestSequence=0;
  const unsaved=new Map();
  function snapshot(){const copy=structuredClone(getStudy());for(const task of unsaved.values())task.apply(copy);return copy;}
@@ -39,6 +40,38 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
  function empty(title,body,action){const box=el('section','empty');box.append(el('h3','',title),paragraph(body));if(action)box.append(button('记一道不会的题','primary-btn',action));return box;}
  function resetFilters(){query='';paper='all';status='all';$('#qa-search').value='';$('#qa-status').value='all';render();}
  function filteredEmpty(title,body){const box=empty(title,body);box.append(button('清除筛选','quiet-btn',resetFilters));return box;}
+ function verificationBadge(a){const v=getVerification(a);return el('span','qa-badge verification-'+v.status,v.label);}
+ function verificationNotice(a){
+  const v=getVerification(a),box=el('section','qa-verification verification-'+v.status);
+  box.append(el('strong','',v.label),paragraph(v.note||'尚未完成题目核验。'));
+  if(!v.canGrade)box.append(paragraph('本题只记录作答，不判对错，不计入正确率与到期队列。'));
+  return box;
+ }
+ function setTab(value){
+  tab=value;status='all';query='';$('#qa-search').value='';
+  const choices=tab==='practice'?[['all','全部状态'],['due','今日到期'],['new','尚未开始'],['passed','复测通过'],['paused','待核题']]:[['all','全部状态'],['unmastered','未弄懂'],['understood','已弄懂'],['noted','有笔记']];
+  const select=$('#qa-status');select.replaceChildren();
+  for(const[value,text]of choices){const option=el('option','',text);option.value=value;select.append(option);}select.value='all';
+  render();
+ }
+ function renderToday(){
+  for(const selector of ['#home-today','#review-today','#qa-today']){
+   const target=$(selector);if(!target)continue;target.replaceChildren();
+   target.append(el('h2','','今日复习'));
+   if(loadState!=='ready'){target.append(paragraph(loadState==='error'?'错题暂未加载，刷新后查看今日队列。':'正在读取复习记录…','muted'));continue;}
+   const summary=getReviewSummary(answers,state()),count=summary.due.length;
+   target.append(paragraph(`${count} 道到期 · ${summary.newItems.length} 道未开始 · ${summary.paused.length} 道待核`,'qa-today-count'));
+   target.append(paragraph(summary.gradedCount?`复测通过 ${summary.passedCount} 题 · 有效作答 ${summary.correctCount}/${summary.gradedCount} 正确（${Math.round(summary.correctCount/summary.gradedCount*100)}%）`:'还没有有效复测记录。先从一道错题开始，未做过的题不会算作逾期。','muted'));
+   if(!count&&summary.scheduled.length)target.append(paragraph('今天没有到期题。下次复习：'+summary.scheduled.map(a=>reviewProgress(a,state()).dueDate).sort()[0],'muted'));
+   const actions=el('div','qa-actions');
+   const start=items=>{setTab('practice');navigate('qa');if(items.length)openPractice(items[0],items.map(a=>a.id));};
+   if(count)actions.append(button('开始今日复习','primary-btn',()=>start(getReviewSummary(answers,state()).due)));
+   if(summary.newItems.length)actions.append(button('开始一道新题','quiet-btn',()=>start(getReviewSummary(answers,state()).newItems.slice(0,1))));
+   actions.append(button('全部重做题目','text-btn',()=>{setTab('practice');navigate('qa');}));
+   target.append(actions);
+   const rule=el('details','qa-review-rule');rule.append(el('summary','','复习怎么安排'),paragraph('按本机日期计算。连续答对后依次间隔 1、3、7、14 天，再次答错回到 1 天；同日反复答对不加快升级。已弄懂是你原来的主观标记，复测通过只来自有效作答。待核题不判分；核验依据变化后重新复测。'));target.append(rule);
+  }
+ }
  async function loadAnswers(){
   const seq=++requestSequence;loadState='loading';render();
   try{const response=await fetch('./answers.json',{cache:'no-cache'});if(!response.ok)throw Error('解析暂时无法加载');const data=await response.json();
@@ -51,6 +84,7 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
   }catch{if(seq!==requestSequence)return;loadState='error';}render();
  }
  function render(){
+  renderToday();
   const mine=Object.entries(state().questions||{}).sort((a,b)=>(b[1].createdAt||'').localeCompare(a[1].createdAt||''));
   $('#qa-mine-count').textContent=mine.length;$('#qa-answer-count').textContent=loadState==='ready'?answers.length:'—';
   const papers=[...new Set((tab==='mine'?mine.map(([,q])=>q):answers).map(q=>q.paper))],paperSelect=$('#qa-paper');
@@ -61,7 +95,8 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
   document.querySelectorAll('[data-qa-tab]').forEach(b=>{b.classList.toggle('active',b.dataset.qaTab===tab);b.setAttribute('aria-pressed',String(b.dataset.qaTab===tab));});
   $('#qa-status').hidden=false;const target=$('#qa-list');target.replaceChildren();
   $('#qa-new').hidden=tab!=='mine';$('#qa-draft-hint').hidden=tab!=='mine'||!state().questionDraft;
-  $('#qa-order-hint').textContent=tab==='mine'?'新记录的题目在前':'新收录的题目在前';
+  $('#qa-order-hint').textContent=tab==='mine'?'新记录的题目在前':tab==='practice'?'中性题号 · 提交后查看解析':'新收录的题目在前';
+  $('#qa-search').placeholder=tab==='practice'?'搜索试卷、题号或题干':'搜索题号、关键词或错因';
   const loading=$('#qa-loading');loading.replaceChildren();
   if(loadState==='error'){loading.append(paragraph('公开解析暂时没加载出来。错题仍可记录、复习；已有解析的状态暂不判断。','warning'),button('重新加载解析','quiet-btn',loadAnswers));}
   else if(loadState==='loading')loading.append(paragraph('正在核对已发布解析…','muted'));
@@ -72,12 +107,25 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
    $('#qa-results').textContent=`${filtered.length} 道 / 共 ${mine.length} 道`;
    if(!filtered.length)target.append(mine.length?filteredEmpty('没有符合条件的错题','可以换个关键词，或清除筛选查看全部。'):empty('把不会的，留在这里','先记下试卷和题号，存进自己的错题库。复习时回来记错因，弄懂后做个标记。',newQuestion));
    for(const[id,q]of filtered){const b=button('','knowledge-card qa-card',()=>openQuestion(id)),meta=el('div','qa-meta'),s=requestStatus(id,q);meta.append(el('span','',q.subject),el('span','qa-badge '+s,loadState!=='ready'&&!q.mastered?'待核对解析':statusLabel[s]));b.append(meta,el('h3','',label(q)),paragraph(q.doubt||'截图和疑问可在微信补充'),el('span','card-state',[q.source,hasNote(q.note)?'有复盘笔记':'点开记录自己的思路'].filter(Boolean).join(' · ')));target.append(b);}
+  }else if(tab==='practice'){
+   const summary=getReviewSummary(answers,state()),ids=key=>new Set(summary[key].map(a=>a.id));
+   const due=ids('due'),newItems=ids('newItems'),paused=ids('paused');
+   const filtered=answers.filter(a=>(status==='all'||status==='due'&&due.has(a.id)||status==='new'&&newItems.has(a.id)||status==='paused'&&paused.has(a.id)||status==='passed'&&reviewProgress(a,state()).passed)&&matches(a,[a.paper,a.number,a.subject,a.question?.stem,a.question?.prompt,...(a.question?.options||[]).map(o=>o.text)].join(' ')));
+   $('#qa-results').textContent=loadState==='ready'?`${filtered.length} 道 / 共 ${answers.length} 道`:'正在核对题目…';
+   if(!filtered.length&&loadState==='ready')target.append(filteredEmpty('当前没有这一类题目','未开始的题不算逾期。可以清除筛选，选择一道开始重做。'));
+   const queue=filtered.map(a=>a.id);
+   for(const a of filtered){
+    const progress=reviewProgress(a,state()),b=button('','knowledge-card qa-card qa-practice-card',()=>openPractice(a,queue)),meta=el('div','qa-meta');b.dataset.answerId=a.id;
+    meta.append(el('span','',a.subject),verificationBadge(a));
+    const detail=paused.has(a.id)?'可练习，暂不判分':due.has(a.id)?'今日到期':newItems.has(a.id)?'尚未开始':`下次复习 ${progress.dueDate}`;
+    b.append(meta,el('h3','',label(a)),paragraph('独立重做 · 先选答案，再看解析'),el('span','card-state',detail+(progress.passed?' · 复测通过':'')));target.append(b);
+   }
   }else{
    const filtered=answers.filter(a=>(status==='all'||(status==='noted'?hasNote(publicNote(a.id).note):status==='unmastered'?!publicNote(a.id).mastered:status==='understood'?publicNote(a.id).mastered:true))&&matches(a,[a.title,a.paper,a.number,a.subject,a.summary,a.answer,a.question?.stem,a.question?.prompt,...(a.question?.options||[]).map(o=>o.text),...a.sections.map(s=>s.heading+' '+s.body),publicNote(a.id).note].join(' ')));
    $('#qa-results').textContent=loadState==='ready'?`${filtered.length} 道 / 共 ${answers.length} 道`:answers.length?`${filtered.length} 道已加载 · ${loadState==='error'?'刷新失败':'正在核对'}`:'暂未加载题目';
    if(!filtered.length&&loadState==='ready')target.append(answers.length?filteredEmpty('没有符合条件的错题','可以换个关键词，或清除筛选查看全部。'):empty('还没有收录错题','把试卷名称和题号发给张菁伟，必要时附上截图。核对原题后，错题与解析会一起更新在这里。你回来复习、记错因就好。'));
    const queue=filtered.map(a=>a.id);
-   for(const a of filtered){const note=publicNote(a.id),b=button('','knowledge-card qa-card',()=>openAnswer(a,undefined,[...queue])),meta=el('div','qa-meta');b.dataset.answerId=a.id;meta.append(el('span','',a.subject),el('span','qa-badge '+(note.mastered?'understood':'answered'),note.mastered?'已弄懂':'待复习'));if(hasNote(note.note))meta.append(el('span','qa-badge noted','有复盘笔记'));b.append(meta,el('h3','',a.title),paragraph(label(a)),el('span','card-state','核对日期 '+a.reviewedAt+' · 查看讲解与记笔记'));target.append(b);}
+   for(const a of filtered){const note=publicNote(a.id),b=button('','knowledge-card qa-card',()=>openAnswer(a,undefined,[...queue])),meta=el('div','qa-meta');b.dataset.answerId=a.id;meta.append(el('span','',a.subject),el('span','qa-badge '+(note.mastered?'understood':'answered'),note.mastered?'已弄懂':'待复习'),verificationBadge(a));if(hasNote(note.note))meta.append(el('span','qa-badge noted','有复盘笔记'));b.append(meta,el('h3','',a.title),paragraph(label(a)),el('span','card-state','核对日期 '+a.reviewedAt+' · 查看讲解与记笔记'));target.append(b);}
   }
  }
  function inputField(form,key,title,options={}){
@@ -144,19 +192,67 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
   content.append(answerBox);
   noteEditor(content,q.note,(note,feedback)=>saveNote('question',id,note,feedback),{mastered:q.mastered,onMastered:(mastered,feedback)=>{const ok=commit(()=>saveQuestion(localStorage,id,{mastered}),feedback);render();return ok;}});
  }
- function openAnswer(a,requestId,answerQueue=[a.id]){
+ function openPractice(a,answerQueue=[a.id]){
+  if(!a)return;
+  if(tab!=='practice')setTab('practice');
+  const queue=[...answerQueue],index=queue.indexOf(a.id),footer=el('div','qa-reader-footer'),pager=el('div','qa-reader-pager');
+  const move=step=>{const next=answers.find(item=>item.id===queue[index+step]);if(next)openPractice(next,queue);};
+  const previous=button('上一题','quiet-btn',()=>move(-1)),next=button('跳过此题','quiet-btn',()=>move(1));
+  previous.disabled=index<=0;next.disabled=index<0||index>=queue.length-1;
+  pager.append(previous,el('span','qa-reader-position',`${index+1} / ${queue.length}`),next);footer.append(pager);
+  const content=openModal('独立重做',{reader:true,footer});content.dataset.answerId=a.id;
+  content.append(el('h3','qa-title',label(a)),verificationNotice(a));
+  // No explanation, title, source annotation, previous answer or private note is
+  // inserted in the DOM until a choice is submitted. Those can contain spoilers.
+  const q=a.question;
+  if(!q||!q.options?.length){content.append(paragraph('题面或选项尚未补齐，暂不能独立作答。'),button('阅读现有解析','quiet-btn',()=>openAnswer(a)));return;}
+  const form=el('form','qa-practice-form'),question=el('section','qa-original');
+  question.append(paragraph(q.stem,'qa-copy qa-original-stem'));if(q.prompt)question.append(paragraph(q.prompt,'qa-copy qa-question-prompt'));
+  const options=el('fieldset','qa-choice-list');options.append(el('legend','','选择本次答案'));
+  let selectedOption=null,confidence=null;
+  for(const option of q.options){
+   const row=el('label','qa-choice'),input=el('input');input.type='radio';input.name='practice-option';input.value=option.label;input.required=true;
+   input.onchange=()=>{selectedOption=option.label;submit.disabled=false;};
+   row.append(input,el('span','qa-option-label',option.label),el('span','qa-option-text',option.text));options.append(row);
+  }
+  const confidenceBox=el('fieldset','qa-confidence');confidenceBox.append(el('legend','','这次有多确定（选填）'));
+  for(const[value,text]of [['','不记录'],['sure','确定'],['unsure','犹豫'],['guess','猜测']]){
+   const row=el('label'),input=el('input');input.type='radio';input.name='practice-confidence';input.value=value;input.checked=!value;input.onchange=()=>{confidence=value||null;};row.append(input,el('span','',text));confidenceBox.append(row);
+  }
+  const saved=paragraph('先选一个选项，再提交查看答案与解析。','save-status');saved.setAttribute('role','status');
+  const submit=el('button','primary-btn','提交并查看解析');submit.type='submit';submit.disabled=true;
+  const attemptId='attempt-'+crypto.randomUUID();let submittedAt;
+  form.onsubmit=e=>{
+   e.preventDefault();if(!selectedOption)return;submittedAt||=new Date();
+   const ok=commit(()=>recordReviewAttempt(localStorage,a,{selectedOption,confidence,attemptId},submittedAt),saved);
+   if(!ok)return;
+   const attempt=state().reviewAttempts[a.id].find(item=>item.id===attemptId);
+   render();openAnswer(a,undefined,queue,attempt);
+  };
+  form.append(question,options,confidenceBox,saved,submit);content.append(form);
+ }
+ function openAnswer(a,requestId,answerQueue=[a.id],attempt=null){
   // The queue belongs to this reading session, not the live filters or mastery state.
   const queue=[...answerQueue],index=queue.indexOf(a.id),tools=el('nav','qa-reader-tools'),footer=el('div','qa-reader-footer'),pager=el('div','qa-reader-pager'),feedback=paragraph('','qa-reader-status');
   tools.setAttribute('aria-label','题目阅读导航');feedback.setAttribute('role','status');
   const leave=action=>{try{flush();feedback.textContent='';feedback.classList.remove('error');action();return true;}catch(e){feedback.textContent='尚未切换：'+e.message;feedback.classList.add('error');return false;}};
-  const move=step=>{const next=answers.find(item=>item.id===queue[index+step]);if(!next){feedback.textContent='这道题暂时无法读取，请先返回列表重新加载。';return;}leave(()=>openAnswer(next,undefined,queue));};
+  const move=step=>{const next=answers.find(item=>item.id===queue[index+step]);if(!next){feedback.textContent='这道题暂时无法读取，请先返回列表重新加载。';return;}leave(()=>attempt?openPractice(next,queue):openAnswer(next,undefined,queue));};
   const previous=button('上一题','quiet-btn',()=>move(-1)),next=button('下一题','primary-btn',()=>move(1));
   previous.dataset.qaStep='previous';next.dataset.qaStep='next';previous.disabled=index<=0;next.disabled=index<0||index>=queue.length-1;
   pager.append(previous,el('span','qa-reader-position',`${index+1} / ${queue.length}`),next);footer.append(pager,feedback);
-  const content=openModal('题目与解析',{reader:true,tools,footer});content.dataset.answerId=a.id;
+  const content=openModal(attempt?'本次复测与解析':'题目与解析',{reader:true,tools,footer});content.dataset.answerId=a.id;
   if(requestId)content.append(button('‹ 返回临时记题','text-btn',()=>leave(()=>openQuestion(requestId))));
   const heading=el('h3','qa-title',a.question?label(a):a.title);heading.id='qa-reader-question';
   content.append(heading,paragraph(a.question?a.subject:label(a)+' · '+a.subject,'muted'),paragraph('核对日期 '+a.reviewedAt+' · 学习解析，非官方标准答案','muted'));
+  content.append(verificationNotice(a));
+  if(attempt){
+   const result=el('section','qa-attempt-result');result.setAttribute('role','status');
+   const outcome=attempt.correct===null?'已记录 · 暂不判分':attempt.correct?'本次复测通过':'本次答错 · 明天再复习';
+   const progress=reviewProgress(a,state());
+   result.append(el('h3','',outcome),paragraph(`本次选择 ${attempt.selectedOption} · ${{sure:'确定',unsure:'犹豫',guess:'猜测'}[attempt.confidence]||'未记录把握程度'}`));
+   if(progress.dueDate)result.append(paragraph('下次复习：'+progress.dueDate));
+   result.append(paragraph('已保存本次记录；原有“已弄懂”标记保持独立。','muted'));content.append(result);
+  }else content.append(button('独立重做这道题','quiet-btn',()=>leave(()=>openPractice(a,queue))));
   if(a.question){
    const q=a.question,question=el('section','qa-original');question.append(el('h3','','题目'),paragraph(q.stem,'qa-copy qa-original-stem'));
    if(q.prompt)question.append(paragraph(q.prompt,'qa-copy qa-question-prompt'));
@@ -164,9 +260,15 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
    if(q.versionNote)question.append(paragraph(q.versionNote,'muted qa-version-note'));
    content.append(question);
   }
-  const explanation=el('details','qa-explanation');explanation.id='qa-reader-explanation';explanation.append(el('summary','','查看答案与解析'));content.append(explanation);
+  const explanation=el('details','qa-explanation');explanation.id='qa-reader-explanation';explanation.open=!!attempt;explanation.append(el('summary','','查看答案与解析'));content.append(explanation);
   if(a.summary)explanation.append(paragraph(a.summary,'qa-notice'));
   explanation.append(el('h3','','答案 / 作答要点'),paragraph(a.answer));for(const s of a.sections)explanation.append(el('h3','',s.heading),paragraph(s.body));
+  const attempts=state().reviewAttempts?.[a.id]||[];
+  if(attempts.length){
+   const history=el('details','qa-attempt-history');history.append(el('summary','','本机作答记录（最近5次）'));
+   for(const item of attempts.slice(-5).reverse())history.append(paragraph(`${item.localDate} · 选择 ${item.selectedOption} · ${{sure:'确定',unsure:'犹豫',guess:'猜测'}[item.confidence]||'未记录把握程度'}`));
+   history.append(paragraph('保留作答时的选择；当前是否通过与到期安排以最新核验为准。','muted'));content.append(history);
+  }
   if(a.sources.length){const details=el('details','reader-sources');details.append(el('summary','','原题与核对来源'));for(const s of a.sources){if(!/^https?:\/\//.test(s.url))continue;const link=el('a','qa-source-link',s.title+' ↗');link.href=s.url;link.target='_blank';link.rel='noopener noreferrer';details.append(link);}content.append(details);}
   // When opened from a local question, keep its existing reflection beside the explanation.
   let editor;
@@ -178,8 +280,13 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast}){
   tools.append(jump('question','题目',heading),jump('explanation','看解析',explanation,()=>{explanation.open=true;}),jump('note','记笔记',editor.block,()=>editor.area.focus({preventScroll:true})));selectJump('question');
  }
  $('#qa-new').onclick=newQuestion;$('#qa-draft-hint').onclick=newQuestion;$('#qa-refresh').onclick=loadAnswers;
- document.querySelectorAll('[data-qa-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.qaTab;render();});
+ document.querySelectorAll('[data-qa-tab]').forEach(b=>b.onclick=()=>setTab(b.dataset.qaTab));
  $('#qa-search').oninput=e=>{query=e.target.value;render();};$('#qa-status').onchange=e=>{status=e.target.value;render();};
  $('#qa-paper').onchange=e=>{paper=e.target.value;render();};$('#qa-reset').onclick=resetFilters;
+ // Recompute dates after a background tab resumes or crosses local midnight.
+ let day=localDate();const refreshDay=()=>{const today=localDate();if(today!==day){day=today;render();}};
+ document.addEventListener?.('visibilitychange',refreshDay);
+ globalThis.addEventListener?.('focus',refreshDay);
+ if(typeof window!=='undefined')window.setInterval(refreshDay,60000);
  loadAnswers();return {render,newQuestion,flush,snapshot,hasUnsaved:()=>unsaved.size>0};
 }

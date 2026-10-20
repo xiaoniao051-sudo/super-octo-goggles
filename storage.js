@@ -1,9 +1,13 @@
+import {gradeAnswer,reviewEvidenceKey,localDate,compareAttempts} from './review.js?v=20261020-review1';
+
+// Keep the existing key: changing it would strand notes on this browser.
 export const STATE_KEY='guokao-2027-study-v1';
-export const emptyStudy=()=>({schema:1,cards:{},scratchpad:'',questions:{},answerNotes:{},questionDraft:null,updatedAt:null});
+export const emptyStudy=()=>({schema:2,cards:{},scratchpad:'',questions:{},answerNotes:{},questionDraft:null,reviewAttempts:{},updatedAt:null});
 const SEPARATOR='\n\n【导入备份】\n';
 const unsafeKeys=new Set(['__proto__','prototype','constructor']);
 const questionId=/^qa-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const entryId=/^[a-z0-9-]{1,64}$/;
+const attemptId=/^attempt-[a-z0-9-]{1,56}$/;
 const questionLimits={paper:200,number:40,subject:100,source:500,myAnswer:500,doubt:5000,stem:30000,note:100000};
 const draftKeys=['paper','number','subject','source','myAnswer','doubt','stem'];
 const identityKeys=['paper','number','subject','source'];
@@ -20,8 +24,19 @@ function normalizeQuestion(item){
  for(const[key,limit]of Object.entries(questionLimits))result[key]=text(item[key],limit,['paper','number'].includes(key));
  result.mastered=bool(item.mastered);result.createdAt=time(item.createdAt);result.updatedAt=time(item.updatedAt);return result;
 }
+function normalizeAttempt(item){
+ safeRecord(item);
+ const id=safeId(item.id,attemptId),selectedOption=text(item.selectedOption,1,true),answeredAt=text(item.answeredAt,64,true),date=text(item.localDate,10,true);
+ if(!/^[A-H]$/.test(selectedOption)||![null,'sure','unsure','guess'].includes(item.confidence)||!(item.correct===null||typeof item.correct==='boolean'))throw invalid();
+ const instant=new Date(answeredAt);
+ if(!Number.isFinite(instant.getTime())||instant.toISOString()!==answeredAt||!/^\d{4}-\d{2}-\d{2}$/.test(date))throw invalid();
+ const calendar=new Date(date+'T12:00:00.000Z');
+ if(!Number.isFinite(calendar.getTime())||calendar.toISOString().slice(0,10)!==date)throw invalid();
+ if(typeof item.evidenceKey!=='string'||!/^rv1-[a-f0-9]{32}$/.test(item.evidenceKey))throw invalid();
+ return {id,selectedOption,confidence:item.confidence,answeredAt,localDate:date,correct:item.correct,evidenceKey:item.evidenceKey};
+}
 function validate(state){
- safeRecord(state);if(state.schema!==1)throw invalid();safeRecord(state.cards);
+ safeRecord(state);if(![1,2].includes(state.schema))throw invalid();safeRecord(state.cards);
  const clean=emptyStudy();clean.scratchpad=text(state.scratchpad,200000);clean.updatedAt=time(state.updatedAt,true);
  for(const[id,item]of Object.entries(state.cards)){
   safeId(id);safeRecord(item);const card={note:text(item.note,100000),starred:bool(item.starred),mastered:bool(item.mastered)};
@@ -30,6 +45,16 @@ function validate(state){
  if(state.questions!==undefined){safeRecord(state.questions);for(const[id,item]of Object.entries(state.questions)){safeId(id,questionId);clean.questions[id]=normalizeQuestion(item);}}
  if(state.answerNotes!==undefined){safeRecord(state.answerNotes);for(const[id,item]of Object.entries(state.answerNotes)){safeId(id);safeRecord(item);clean.answerNotes[id]={note:text(item.note,100000),mastered:bool(item.mastered),updatedAt:time(item.updatedAt)};}}
  if(state.questionDraft!==undefined)clean.questionDraft=normalizeDraft(state.questionDraft);
+ // Schema 1 did not contain answer attempts. Mastery flags remain subjective.
+ if(state.schema===2){
+  safeRecord(state.reviewAttempts);
+  for(const[id,items]of Object.entries(state.reviewAttempts)){
+   safeId(id);if(!Array.isArray(items))throw invalid();
+   const unique=new Map();
+   for(const item of items){const attempt=normalizeAttempt(item),existing=unique.get(attempt.id);if(existing&&JSON.stringify(existing)!==JSON.stringify(attempt))throw invalid();unique.set(attempt.id,attempt);}
+   clean.reviewAttempts[id]=[...unique.values()].sort(compareAttempts);
+  }
+ }
  return clean;
 }
 export function loadStudy(storage){const raw=storage.getItem(STATE_KEY);return raw?validate(JSON.parse(raw)):emptyStudy();}
@@ -54,6 +79,18 @@ export function saveAnswerNote(storage,id,patch){
  item.updatedAt=new Date().toISOString();state.answerNotes[id]=item;return commit(storage,state);
 }
 export function saveQuestionDraft(storage,draft){const state=loadStudy(storage);state.questionDraft=normalizeDraft(draft);return commit(storage,state);}
+export function recordReviewAttempt(storage,answer,selection,now=new Date()){
+ safeId(answer?.id);safeRecord(selection);
+ if(!Array.isArray(answer.question?.options)||!answer.question.options.some(o=>o&&o.label===selection.selectedOption))throw Error('请先选择题目中的一个选项');
+ const id=selection.attemptId||'attempt-'+crypto.randomUUID();
+ const item=normalizeAttempt({id,selectedOption:selection.selectedOption,confidence:selection.confidence??null,answeredAt:now.toISOString(),localDate:localDate(now),correct:gradeAnswer(answer,selection.selectedOption),evidenceKey:reviewEvidenceKey(answer)});
+ const state=loadStudy(storage),items=state.reviewAttempts[answer.id]||[],existing=items.find(a=>a.id===id);
+ if(existing){
+  if(existing.selectedOption!==item.selectedOption||existing.confidence!==item.confidence||existing.evidenceKey!==item.evidenceKey)throw Error('本次作答已保存，请重新开始一次重做');
+  return state;
+ }
+ state.reviewAttempts[answer.id]=[...items,item];return commit(storage,state);
+}
 function mergeText(a,b){if(!b||a===b)return a;if(!a)return b;const parts=a.split(SEPARATOR);for(const part of b.split(SEPARATOR))if(part&&!parts.includes(part))parts.push(part);return parts.join(SEPARATOR);}
 const identity=item=>JSON.stringify(identityKeys.map(key=>item[key]));
 // Stable local IDs prevent the same conflicting backup from creating repeated copies.
@@ -68,7 +105,7 @@ function mergeQuestion(a,b,now){
  merged.mastered=a.mastered||b.mastered;merged.updatedAt=now;return merged;
 }
 export function mergeStudy(storage,backup,knownIds){
- const incoming=validate(backup),state=loadStudy(storage),now=new Date().toISOString();let count=0,questionCount=0,answerNoteCount=0;const conflicts=[],warnings=[];
+ const incoming=validate(backup),state=loadStudy(storage),now=new Date().toISOString();let count=0,questionCount=0,answerNoteCount=0,reviewAttemptCount=0;const conflicts=[],reviewConflicts=[],warnings=[];
  for(const[id,item]of Object.entries(incoming.cards)){
   if(!knownIds.includes(id))continue;const old=state.cards[id]||{note:'',starred:false,mastered:false};
   state.cards[id]={note:mergeText(old.note,item.note),starred:old.starred||item.starred,mastered:old.mastered||item.mastered,updatedAt:now};count++;
@@ -85,6 +122,24 @@ export function mergeStudy(storage,backup,knownIds){
  for(const[id,item]of Object.entries(incoming.answerNotes)){
   const old=state.answerNotes[id]||{note:'',mastered:false};state.answerNotes[id]={note:mergeText(old.note,item.note),mastered:old.mastered||item.mastered,updatedAt:now};answerNoteCount++;
  }
+ for(const[id,items]of Object.entries(incoming.reviewAttempts)){
+  const combined=new Map((state.reviewAttempts[id]||[]).map(a=>[a.id,a]));
+  for(const item of items){
+   let next=item,existing=combined.get(item.id);
+   if(existing&&JSON.stringify(existing)!==JSON.stringify(item)){
+    let attempt=0;
+    do{
+     const synthetic=conflictId(item.id,{paper:JSON.stringify(item),number:id,subject:String(attempt++),source:''},0);
+     next={...item,id:'attempt-import-'+synthetic.slice(3)};
+     existing=combined.get(next.id);
+    }while(existing&&JSON.stringify(existing)!==JSON.stringify(next));
+    reviewConflicts.push({answerId:id,originalId:item.id,importedId:next.id});
+    warnings.push('同一作答编号包含不同记录，已完整另存，原记录未覆盖：'+id+'。');
+   }
+   combined.set(next.id,next);reviewAttemptCount++;
+  }
+  state.reviewAttempts[id]=[...combined.values()].sort(compareAttempts);
+ }
  state.scratchpad=mergeText(state.scratchpad,incoming.scratchpad);
  if(incoming.questionDraft){
   if(!state.questionDraft)state.questionDraft=incoming.questionDraft;
@@ -94,5 +149,5 @@ export function mergeStudy(storage,backup,knownIds){
    state.scratchpad=mergeText(state.scratchpad,preserved);warnings.push('当前草稿已保留，备份中的另一份题目草稿已完整保存到随手记。');
   }
  }
- return {state:commit(storage,state),count,totalCount:count+questionCount+answerNoteCount,questionCount,answerNoteCount,conflicts,warnings};
+ return {state:commit(storage,state),count,totalCount:count+questionCount+answerNoteCount+reviewAttemptCount,questionCount,answerNoteCount,reviewAttemptCount,conflicts,reviewConflicts,warnings};
 }

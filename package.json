@@ -1,0 +1,9 @@
+{
+  "name": "guokao-study",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test-storage.mjs test-questions.mjs test-note-inspection.mjs test-storage-review.mjs test-answer-evidence.mjs",
+    "test:browser": "node test-browser.mjs"
+  }
+}

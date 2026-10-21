@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#216c61">
+<meta name="description" content="申论原作答与完整批改归档，按篇回看审题、论证与修改建议。">
+<title>申论批改 · 国考精选</title>
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="stylesheet" href="./essay-reviews.css?v=20261021-20">
+<script type="module" src="./essay-reviews.js?v=20261021-20"></script>
+</head>
+<body>
+<section id="archive-view">
+ <header class="site-header"><a class="brand" href="./#home" data-back-study><span class="brand-mark">知</span><span>国考精选</span></a><a class="quiet-link" href="./#home" data-back-study>‹ 返回学习</a></header>
+ <main class="archive-main">
+  <div class="archive-heading"><span class="eyebrow">从这一稿，走向下一稿</span><h1>申论批改</h1><p>原作答与完整批改放在一起，回看问题，再动笔修改。</p></div>
+  <div class="search-row"><label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"></circle><path d="m16 16 5 5"></path></svg><input id="essay-search" type="search" placeholder="搜索文章、试卷或批改要点" aria-label="搜索申论批改"></label><button id="essay-clear" class="text-btn" hidden>清除</button></div>
+  <div class="list-meta"><span id="essay-count" role="status">正在加载批改记录…</span><button id="essay-refresh" class="text-btn">刷新记录</button></div>
+  <div id="archive-status" role="status"></div>
+  <div id="review-list" class="review-list"></div>
+  <p class="archive-foot">本板块收录已整理的批改，不会自动评分。历史记录保留当时的结论，建议分不等同于官方阅卷分。</p>
+ </main>
+</section>
+<section id="reader-view" hidden>
+ <div class="reader-chrome">
+ <header class="reader-header"><button id="back-reviews" class="back-btn">‹ 批改列表</button><span id="reader-label">申论批改</span><button id="download-review" class="text-btn">下载文字版</button></header>
+ <nav class="reader-tabs" aria-label="文章内容"><button data-review-tab="report" aria-pressed="true">完整批改</button><button data-review-tab="answer" aria-pressed="false">原作答</button><button data-review-tab="question" aria-pressed="false">原题与出处</button></nav>
+ </div>
+ <main class="reader-main">
+  <div class="reader-title"><div id="reader-badges" class="badges"></div><h1 id="review-title"></h1><p id="review-paper" class="muted"></p></div>
+  <p id="review-notice" class="notice"></p>
+  <p id="action-status" role="status" class="muted" hidden></p>
+  <article id="review-content" class="review-content" tabindex="-1"></article>
+ </main>
+</section>
+<noscript><p class="notice">请启用浏览器 JavaScript，以查看申论批改记录。</p></noscript>
+</body></html>

@@ -29,21 +29,25 @@ const unresolved={
  'gk-2023-enforcement-059':'disputed'
 };
 const addedId='gk-2023-enforcement-024';
+const growthId='ziliao-feisheng-200-part2-007';
+const addedIds=[addedId,growthId];
 const originalIds=[...Object.keys(expectedOptions),...Object.keys(unresolved)];
 
 test('review rollout only adds metadata: original IDs, questions, explanations and sources are unchanged',()=>{
  const original=structuredClone(data);
- original.answers=original.answers.filter(answer=>answer.id!==addedId);
+ original.answers=original.answers.filter(answer=>!addedIds.includes(answer.id));
+ original.updatedAt='2026-10-20';
  assert.equal(original.answers.length,18);
  assert.deepEqual(original.answers.map(answer=>answer.id).sort(),[...originalIds].sort());
  for(const answer of original.answers){delete answer.verification;delete answer.correctOption;}
  const digest=createHash('sha256').update(JSON.stringify(original)).digest('hex');
  // Fingerprint of answers.json at a0dd859, before the review rollout.
- // Exclude only the explicitly added question; never refresh the old-content fingerprint.
+ // Exclude only the explicitly added questions and restore the original collection date;
+ // never refresh the old-content fingerprint.
  assert.equal(digest,'d6b7301f9372784ccabbc655cf1276f49cef3e637faafd4c85711c91f603a834');
- assert.equal(data.answers.length,19);
- assert.equal(answers.size,19,'IDs remain unique');
- assert.deepEqual([...answers.keys()].sort(),[...originalIds,addedId].sort());
+ assert.equal(data.answers.length,20);
+ assert.equal(answers.size,20,'IDs remain unique');
+ assert.deepEqual([...answers.keys()].sort(),[...originalIds,...addedIds].sort());
 });
 
 test('all checked answers use explicit letters matching the manually verified option text',()=>{
@@ -54,7 +58,7 @@ test('all checked answers use explicit letters matching the manually verified op
   assert.equal(answer.question.options.find(option=>option.label===letter)?.text,text,id);
   assert.match(answer.verification.note,/参考解析.*并非官方标准答案/,id);
  }
- assert.deepEqual(data.answers.filter(answer=>answer.verification.status==='checked').map(answer=>answer.id).sort(),[...Object.keys(expectedOptions),addedId].sort());
+ assert.deepEqual(data.answers.filter(answer=>answer.verification.status==='checked').map(answer=>answer.id).sort(),[...Object.keys(expectedOptions),...addedIds].sort());
 });
 
 test('2023 enforcement question 24 keeps A–D option order and grades only B as correct',()=>{
@@ -76,9 +80,59 @@ test('2023 enforcement question 24 keeps A–D option order and grades only B as
  for(const option of ['A','C','D'])assert.equal(gradeAnswer(answer,option),false,option);
  assert.equal(gradeAnswer(answer,'E'),null);
  const summary=getReviewSummary(data.answers,{});
- assert.deepEqual(summary.newItems.map(item=>item.id).sort(),[...Object.keys(expectedOptions),addedId].sort());
+ assert.deepEqual(summary.newItems.map(item=>item.id).sort(),[...Object.keys(expectedOptions),...addedIds].sort());
  assert.deepEqual(summary.paused.map(item=>item.id).sort(),Object.keys(unresolved).sort());
  assert.equal(summary.due.length,0);
+});
+
+test('FIC question compares both five-year totals and only China crosses the three-times threshold',()=>{
+ const answer=answers.get(growthId);
+ assert.ok(answer,'FIC question has a separate stable ID');
+ assert.equal(data.answers[0].id,growthId,'newly added question stays first');
+ assert.equal(answer.addedAt,'2026-10-22');
+ assert.equal(answer.number,'7');
+ assert.deepEqual(answer.question.options.map(option=>[option.label,option.text.trim()]),[
+  ['A','中国'],['B','日本'],['C','欧洲'],['D','美国']
+ ]);
+ assert.equal(answer.verification.status,'checked');
+ assert.equal(answer.correctOption,'A');
+ assert.equal(getVerification(answer).canGrade,true);
+ assert.equal(gradeAnswer(answer,'A'),true);
+ for(const option of ['B','C','D'])assert.equal(gradeAnswer(answer,option),false,option);
+
+ const expected={
+  '中国':{before:[9,10,20,25,40],after:[50,112,116,127,120],totals:[104,525]},
+  '日本':{before:[7,8,10,8,11],after:[10,17,12,13,12],totals:[44,64]},
+  '欧洲':{before:[31,40,44,42,63],after:[55,61,70,77,72],totals:[220,335]},
+  '美国':{before:[47,75,77,89,104],after:[134,138,178,159,151],totals:[392,760]}
+ };
+ const growth={};
+ for(const [region,evidence]of Object.entries(expected)){
+  const rows=[...answer.question.stem.matchAll(new RegExp(region+'：[ \\t]*([^\\r\\n]+)','g'))]
+   .map(match=>match[1].trim().split('、').map(value=>{
+    assert.match(value.trim(),/^\d+$/,region+' contains only integer counts');
+    return Number(value.trim());
+   }));
+  assert.equal(rows.length,2,region+' occurs once in each five-year period');
+  assert.deepEqual(rows.map(row=>row.length),[5,5],region+' has five annual values per period');
+  assert.deepEqual(rows,[evidence.before,evidence.after],region+' matches the supplied table');
+  const [before,after]=rows,totals=rows.map(row=>row.reduce((sum,value)=>sum+value,0));
+  assert.deepEqual(totals,evidence.totals,region+' five-year sums');
+  const margins=after.map((value,index)=>value-3*before[index]);
+  if(region==='中国'){
+   assert.ok(margins.every(value=>value>=0)&&margins.some(value=>value>0),'China is at least 3x in every pair and strictly greater in some');
+   assert.ok(totals[1]>3*totals[0],'China total is strictly above 3x');
+  }else{
+   assert.ok(margins.every(value=>value<0),region+' is strictly below 3x in every pair');
+   assert.ok(totals[1]<3*totals[0],region+' total is strictly below 3x');
+  }
+  growth[region]=(totals[1]-totals[0])/totals[0];
+ }
+ assert.ok(growth['中国']>2);
+ for(const region of ['日本','欧洲','美国'])assert.ok(growth[region]<2&&growth['中国']>growth[region],region+' has lower five-year growth');
+ const originalSeven=answers.get('gk-2023-enforcement-007');
+ assert.equal(originalSeven.correctOption,'B','the distinct 2023 enforcement question 7 is unchanged');
+ assert.equal(gradeAnswer(originalSeven,'B'),true);
 });
 
 test('missing material, ambiguous readings and disputed answers have no grading key',()=>{

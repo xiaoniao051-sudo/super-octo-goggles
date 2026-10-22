@@ -30,7 +30,8 @@ const unresolved={
 };
 const addedId='gk-2023-enforcement-024';
 const growthId='ziliao-feisheng-200-part2-007';
-const addedIds=[addedId,growthId];
+const climateId='verbal-exercise27-001';
+const addedIds=[addedId,growthId,climateId];
 const originalIds=[...Object.keys(expectedOptions),...Object.keys(unresolved)];
 
 test('review rollout only adds metadata: original IDs, questions, explanations and sources are unchanged',()=>{
@@ -45,8 +46,8 @@ test('review rollout only adds metadata: original IDs, questions, explanations a
  // Exclude only the explicitly added questions and restore the original collection date;
  // never refresh the old-content fingerprint.
  assert.equal(digest,'d6b7301f9372784ccabbc655cf1276f49cef3e637faafd4c85711c91f603a834');
- assert.equal(data.answers.length,20);
- assert.equal(answers.size,20,'IDs remain unique');
+ assert.equal(data.answers.length,21);
+ assert.equal(answers.size,21,'IDs remain unique');
  assert.deepEqual([...answers.keys()].sort(),[...originalIds,...addedIds].sort());
 });
 
@@ -88,7 +89,7 @@ test('2023 enforcement question 24 keeps A–D option order and grades only B as
 test('FIC question compares both five-year totals and only China crosses the three-times threshold',()=>{
  const answer=answers.get(growthId);
  assert.ok(answer,'FIC question has a separate stable ID');
- assert.equal(data.answers[0].id,growthId,'newly added question stays first');
+ assert.ok(data.answers.findIndex(item=>item.id===growthId)>data.answers.findIndex(item=>item.id===climateId),'FIC follows the newly added climate question');
  assert.equal(answer.addedAt,'2026-10-22');
  assert.equal(answer.number,'7');
  assert.deepEqual(answer.question.options.map(option=>[option.label,option.text.trim()]),[
@@ -133,6 +134,37 @@ test('FIC question compares both five-year totals and only China crosses the thr
  const originalSeven=answers.get('gk-2023-enforcement-007');
  assert.equal(originalSeven.correctOption,'B','the distinct 2023 enforcement question 7 is unchanged');
  assert.equal(gradeAnswer(originalSeven,'B'),true);
+});
+
+test('exercise 27 keeps its unidentified provenance, full option order and reference answer C',()=>{
+ const answer=answers.get(climateId);
+ assert.ok(answer,'climate question has a separate stable ID');
+ assert.equal(answer.paper,'练习题27（书名、版次未显示）');
+ assert.equal(answer.number,'1');
+ assert.equal(answer.addedAt,'2026-10-22');
+ assert.equal(data.answers[0].id,climateId,'the latest addition is first');
+ assert.deepEqual(answer.question.options.map(option=>[option.label,option.text.trim()]),[
+  ['A','回顾历史上的气候变迁过程'],
+  ['B','强调气候对粮食生产的意义'],
+  ['C','揭示气候变化对人类社会的影响'],
+  ['D','说明气候是影响王朝兴衰的因素']
+ ]);
+ assert.equal(answer.verification.status,'checked');
+ assert.equal(answer.correctOption,'C');
+ assert.equal(getVerification(answer).canGrade,true);
+ assert.equal(gradeAnswer(answer,'C'),true);
+ for(const option of ['A','B','D'])assert.equal(gradeAnswer(answer,option),false,option);
+ assert.equal(gradeAnswer(answer,'E'),null);
+ const provenance=[answer.sourceVersion,answer.question.versionNote].join('\n');
+ assert.match(provenance,/用户.*(?:图片|照片)/,'source is the supplied image');
+ assert.match(provenance,/(?:未|不)[^。；\n]*真题/,'unknown exam provenance is not promoted to an identified past exam');
+ assert.doesNotMatch(answer.paper,/国考|省考|\d{4}年/);
+
+ const sameDay=data.answers.filter(item=>item.addedAt==='2026-10-22').map(item=>item.id);
+ assert.deepEqual(sameDay,[climateId,growthId],'same-day additions retain their insertion order');
+ const sorted=[...data.answers].sort((a,b)=>(b.addedAt||'').localeCompare(a.addedAt||''));
+ assert.deepEqual(sorted.slice(0,2).map(item=>item.id),[climateId,growthId],'stable date sorting keeps the newest addition before FIC');
+ assert.deepEqual(getReviewSummary(data.answers,{}).newItems.slice(0,2).map(item=>item.id),[climateId,growthId],'the new-question queue preserves the same order');
 });
 
 test('missing material, ambiguous readings and disputed answers have no grading key',()=>{

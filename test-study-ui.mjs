@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {searchWords,searchExcerpt,orderCards} from './study-ui.js';
+const card={summary:'一组近义词',sections:[{heading:'区别',body:'固定搭配：循序渐进强调按步骤推进。'}],example:{question:'选词',answer:'循序渐进',explanation:'按次序'},pitfalls:['不要忽视语境']};
+assert.deepEqual(searchWords('  AI  搭配  '),['ai','搭配']);
+assert.equal(searchExcerpt(card,''),card.summary);
+assert.ok(searchExcerpt(card,'搭配').includes('循序渐进'));
+assert.ok(searchExcerpt(card,'复盘','我的复盘：选错了').includes('我的复盘'));
+assert.ok(searchExcerpt({...card,summary:'字'.repeat(300)+'关键词'+'字'.repeat(300)},'关键词').length<130);
+assert.ok(searchExcerpt({...card,summary:'字'.repeat(300)+'关键词'+'字'.repeat(300)},'关键词').includes('关键词'));
+const original=[{id:'a',reviewedAt:'2026-01-01'},{id:'b',reviewedAt:'2026-10-22'},{id:'c',reviewedAt:'2026-10-22'},{id:'d'}];
+assert.deepEqual(orderCards(original,'recent').map(c=>c.id),['b','c','a','d']);
+assert.deepEqual(original.map(c=>c.id),['a','b','c','d']);
+assert.equal(orderCards(original),original);
+console.log('Search excerpts and stable recent ordering pass; source data unchanged.');

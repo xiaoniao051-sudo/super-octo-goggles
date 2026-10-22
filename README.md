@@ -64,10 +64,30 @@ node --test --test-isolation=none test-storage.mjs test-questions.mjs test-note-
 
 `test-browser.mjs` 使用 Playwright 和独立浏览器上下文，默认启动仅监听127.0.0.1的临时静态服务，覆盖桌面及移动窄屏交互，不读取真实浏览器资料。运行 `npm run test:browser`；截图和测试备份写入被Git忽略的 `artifacts/`。部署后可将环境变量 `GUOKAO_TEST_URL` 设为 `https://xiaoniao051-sudo.github.io/super-octo-goggles` 再运行同一测试，报告写入 `artifacts/online/`；仍只使用隔离上下文及合成笔记。
 
-仓库沿用 `main` 分支的 GitHub Pages 自动发布流程（`pages build and deployment`）。发布后应核对部署任务成功、其提交与目标提交一致，并检查线上静态资源和交互。本次入口 `app.js` 缓存版本更新为 `20261022-tian`，其余模块及样式缓存版本保持原值。
+仓库沿用 `main` 分支的 GitHub Pages 自动发布流程（`pages build and deployment`）。发布后应核对部署任务成功、其提交与目标提交一致，并检查线上静态资源和交互。本次入口 `app.js` 和新增 `study-ui.js` 缓存版本为 `20261022-ux`，样式缓存版本为 `20261022-ux24`。
 
 补充 WebKit 兼容检查可设置 `GUOKAO_BROWSER=webkit`（需安装与 Playwright 版本匹配的 WebKit），并按运行环境设置 `PLAYWRIGHT_BROWSERS_PATH`。Windows 上的 WebKit 与 iPhone 触摸/视口配置不等于真实 iOS Safari；真机验收须另行记录 iPhone/iPad 型号、iOS 版本、浏览器、测试网址及结果，不能以模拟检查代替。
 
 首版验收（2026-10-20，基线 `a0dd859`）：23项自动化测试通过（含三套既有回归），Chrome 155 的1280×900、390×844、320×740交互测试通过。每个视口逐一检查18道题提交前的DOM、旧备份导入、新备份恢复、笔记保留、待核题排除和本地日期到期计算；页面及弹窗内部均无横向溢出、无脚本错误。上海与洛杉矶时区均已测试。
 
 连续做题验收（2026-10-20，基线 `0f637b8`）：23项自动化测试通过；Chrome 155.0.8059.85 与 WebKit 26.5 在1280×900、390×844、320×740三个视口均完成15道新题连续作答，覆盖选择重置、筛选队列、跳过不记作答、固定提交按钮、末题完成，以及以上首版回归。修复了 WebKit 长试卷下拉框造成的横向溢出。WebKit 移动视口使用 iPhone 触控模拟，真实 iOS Safari 验收另行记录。
+
+
+## 2026-10-22 操作体验更新
+
+参考粉笔的收藏与错题分工、Anki 的主动回忆流程、Quizlet 的星标复习方式，针对本库实施：
+
+- 手机主导航保留学习、知识库、复习、错题库、我的五项；申论批改保留首页、申论分类和我的入口，原链接可用。
+- 首页增加直接搜索和收藏入口；知识库搜索明确当前范围，可保留关键词跨分类检索，并显示命中的正文片段。
+- 知识卡按要点、练习、笔记分层；长卡补充内容按需展开，原题解与来源完整保留。
+- 可遮住核心文字回忆、复制公开背诵段、切换标准与大字号。展示偏好仅写入原 UI 偏好键，不改学习记录。
+- 最近核对按原有 reviewedAt 排序，不等于新增日期。
+- 190 张知识卡、21 道题、3 份申论批改的内容及稳定 ID 未改动。
+
+来源：
+- https://www.fenbi.com/page/information-hub-detail/11493
+- https://docs.ankiweb.net/manual/studying
+- https://help.quizlet.com/hc/en-ca/articles/360030988091-Studying-with-Flashcards
+- https://help.quizlet.com/hc/en-us/articles/360031172312-Studying-most-missed-terms-with-stars
+
+验证：七套 Node 检查通过，含搜索片段、稳定排序、旧笔记/备份兼容、错题保存保护、判分证据和申论归档；浏览器检查搜索范围切换、阅读页签、答案展开、字号保存、返回后的查询、窄屏布局及错题弹窗。手机尺寸检查为桌面浏览器视口，真实 iPhone 和微信软键盘仍需实际使用确认。没有在正式网站写入合成笔记或作答。

@@ -79,7 +79,7 @@ try{
    assert.match(await page.locator('.practice-feedback').textContent(),/来源参考答案/);
    const state=await page.evaluate(()=>JSON.parse(localStorage.getItem('guokao-2027-study-v1')));
    const remoteIds=new Set(bank.items.map(q=>q.id));
-   const attempts=Object.entries(state.reviewAttempts).filter(([id])=>remoteIds.has(id)).flatMap(([,rows])=>rows);
+   const attempts=Object.entries(state.reviewAttempts).filter(([id])=>remoteIds.has(id)).flatMap(([,rows])=>rows).filter(a=>a.correct===null);
    assert.equal(attempts.length,1);assert.equal(attempts[0].correct,null);
   }
   await page.goto(base+'verbal.html?view=index&exam=shiye&year=2022&q=49&part='+encodeURIComponent('片段阅读'));

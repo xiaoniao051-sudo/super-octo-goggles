@@ -1,6 +1,6 @@
 {
   "updatedAt": "2026-10-23",
-  "scopeNote": "2019—2026国考与福建省考29个卷型可选卷载入题面并作答，来源参考答案未独立核验；另有9道本站讲解可直接练习。福建事业单位目前仍为目录，尚不能在本站做题。",
+  "scopeNote": "2019—2026国考与福建省考29个卷型可选卷载入题面并作答，来源参考答案未独立核验；另有14道本站讲解可直接练习。福建事业单位目前仍为目录，尚不能在本站做题。",
   "stats": {
     "occurrences": 1498,
     "uniqueItems": 1202,
@@ -10,26 +10,28 @@
       "片段阅读": 535,
       "语句表达": 223
     },
-    "newFullText": 0,
-    "newIndependentSolutions": 0,
-    "existingExplanations": 9
+    "newFullText": 5,
+    "newIndependentSolutions": 5,
+    "existingExplanations": 14
   },
   "maintenanceBatch": {
     "reviewedAt": "2026-10-23",
-    "baseline": "6f3a421600f13035ea7fc4206cbdae97484ec6b2",
-    "indexedPapersAdded": 1,
-    "indexedOccurrencesAdded": 25,
-    "indexGroupsAdded": 25,
+    "baseline": "9e17d2bfede5b2ac4b579b6282415e2775f9619b",
+    "indexedPapersAdded": 0,
+    "indexedOccurrencesAdded": 0,
+    "indexGroupsAdded": 0,
     "runtimeOccurrencesAdded": 0,
-    "runtimePapersPinned": 8,
-    "runtimeOccurrencesPinned": 300,
-    "independentSolutionsAdded": 0,
-    "independentSolutionsRevised": [
-      "gk-2023-enforcement-037",
-      "gk-2023-enforcement-039"
+    "localCompleteQuestionsAdded": 5,
+    "independentSolutionsAdded": 5,
+    "checkedAnswersAdded": 5,
+    "answerIds": [
+      "verbal-a5168b49d026064bf459a94f",
+      "verbal-5a0d1d1bcc4381dd16842247",
+      "verbal-d91a592170c7c9825085c7c6",
+      "verbal-468ec5de3b18fa4c3c62738b",
+      "verbal-9a55730921f0aca3c203d635"
     ],
-    "checkedAnswersAdded": 0,
-    "note": "解析器重新验收29卷1080题次；Node文本解析验收不等于浏览器或真机验收。"
+    "note": "用户指定2022行政执法31、32、34、36、40单题答疑。复用已有索引ID及笔记键；公开解析不包含用户个人选择与错因。运行时来源答案仍不自动升级核验状态。"
   },
   "runtimePractice": {
     "sourcePapers": 29,
@@ -795,14 +797,14 @@
     }
   ],
   "gaps": [
-    "国考和福建省考29卷共1080题次支持按选卷读取原文并作答，非去重题数。尚未新增逐题独立解析；已有9道讲解沿用错题库，其中4道属目标国考真题、5道为补充练习。",
+    "国考和福建省考29卷共1080题次支持选卷读取原文并作答，包含跨卷重复；来源答案仍未逐题独立核验。本站言语完整讲解14条，其中13题可判分、1题有争议；目标国考9条（含争议1条）、补充练习5条。",
     "国考21卷与福建省考8卷使用上游言语模块序号，原卷题号尚未核实；副省级篇章题被前置，不能统一加固定偏移量。",
     "三类按设问进行规则初分并复核例外；保留分类边界，后续与完整原卷逐题复核，不宣称全部人工精校。",
     "福建事业单位已收录场次不等于该年全部场次；市县独立卷、不同科目版本和缺失材料仍需补齐。",
     "公开仓库不存整库原文或机构解析；做题时由读者浏览器读取指定公开原卷，网络不可达时无法载入。本地作答和笔记可备份。福建事业单位尚未接通此读取方式。",
     "2026年截至10月23日；尚未发生的场次不计入已整理范围。",
     "2022-09-03福建事业单位综合基础知识新增25条分类索引（来源卷31—55），未接通可做题；需可使用原卷言语页，特别核对38、48的转录疑点及45、49的图片内容和卷型。仍有13个事业单位候选入口未读取。",
-    "本批重写2023国考行政执法37、39的逐项解析，原ID和addedAt不变；未新增独立解析或已核对判分题。言语已有9条讲解关联中8题可核对判分，59题仍有争议。"
+    "2022国考行政执法31、32、34、36、40已逐题核对并补原创解析，复用已有索引ID。公开回忆版题号已经交叉核对，但未取得官方原卷，未将其他模块题号统一加偏移。"
   ],
   "sourceCatalog": {
     "shiyeCandidates": [

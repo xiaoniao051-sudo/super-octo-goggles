@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {getVerification,gradeAnswer,getReviewSummary} from './review.js';
+import {adaptSourceQuestion,submissionResult} from './verbal-practice-model.js';
+import {loadStudy,saveAnswerNote,recordReviewAttempt} from './storage.js';
 
 const data=JSON.parse(readFileSync(new URL('./answers.json',import.meta.url),'utf8'));
 const answers=new Map(data.answers.map(answer=>[answer.id,answer]));
@@ -31,8 +33,53 @@ const unresolved={
 const addedId='gk-2023-enforcement-024';
 const growthId='ziliao-feisheng-200-part2-007';
 const climateId='verbal-exercise27-001';
-const addedIds=[addedId,growthId,climateId];
+const enforcement2022Ids=["verbal-a5168b49d026064bf459a94f", "verbal-5a0d1d1bcc4381dd16842247", "verbal-d91a592170c7c9825085c7c6", "verbal-468ec5de3b18fa4c3c62738b", "verbal-9a55730921f0aca3c203d635"];
+const addedIds=[addedId,growthId,climateId,...enforcement2022Ids];
 const originalIds=[...Object.keys(expectedOptions),...Object.keys(unresolved)];
+
+test('five 2022 questions reuse indexed identities and explicitly map this edition to B/D/A/A/B',()=>{
+ const bank=JSON.parse(readFileSync(new URL('./verbal-bank.json',import.meta.url),'utf8'));
+ const expected=[
+  ['31','B',['周期性　高效','间歇性　平稳','地域性　持续','阶段性　弹性'],11],
+  ['32','D',['异军突起　推陈出新','横空出世　一举两得','粉墨登场　扬长避短','应运而生　另辟蹊径'],12],
+  ['34','A',['不期而至　克敌制胜','有机可乘　攻无不克','纷至沓来　所向披靡','不请自来　攻坚克难'],14],
+  ['36','A',['照搬　自立门户　屈指可数','保持　另起炉灶　凤毛麟角','沿袭　独当一面　差强人意','复制　革故鼎新　寥寥无几'],16],
+  ['40','B',['方向　受制　大开眼界','视角　拘泥　流连忘返','境界　局限　身临其境','途径　止步　叹为观止'],20]
+ ];
+ for(const [i,[number,key,options,moduleNumber]] of expected.entries()){
+  const q=answers.get(enforcement2022Ids[i]),item=bank.items.find(x=>x.id===q.id);
+  assert.equal(q.paper,'2022年国考行政执法卷');assert.equal(q.number,number);
+  assert.deepEqual(q.question.options.map(o=>o.label),['A','B','C','D']);
+  assert.deepEqual(q.question.options.map(o=>o.text),options);assert.equal(q.correctOption,key);
+  assert.equal(q.addedAt,'2026-10-23');assert.equal(q.reviewedAt,'2026-10-23');
+  assert(q.question.stem.length>80);assert(q.question.prompt);assert(q.sections.length>=5);
+  assert(q.answer.includes(options['ABCD'.indexOf(key)].replaceAll('　','—')));
+  assert.equal(bank.explained.filter(e=>e.answerId===q.id).length,1);
+  assert(item.occurrences.some(o=>o.paperId==='guokao-2022-enforcement'&&o.moduleNumber===moduleNumber));
+  for(const letter of 'ABCD')assert.equal(gradeAnswer(q,letter),letter===key);
+  assert.doesNotMatch(JSON.stringify(q),/你选了|你当时|你的选项|你的思考/);
+ }
+ assert.deepEqual(data.answers.slice(0,5).map(q=>q.id),enforcement2022Ids);
+});
+
+test('source edition and checked edition share a note key without mixing answer letters or grading evidence',()=>{
+ const q=answers.get(enforcement2022Ids[0]),content=new Map();
+ const storage={getItem:k=>content.get(k)??null,setItem:(k,v)=>content.set(k,v)};
+ // The existing runtime edition puts the same correct words in C, not B.
+ const words=['地域性　持续','阶段性　弹性','间歇性　平稳','周期性　高效'];
+ const parsed={qid:'4637390',stem:[{type:'text',text:q.question.stem}],options:words.map((text,i)=>({label:'ABCD'[i],segments:[{type:'text',text}]})),referenceAnswer:{value:'C'}};
+ const runtime=adaptSourceQuestion(parsed,{id:q.id,part:'逻辑填空',subtype:'词语辨析'},{moduleNumber:11},{id:'guokao-2022-enforcement',title:'运行时回忆版',url:'https://example.com',exam:'guokao',year:2022});
+ assert.equal(runtime.id,q.id);assert.equal(submissionResult(runtime,'C').kind,'reference-match');
+ assert.equal(submissionResult(runtime,'C').correct,null);assert.equal(gradeAnswer(q,'C'),false);
+ saveAnswerNote(storage,runtime.id,{note:'既有笔记'});
+ recordReviewAttempt(storage,runtime,{selectedOption:'C',attemptId:'attempt-source-edition-test'});
+ recordReviewAttempt(storage,q,{selectedOption:'B',attemptId:'attempt-checked-edition-test'});
+ const study=loadStudy(storage);
+ assert.deepEqual(Object.keys(study.answerNotes),[q.id]);assert.equal(study.answerNotes[q.id].note,'既有笔记');
+ assert.equal(study.reviewAttempts[q.id].length,2);
+ assert.deepEqual(study.reviewAttempts[q.id].map(a=>a.correct),[null,true]);
+ assert.equal(getReviewSummary([q],study).gradedCount,1);
+});
 
 test('original IDs, questions and sources stay fixed; only two approved editorial revisions are excluded',()=>{
  const original=structuredClone(data);
@@ -50,8 +97,8 @@ test('original IDs, questions and sources stay fixed; only two approved editoria
  // Their original questions, options, sources and addedAt remain fingerprinted,
  // as does every other old record; unrelated changes must still fail.
  assert.equal(digest,'7774c63f5425953c0a4caa825a810d9a8b28b590b525930f3fd7db0c80094dc8');
- assert.equal(data.answers.length,21);
- assert.equal(answers.size,21,'IDs remain unique');
+ assert.equal(data.answers.length,26);
+ assert.equal(answers.size,26,'IDs remain unique');
  assert.deepEqual([...answers.keys()].sort(),[...originalIds,...addedIds].sort());
 });
 
@@ -146,7 +193,7 @@ test('exercise 27 keeps its unidentified provenance, full option order and refer
  assert.equal(answer.paper,'练习题27（书名、版次未显示）');
  assert.equal(answer.number,'1');
  assert.equal(answer.addedAt,'2026-10-22');
- assert.equal(data.answers[0].id,climateId,'the latest addition is first');
+ assert.equal(data.answers.filter(a=>!enforcement2022Ids.includes(a.id))[0].id,climateId,'older additions retain their order');
  assert.deepEqual(answer.question.options.map(option=>[option.label,option.text.trim()]),[
   ['A','回顾历史上的气候变迁过程'],
   ['B','强调气候对粮食生产的意义'],
@@ -167,8 +214,8 @@ test('exercise 27 keeps its unidentified provenance, full option order and refer
  const sameDay=data.answers.filter(item=>item.addedAt==='2026-10-22').map(item=>item.id);
  assert.deepEqual(sameDay,[climateId,growthId],'same-day additions retain their insertion order');
  const sorted=[...data.answers].sort((a,b)=>(b.addedAt||'').localeCompare(a.addedAt||''));
- assert.deepEqual(sorted.slice(0,2).map(item=>item.id),[climateId,growthId],'stable date sorting keeps the newest addition before FIC');
- assert.deepEqual(getReviewSummary(data.answers,{}).newItems.slice(0,2).map(item=>item.id),[climateId,growthId],'the new-question queue preserves the same order');
+ assert.deepEqual(sorted.filter(a=>!enforcement2022Ids.includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'stable date sorting keeps the newest addition before FIC');
+ assert.deepEqual(getReviewSummary(data.answers,{}).newItems.filter(a=>!enforcement2022Ids.includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'the new-question queue preserves the same order');
 });
 
 test('missing material, ambiguous readings and disputed answers have no grading key',()=>{

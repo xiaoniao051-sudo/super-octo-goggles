@@ -2,17 +2,34 @@
   "updatedAt": "2026-10-23",
   "scopeNote": "2019—2026国考与福建省考29个卷型可选卷载入题面并作答，来源参考答案未独立核验；另有9道本站讲解可直接练习。福建事业单位目前仍为目录，尚不能在本站做题。",
   "stats": {
-    "occurrences": 1473,
-    "uniqueItems": 1177,
-    "papers": 44,
+    "occurrences": 1498,
+    "uniqueItems": 1202,
+    "papers": 45,
     "parts": {
-      "逻辑填空": 441,
-      "片段阅读": 518,
-      "语句表达": 218
+      "逻辑填空": 444,
+      "片段阅读": 535,
+      "语句表达": 223
     },
     "newFullText": 0,
     "newIndependentSolutions": 0,
     "existingExplanations": 9
+  },
+  "maintenanceBatch": {
+    "reviewedAt": "2026-10-23",
+    "baseline": "6f3a421600f13035ea7fc4206cbdae97484ec6b2",
+    "indexedPapersAdded": 1,
+    "indexedOccurrencesAdded": 25,
+    "indexGroupsAdded": 25,
+    "runtimeOccurrencesAdded": 0,
+    "runtimePapersPinned": 8,
+    "runtimeOccurrencesPinned": 300,
+    "independentSolutionsAdded": 0,
+    "independentSolutionsRevised": [
+      "gk-2023-enforcement-037",
+      "gk-2023-enforcement-039"
+    ],
+    "checkedAnswersAdded": 0,
+    "note": "解析器重新验收29卷1080题次；Node文本解析验收不等于浏览器或真机验收。"
   },
   "runtimePractice": {
     "sourcePapers": 29,
@@ -364,11 +381,15 @@
       "exam": "fujian",
       "year": 2026,
       "title": "2026年福建省公务员录用考试《行测》题（网友回忆版）",
-      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
       "edition": "网友回忆版，非官方原卷",
       "note": "网友回忆版；未核对官方原卷及原卷题号。",
       "sourceSha": "fa7e60eb67c76c3c63d923e3bc69333d0e3fae39",
       "indexed": true,
+      "previousUrls": [
+        "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md"
+      ],
+      "sourceCommit": "278984401124db40da5163a31275b8deb9c282f4",
       "parts": {
         "逻辑填空": 10,
         "片段阅读": 14,
@@ -380,11 +401,15 @@
       "exam": "fujian",
       "year": 2025,
       "title": "2025年福建省公务员录用考试《行测》题（网友回忆版）",
-      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
       "edition": "网友回忆版，非官方原卷",
       "note": "网友回忆版；未核对官方原卷及原卷题号。",
       "sourceSha": "ab70b3abc2f2678fc05db99b713415dd3d2a16e3",
       "indexed": true,
+      "previousUrls": [
+        "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md"
+      ],
+      "sourceCommit": "278984401124db40da5163a31275b8deb9c282f4",
       "parts": {
         "逻辑填空": 10,
         "片段阅读": 13,
@@ -396,11 +421,15 @@
       "exam": "fujian",
       "year": 2024,
       "title": "2024年福建省公务员录用考试《行测》题（网友回忆版）",
-      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
       "edition": "网友回忆版，非官方原卷",
       "note": "网友回忆版；未核对官方原卷及原卷题号。",
       "sourceSha": "0ca85c39c06ff93a9a808dc7c93ed9ab21cd3957",
       "indexed": true,
+      "previousUrls": [
+        "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md"
+      ],
+      "sourceCommit": "278984401124db40da5163a31275b8deb9c282f4",
       "parts": {
         "逻辑填空": 20,
         "片段阅读": 16,
@@ -412,11 +441,15 @@
       "exam": "fujian",
       "year": 2023,
       "title": "2023年福建省公务员录用考试《行测》题（网友回忆版）",
-      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
       "edition": "网友回忆版，非官方原卷",
       "note": "网友回忆版；未核对官方原卷及原卷题号。",
       "sourceSha": "8e1331e252743bc62bc01223078c2820b66bede0",
       "indexed": true,
+      "previousUrls": [
+        "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md"
+      ],
+      "sourceCommit": "278984401124db40da5163a31275b8deb9c282f4",
       "parts": {
         "逻辑填空": 20,
         "片段阅读": 13,
@@ -428,11 +461,15 @@
       "exam": "fujian",
       "year": 2022,
       "title": "2022年福建省公务员录用考试《行测》题（网友回忆版）",
-      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
       "edition": "网友回忆版，非官方原卷",
       "note": "网友回忆版；未核对官方原卷及原卷题号。",
       "sourceSha": "15b454312c48f98c640c509c1c9920f5d4e47a2b",
       "indexed": true,
+      "previousUrls": [
+        "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md"
+      ],
+      "sourceCommit": "278984401124db40da5163a31275b8deb9c282f4",
       "parts": {
         "逻辑填空": 19,
         "片段阅读": 14,
@@ -444,11 +481,15 @@
       "exam": "fujian",
       "year": 2021,
       "title": "2021年福建省公务员录用考试《行测》题（网友回忆版）",
-      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2021%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2021%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
       "edition": "网友回忆版，非官方原卷",
       "note": "网友回忆版；未核对官方原卷及原卷题号。",
       "sourceSha": "4baefb0b310ffa50e7e20addc4bd195fc1425d63",
       "indexed": true,
+      "previousUrls": [
+        "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2021%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md"
+      ],
+      "sourceCommit": "278984401124db40da5163a31275b8deb9c282f4",
       "parts": {
         "逻辑填空": 20,
         "片段阅读": 12,
@@ -460,11 +501,15 @@
       "exam": "fujian",
       "year": 2020,
       "title": "2020年福建省公务员考试《行测》试题（网友回忆版）",
-      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2020%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E8%AF%95%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2020%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E8%AF%95%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
       "edition": "网友回忆版，非官方原卷",
       "note": "网友回忆版；未核对官方原卷及原卷题号。",
       "sourceSha": "6a118cbf1d3553da286ee51203821a2d174012a8",
       "indexed": true,
+      "previousUrls": [
+        "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2020%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E8%AF%95%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md"
+      ],
+      "sourceCommit": "278984401124db40da5163a31275b8deb9c282f4",
       "parts": {
         "逻辑填空": 20,
         "片段阅读": 11,
@@ -476,11 +521,15 @@
       "exam": "fujian",
       "year": 2019,
       "title": "2019年420联考《行测》题（福建卷）（网友回忆版）",
-      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2019%E5%B9%B4420%E8%81%94%E8%80%83%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%A6%8F%E5%BB%BA%E5%8D%B7%EF%BC%89%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2019%E5%B9%B4420%E8%81%94%E8%80%83%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%A6%8F%E5%BB%BA%E5%8D%B7%EF%BC%89%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
       "edition": "网友回忆版，非官方原卷",
       "note": "网友回忆版；未核对官方原卷及原卷题号。",
       "sourceSha": "83a3df58461aeb7978eccf5d3b5c8e71ba07116a",
       "indexed": true,
+      "previousUrls": [
+        "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2019%E5%B9%B4420%E8%81%94%E8%80%83%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%A6%8F%E5%BB%BA%E5%8D%B7%EF%BC%89%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md"
+      ],
+      "sourceCommit": "278984401124db40da5163a31275b8deb9c282f4",
       "parts": {
         "逻辑填空": 20,
         "片段阅读": 14,
@@ -726,6 +775,23 @@
         "片段阅读": 14,
         "语句表达": 6
       }
+    },
+    {
+      "id": "fj-sy-2022-0903",
+      "exam": "shiye",
+      "year": 2022,
+      "title": "2022年9月3日福建省事业单位《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1663252225471",
+      "edition": "网友回忆版",
+      "note": "来源回忆卷31—55为言语部分，非官方原卷题号核验。具体A/B卷型未确认；第38、48题存在转录疑点，第45、49题含图片内容，完整题面仍待核。仅新增分类索引，不提供本站作答。",
+      "sourceSha": null,
+      "indexed": true,
+      "reviewedAt": "2026-10-23",
+      "parts": {
+        "逻辑填空": 3,
+        "片段阅读": 17,
+        "语句表达": 5
+      }
     }
   ],
   "gaps": [
@@ -734,7 +800,9 @@
     "三类按设问进行规则初分并复核例外；保留分类边界，后续与完整原卷逐题复核，不宣称全部人工精校。",
     "福建事业单位已收录场次不等于该年全部场次；市县独立卷、不同科目版本和缺失材料仍需补齐。",
     "公开仓库不存整库原文或机构解析；做题时由读者浏览器读取指定公开原卷，网络不可达时无法载入。本地作答和笔记可备份。福建事业单位尚未接通此读取方式。",
-    "2026年截至10月23日；尚未发生的场次不计入已整理范围。"
+    "2026年截至10月23日；尚未发生的场次不计入已整理范围。",
+    "2022-09-03福建事业单位综合基础知识新增25条分类索引（来源卷31—55），未接通可做题；需可使用原卷言语页，特别核对38、48的转录疑点及45、49的图片内容和卷型。仍有13个事业单位候选入口未读取。",
+    "本批重写2023国考行政执法37、39的逐项解析，原ID和addedAt不变；未新增独立解析或已核对判分题。言语已有9条讲解关联中8题可核对判分，59题仍有争议。"
   ],
   "sourceCatalog": {
     "shiyeCandidates": [
@@ -873,11 +941,16 @@
         "examDate": "2022-09-03",
         "subject": "综合基础知识",
         "evidenceSources": [
-          "kkgwy-fj"
+          "kkgwy-fj",
+          "fj-sy-2022-0903",
+          "official-20220903-gxt"
         ],
-        "sourceStatus": "catalog_or_announcement_only",
-        "verbalCount": null,
-        "rightsStatus": "not_cleared_for_bulk_publication"
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 25,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2022-0903",
+        "reviewedAt": "2026-10-23",
+        "note": "已读取网友回忆版31—55，分类3/17/5；卷型A/B、图片数字与疑似错字待原卷核验。未获批量转载依据，未接通本站作答。"
       },
       {
         "id": "fj-sydw-20230429-zonghe",
@@ -1443,6 +1516,24 @@
         "access": "本次HTML可读；言语部分已逐题核对分类",
         "license": "未发现开放转载授权",
         "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2022-0903",
+        "name": "2022年9月3日福建省事业单位《综合基础知识》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1663252225471",
+        "type": "third_party_recollection",
+        "access": "2026-10-23 HTML可读；分类核对25题，未复制完整题文",
+        "license": "未发现开放转载授权",
+        "attributedSource": "fenbi",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "official-20220903-gxt",
+        "name": "福建省工信厅：2022年福建省工艺美术行业发展促进中心招聘方案",
+        "url": "https://gxt.fujian.gov.cn/zwgk/rsxx/zkxx/202208/t20220809_5971051.htm",
+        "type": "official_announcement",
+        "access": "搜索收录可核日期与科目，正文抓取未完成",
+        "note": "旁证2022-09-03综合基础知识场次；不证明回忆卷逐题准确或A/B卷型。"
       }
     ],
     "unreadPaperLinks": [
@@ -1529,14 +1620,6 @@
       {
         "title": "2022上半年宁德综合",
         "url": "https://gwy.gkzhenti.cn/paper/1658230430865",
-        "status": "web_fetch_cache_miss",
-        "classificationStatus": "not_classified",
-        "questionCount": null,
-        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
-      },
-      {
-        "title": "2022年9月3日福建综合",
-        "url": "https://gwy.gkzhenti.cn/paper/1663252225471",
         "status": "web_fetch_cache_miss",
         "classificationStatus": "not_classified",
         "questionCount": null,

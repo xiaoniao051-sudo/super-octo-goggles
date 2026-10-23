@@ -1,7 +1,9 @@
 {
   "date": "2026-10-23",
+  "method": "Node parser audit of connector-fetched pinned source files; not browser or device acceptance",
   "papers": 29,
   "questions": 1080,
+  "playableQuestions": 1080,
   "referenceAnswers": 1080,
   "warningCount": 0,
   "countsMatch": true,
@@ -9,9 +11,13 @@
   "hasExplanationField": false,
   "reports": [
     {
+      "paperId": "guokao-2026-prefectural",
       "paper": "2026年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "58b46466db70a8004abdf621a0f15f370b006b00",
       "parsed": 30,
       "expected": 30,
+      "playable": 30,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 30,
@@ -21,9 +27,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2026-provincial",
       "paper": "2026年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "a1ba86b4af90cf38a9f86558428d544d02e2391e",
       "parsed": 30,
       "expected": 30,
+      "playable": 30,
       "materials": 2,
       "materialQuestionNumbers": [
         1,
@@ -44,9 +54,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2026-enforcement",
       "paper": "2026年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "bca4a38258300ab97e65449f530712e1b0467eb2",
       "parsed": 30,
       "expected": 30,
+      "playable": 30,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 30,
@@ -56,9 +70,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2025-prefectural",
       "paper": "2025年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "9df976536545b4d1f6aeb815a636375b0329f391",
       "parsed": 30,
       "expected": 30,
+      "playable": 30,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 30,
@@ -68,9 +86,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2025-provincial",
       "paper": "2025年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "d0eb36e68a99cd1f6862089a6185a09320242dca",
       "parsed": 30,
       "expected": 30,
+      "playable": 30,
       "materials": 2,
       "materialQuestionNumbers": [
         1,
@@ -91,9 +113,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2025-enforcement",
       "paper": "2025年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "4fc5512ce4664adf8769781b9b2e7f53c651e188",
       "parsed": 30,
       "expected": 30,
+      "playable": 30,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 30,
@@ -103,9 +129,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2024-prefectural",
       "paper": "2024年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "eb35d33922b4f5e28fd98f9f8e9aff335638258c",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -115,9 +145,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2024-provincial",
       "paper": "2024年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "7a968355adedbbe7160339599b503d6d53bef2d9",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 2,
       "materialQuestionNumbers": [
         1,
@@ -138,9 +172,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2024-enforcement",
       "paper": "2024年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "d5d6057430232765eb0d5effa1ac1bb2e2a92a00",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -150,9 +188,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2023-prefectural",
       "paper": "2023年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "700f10bd9d026018c24caa028f5cbe4e5158925b",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -162,9 +204,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2023-provincial",
       "paper": "2023年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "4867f17a1006081facd7fdaefe8462ed2adfc5f8",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 2,
       "materialQuestionNumbers": [
         1,
@@ -185,9 +231,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2023-enforcement",
       "paper": "2023年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "4301f2639cfb015497dfebf160a2fa98b434b952",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -197,9 +247,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2022-prefectural",
       "paper": "2022年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "b687b515cb9abca60f70f0c34c065fb3e8360371",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -209,9 +263,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2022-provincial",
       "paper": "2022年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "b9cd92a07bb44c0bffd64f05cf07594be4c34712",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 2,
       "materialQuestionNumbers": [
         1,
@@ -232,9 +290,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2022-enforcement",
       "paper": "2022年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "12806f82d674e15059badcc77ebd82b956f63fe6",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -244,9 +306,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2021-prefectural",
       "paper": "2021年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2021%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "cd498dc37a51d72191e303927833d80d3c6ca551",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -256,9 +322,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2021-provincial",
       "paper": "2021年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2021%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "a76d24bdab685abbd9f67ca71eeaef0fb278f57a",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 3,
       "materialQuestionNumbers": [
         1,
@@ -279,9 +349,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2020-prefectural",
       "paper": "2020年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2020%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "110030a9221b84c453975da4cd19e69a86b26f90",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -291,9 +365,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2020-provincial",
       "paper": "2020年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2020%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "21739e15ccd502d3f189ac1a79483250db33fe66",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 2,
       "materialQuestionNumbers": [
         1,
@@ -314,9 +392,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2019-prefectural",
       "paper": "2019年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2019%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "c22b5188a544345fda48be8003864665ed5b217b",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -326,9 +408,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "guokao-2019-provincial",
       "paper": "2019年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2019%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "00ba1ab2eec77fae03a878362a30acb811d5452c",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 2,
       "materialQuestionNumbers": [
         1,
@@ -349,9 +435,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "fj-sk-2026-xingce",
       "paper": "2026年福建省公务员录用考试《行测》题（网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "fa7e60eb67c76c3c63d923e3bc69333d0e3fae39",
       "parsed": 30,
       "expected": 30,
+      "playable": 30,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 30,
@@ -361,9 +451,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "fj-sk-2025-xingce",
       "paper": "2025年福建省公务员录用考试《行测》题（网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "ab70b3abc2f2678fc05db99b713415dd3d2a16e3",
       "parsed": 30,
       "expected": 30,
+      "playable": 30,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 30,
@@ -373,9 +467,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "fj-sk-2024-xingce",
       "paper": "2024年福建省公务员录用考试《行测》题（网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "0ca85c39c06ff93a9a808dc7c93ed9ab21cd3957",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -385,9 +483,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "fj-sk-2023-xingce",
       "paper": "2023年福建省公务员录用考试《行测》题（网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "8e1331e252743bc62bc01223078c2820b66bede0",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -397,9 +499,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "fj-sk-2022-xingce",
       "paper": "2022年福建省公务员录用考试《行测》题（网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "15b454312c48f98c640c509c1c9920f5d4e47a2b",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -409,9 +515,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "fj-sk-2021-xingce",
       "paper": "2021年福建省公务员录用考试《行测》题（网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2021%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "4baefb0b310ffa50e7e20addc4bd195fc1425d63",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -421,9 +531,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "fj-sk-2020-xingce",
       "paper": "2020年福建省公务员考试《行测》试题（网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2020%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E8%AF%95%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "6a118cbf1d3553da286ee51203821a2d174012a8",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -433,9 +547,13 @@
       "hasExplanationField": false
     },
     {
+      "paperId": "fj-sk-2019-xingce",
       "paper": "2019年420联考《行测》题（福建卷）（网友回忆版）",
+      "sourceUrl": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2019%E5%B9%B4420%E8%81%94%E8%80%83%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%A6%8F%E5%BB%BA%E5%8D%B7%EF%BC%89%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "sourceBlobSha": "83a3df58461aeb7978eccf5d3b5c8e71ba07116a",
       "parsed": 40,
       "expected": 40,
+      "playable": 40,
       "materials": 0,
       "materialQuestionNumbers": [],
       "referenceAnswers": 40,
@@ -446,10 +564,5 @@
     }
   ],
   "materialQuestionCount": 80,
-  "sharedPassageCount": 17,
-  "regressionTests": {
-    "explicitNullCannotDiscardSourceMaterials": true,
-    "corrected2021SharedPassageCount": 3,
-    "corrected2021MaterialQuestions": 10
-  }
+  "sharedPassageCount": 17
 }

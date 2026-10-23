@@ -4,6 +4,8 @@
 
 2026-10-23：言语专项已增加直接做题模式，三类题型下选卷，显示题干与A—D选项，提交后看答案、记录错题与错因。国考/福建省考29卷共1080题次按用户选卷读取公开来源，答案为未独立核验的来源参考答案；已有9道本站讲解可直接练习。福建事业单位尚未接通可做题数据，逐题原创解析仍需补齐，不能称全量完成。新检查：`node maintenance/check-practice.mjs`。
 
+2026-10-23 增量核查：固定8份福建省考原文版本，严格校验载卷身份、数量和共享材料；重写2023国考行政执法第37、39题逐项解析。新增2022-09-03福建事业单位回忆卷25条分类索引（未接通作答），总计45版本、1498题次、1202索引组，不能称唯一真题数。运行时仍29卷1080题次；言语讲解9条，其中8道可判分、1道争议。本批无新增可做题或已核对判分题。完整缺口和验收说明见交接文件。
+
 # 国考精选 · 2027
 
 面向2027年度国考行政执法备考的轻量知识库，现有190张精选卡、21道错题，其中18题可按本站参考答案判分。
@@ -68,7 +70,7 @@ npm test
 node --test --test-isolation=none test-storage.mjs test-questions.mjs test-note-inspection.mjs test-storage-review.mjs test-answer-evidence.mjs
 ```
 
-`test-browser.mjs` 使用 Playwright 和独立浏览器上下文，默认启动仅监听127.0.0.1的临时静态服务，覆盖桌面及移动窄屏交互，不读取真实浏览器资料。运行 `npm run test:browser`；截图和测试备份写入被Git忽略的 `artifacts/`。部署后可将环境变量 `GUOKAO_TEST_URL` 设为 `https://xiaoniao051-sudo.github.io/super-octo-goggles` 再运行同一测试，报告写入 `artifacts/online/`；仍只使用隔离上下文及合成笔记。
+`test-browser.mjs` 使用 Playwright 和独立浏览器上下文，默认启动仅监听127.0.0.1的临时静态服务，覆盖桌面及移动窄屏交互，不读取真实浏览器资料。运行 `npm run test:browser`；截图和测试备份写入被Git忽略的 `artifacts/`。本轮仅在本地运行写入合成记录的测试，不在真实线上学习存储写测试数据。线上验收仅作只读核对。
 
 仓库沿用 `main` 分支的 GitHub Pages 自动发布流程（`pages build and deployment`）。发布后应核对部署任务成功、其提交与目标提交一致，并检查线上静态资源和交互。本次入口 `app.js` 和新增 `study-ui.js` 缓存版本为 `20261022-ux`，样式缓存版本为 `20261022-ux24`。
 

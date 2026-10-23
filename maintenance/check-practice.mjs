@@ -12,7 +12,7 @@ assert.equal(submissionResult(a,'C').kind,'correct');assert.equal(submissionResu
 const now=new Date('2026-10-23T10:00:00+08:00');recordReviewAttempt(storage,a,{selectedOption:'A',attemptId:'attempt-unit-001'},now);recordReviewAttempt(storage,a,{selectedOption:'A',attemptId:'attempt-unit-001'},now);
 assert.equal(loadStudy(storage).reviewAttempts[a.id].length,1);assert(hasMistake(a,loadStudy(storage)));
 assert.equal(loadStudy(storage).cards['keep-old'].note,'旧笔记保留');assert.equal(loadStudy(storage).answerNotes[a.id].note,'旧错因');
-const url='https://github.com/ERRRC/xingcezhenti/blob/main/03-言语理解与表达/测试.md';
+const url='https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-言语理解与表达/测试.md';
 const md='试卷: "测试"\n题数: "1"\n年份: "2026"\n## 第 1 题 <sub>qid 1 · 词语选填</sub>\n这是一道自行编写的测试题：一加一等于？\n- **A**. 一\n- **B**. 二 ✅\n- **C**. 三\n- **D**. 四\n**答案**：B\n**官方解析**\n禁止复制的示例解析正文';
 const p=parseVerbalSource(md,{sourceUrl:url,expectedCount:1,bindings:[{qid:1,moduleNumber:1,materialGroupId:null}]});assert.equal(p.questions.length,1);assert(p.questions[0].sourceTextComplete);assert(!JSON.stringify(p).includes('禁止复制'));assert(!JSON.stringify(p.questions[0].options).includes('✅'));
 const r=adaptSourceQuestion(p.questions[0],{id:'verbal-unit-001',part:'逻辑填空',subtype:'测试'},{moduleNumber:1},{id:'source-test',title:'测试',url,exam:'guokao',year:2026});

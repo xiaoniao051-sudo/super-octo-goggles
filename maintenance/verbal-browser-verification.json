@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-23",
+  "browser": "154.0.8037.57",
+  "environment": "Desktop Chromium responsive viewports; not iPhone/WeChat",
+  "sourceMode": "Pinned external source text replayed locally; not live network acceptance",
+  "results": [
+    {
+      "width": 320,
+      "subpath": true,
+      "threeParts": true,
+      "filtersAndSearch": true,
+      "preSubmitHidden": true,
+      "nextAndMistakeRetry": true,
+      "noteSurvivesReload": true,
+      "failedSaveProtected": true,
+      "sharedMaterialAndReferenceUnscored": true,
+      "asyncSwitchProtected": true,
+      "noHorizontalOverflow": true
+    },
+    {
+      "width": 390,
+      "subpath": true,
+      "threeParts": true,
+      "filtersAndSearch": true,
+      "preSubmitHidden": true,
+      "nextAndMistakeRetry": true,
+      "noteSurvivesReload": true,
+      "failedSaveProtected": true,
+      "sharedMaterialAndReferenceUnscored": true,
+      "asyncSwitchProtected": true,
+      "noHorizontalOverflow": true
+    }
+  ]
+}

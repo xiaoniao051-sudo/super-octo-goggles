@@ -34,18 +34,22 @@ const climateId='verbal-exercise27-001';
 const addedIds=[addedId,growthId,climateId];
 const originalIds=[...Object.keys(expectedOptions),...Object.keys(unresolved)];
 
-test('review rollout only adds metadata: original IDs, questions, explanations and sources are unchanged',()=>{
+test('original IDs, questions and sources stay fixed; only two approved editorial revisions are excluded',()=>{
  const original=structuredClone(data);
  original.answers=original.answers.filter(answer=>!addedIds.includes(answer.id));
  original.updatedAt='2026-10-20';
  assert.equal(original.answers.length,18);
  assert.deepEqual(original.answers.map(answer=>answer.id).sort(),[...originalIds].sort());
- for(const answer of original.answers){delete answer.verification;delete answer.correctOption;}
+ for(const answer of original.answers){
+  delete answer.verification;delete answer.correctOption;
+  if(['gk-2023-enforcement-037','gk-2023-enforcement-039'].includes(answer.id))
+   for(const field of ['title','summary','answer','sections','reviewedAt'])delete answer[field];
+ }
  const digest=createHash('sha256').update(JSON.stringify(original)).digest('hex');
- // Fingerprint of answers.json at a0dd859, before the review rollout.
- // Exclude only the explicitly added questions and restore the original collection date;
- // never refresh the old-content fingerprint.
- assert.equal(digest,'d6b7301f9372784ccabbc655cf1276f49cef3e637faafd4c85711c91f603a834');
+ // Baseline 6f3a421: exclude only the approved 37/39 editorial fields.
+ // Their original questions, options, sources and addedAt remain fingerprinted,
+ // as does every other old record; unrelated changes must still fail.
+ assert.equal(digest,'7774c63f5425953c0a4caa825a810d9a8b28b590b525930f3fd7db0c80094dc8');
  assert.equal(data.answers.length,21);
  assert.equal(answers.size,21,'IDs remain unique');
  assert.deepEqual([...answers.keys()].sort(),[...originalIds,...addedIds].sort());

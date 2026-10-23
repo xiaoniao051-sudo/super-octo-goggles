@@ -1,6 +1,6 @@
 import {loadStudy,saveAnswerNote} from './storage.js?v=20261020-review2';
 import {getVerification} from './review.js?v=20261020-review2';
-import {parseVerbalSource,rawSourceUrl} from './verbal-source-parser.js?v=20261023-practice';
+import {parseVerbalSource,rawSourceUrl} from './verbal-source-parser.js?v=20261023-audit1';
 import {adaptSourceQuestion,submissionResult,hasMistake,plainQuestion,persistPracticeRound,retryPendingRounds,hasPendingRounds,reconcileNoteDraft} from './verbal-practice-model.js?v=20261023-practice';
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const btn=(text,cls,fn)=>{const n=el('button',cls,text);n.type='button';n.onclick=fn;return n;};
@@ -41,7 +41,7 @@ export function createPractice({bank,answers,mount,toast,onCount}){
  }
  async function loadPaper(id){if(!flush())return;const token=++sequence,paper=bank.papers.find(p=>p.id===id),url=sourceUrl(paper?.url);if(!url)return;count('正在载入题干与选项…');const loadButton=mount.querySelector('.practice-picker button');if(loadButton)loadButton.disabled=true;
   try{const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),22000);let md;try{const response=await fetch(url,{signal:controller.signal,credentials:'omit',referrerPolicy:'no-referrer'});if(!response.ok)throw Error('来源返回 '+response.status);md=await response.text();}finally{clearTimeout(timeout);}if(md.length>2000000)throw Error('试卷文件过大');const rows=bank.items.flatMap(item=>item.occurrences.filter(o=>o.paperId===id).map(o=>({item,o}))).sort((a,b)=>a.o.moduleNumber-b.o.moduleNumber);
-   const bindings=rows.map(({o})=>({qid:Number(o.qid),moduleNumber:o.moduleNumber,materialGroupId:o.materialGroupId||null}));const result=parseVerbalSource(md,{sourceUrl:url,expectedCount:rows.length,bindings});const qs=[];
+   const bindings=rows.map(({o})=>({qid:String(o.qid),moduleNumber:o.moduleNumber,materialGroupId:o.materialGroupId}));const result=parseVerbalSource(md,{sourceUrl:url,expectedTitle:paper.title,expectedYear:paper.year,expectedCount:rows.length,bindings});const qs=[];
    for(const row of rows){const q=result.questions.find(q=>String(q.qid)===String(row.o.qid)&&q.moduleNumber===row.o.moduleNumber);if(q?.sourceTextComplete&&q.referenceAnswer?.value)qs.push(adaptSourceQuestion(q,row.item,row.o,paper));}
    if(!qs.length)throw Error('没有识别到完整题面与答案，已停止载入');if(token!==sequence)return;if(!flush()){if(loadButton)loadButton.disabled=false;return;}loaded.set(id,qs);position=0;toast('已载入 '+qs.length+' 道；不完整或答案冲突的题已跳过。');render();
   }catch(e){if(token!==sequence)return;count('题目未载入');toast('暂时无法读取原卷：'+(e.name==='AbortError'?'网络超时':e.message)+'。可先做“本站已有讲解”。');if(loadButton)loadButton.disabled=false;}

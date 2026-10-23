@@ -29,7 +29,7 @@ export function rawSourceUrl(value) {
     if (!path.startsWith(prefix)) throw Error('原题仓库不在支持范围');
     path = '/' + OWNER + '/' + REPO + '/' + path.slice(prefix.length);
   } else if (url.hostname !== 'raw.githubusercontent.com') throw Error('原题域名不在支持范围');
-  const pattern = new RegExp('^/' + OWNER + '/' + REPO + '/([a-f0-9]{40}|main)/03-言语理解与表达/[^/]+\\.md$');
+  const pattern = new RegExp('^/' + OWNER + '/' + REPO + '/[a-f0-9]{40}/03-言语理解与表达/[^/]+\\.md$');
   if (!pattern.test(path)) throw Error('不是支持的言语试卷文件');
   return 'https://raw.githubusercontent.com' + path.split('/').map(encodeURIComponent).join('/');
 }
@@ -116,15 +116,25 @@ export function parseVerbalSource(markdown, options = {}) {
   const title = field(markdown,'试卷');
   if (!title) throw Error('没有识别到试卷名称');
   if (options.expectedTitle && title !== options.expectedTitle) throw Error('试卷名称与目录不一致');
+  const year = Number(field(markdown,'年份')) || null;
+  if (Number.isInteger(options.expectedYear) && year !== options.expectedYear) throw Error('试卷年份与目录不一致');
   const declaredCount = Number(field(markdown,'题数'));
   const headers = [...markdown.matchAll(new RegExp(QUESTION_HEADER.source,'gm'))];
   if (!headers.length) throw Error('没有识别到试题');
   const warnings = [];
-  if (declaredCount !== headers.length) warnings.push('来源声明题量与实际题目数不一致');
+  if (declaredCount !== headers.length) throw Error('来源声明题量与实际题目数不一致');
   if (Number.isInteger(options.expectedCount) && options.expectedCount !== headers.length)
-    warnings.push('目录题量与实际来源题量不一致');
+    throw Error('目录题量与实际来源题量不一致');
+  if (options.bindings) {
+    const keys = options.bindings.map(b => String(b.qid)+':'+Number(b.moduleNumber));
+    const sourceKeys = headers.map(h => h[2]+':'+Number(h[1]));
+    if (new Set(keys).size !== keys.length || new Set(sourceKeys).size !== sourceKeys.length ||
+        keys.length !== sourceKeys.length || sourceKeys.some(key => !keys.includes(key)))
+      throw Error('目录题号与来源题目不能一一对应');
+  }
   const materials = [];
   for (const heading of markdown.matchAll(/^##\s+材料\s+(\d+)\s*$/gm)) {
+    if (materials.some(m => m.number === Number(heading[1]))) throw Error('来源材料编号重复');
     const next = headers.find(h => h.index > heading.index);
     if (!next) {warnings.push('材料没有对应小题');continue;}
     const raw = markdown.slice(heading.index + heading[0].length,next.index).trim();
@@ -166,6 +176,8 @@ export function parseVerbalSource(markdown, options = {}) {
       const raw = questionOnly.slice(option.index+option[0].length,end).trim();
       const parsed = displaySegments(raw,sourceUrl);
       questionWarnings.push(...parsed.warnings);
+      if (!parsed.segments.some(s => s.type === 'image' || s.text?.trim()))
+        questionWarnings.push('选项'+option[1]+'内容为空');
       return {label:option[1],segments:parsed.segments,markedCorrect:raw.includes('✅')};
     });
     if (choices.map(c=>c.label).join('') !== 'ABCD') questionWarnings.push('A—D选项不完整或顺序异常');
@@ -184,7 +196,10 @@ export function parseVerbalSource(markdown, options = {}) {
     else if (Number.isInteger(groupNumber)) {
       material = materials.find(m=>m.number===groupNumber) || null;
       if (!material) questionWarnings.push('目录指定的共享材料没有找到');
-      else questionWarnings.push(...material.warnings);
+      else {
+        questionWarnings.push(...material.warnings);
+        if (!material.segments.some(s => s.type === 'image' || s.text?.trim())) questionWarnings.push('共享材料内容为空');
+      }
     }
     if (!stem.segments.length) questionWarnings.push('题干为空');
     const problems = [...new Set(questionWarnings)];
@@ -204,7 +219,7 @@ export function parseVerbalSource(markdown, options = {}) {
     };
   });
   return {
-    title,year:Number(field(markdown,'年份'))||null,sourceUrl,
+    title,year,sourceUrl,
     declaredCount,parsedCount:questions.length,materials,questions,
     sourceNature:'第三方整理的网友回忆版',
     answerNotice:'参考答案来自原题库，未逐题独立核验，不称官方答案；机构解析未导入。',

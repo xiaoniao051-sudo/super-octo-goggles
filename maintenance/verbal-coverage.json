@@ -1,0 +1,1556 @@
+{
+  "updatedAt": "2026-10-23",
+  "scopeNote": "覆盖目标为2019—2026国考、福建省考及福建事业单位。当前为可核查来源的分类目录，尚未收齐全部事业单位场次，也未完成这些目录题的全文入库和独立解答。",
+  "stats": {
+    "occurrences": 1473,
+    "uniqueItems": 1177,
+    "papers": 44,
+    "parts": {
+      "逻辑填空": 441,
+      "片段阅读": 518,
+      "语句表达": 218
+    },
+    "newFullText": 0,
+    "newIndependentSolutions": 0,
+    "existingExplanations": 9
+  },
+  "papers": [
+    {
+      "id": "guokao-2026-prefectural",
+      "exam": "guokao",
+      "year": 2026,
+      "title": "2026年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "地市级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 15,
+        "片段阅读": 8,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "guokao-2026-provincial",
+      "exam": "guokao",
+      "year": 2026,
+      "title": "2026年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "副省级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 10,
+        "片段阅读": 13,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "guokao-2026-enforcement",
+      "exam": "guokao",
+      "year": 2026,
+      "title": "2026年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "行政执法",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 15,
+        "片段阅读": 9,
+        "语句表达": 6
+      }
+    },
+    {
+      "id": "guokao-2025-prefectural",
+      "exam": "guokao",
+      "year": 2025,
+      "title": "2025年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "地市级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 15,
+        "片段阅读": 10,
+        "语句表达": 5
+      }
+    },
+    {
+      "id": "guokao-2025-provincial",
+      "exam": "guokao",
+      "year": 2025,
+      "title": "2025年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "副省级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 10,
+        "片段阅读": 14,
+        "语句表达": 6
+      }
+    },
+    {
+      "id": "guokao-2025-enforcement",
+      "exam": "guokao",
+      "year": 2025,
+      "title": "2025年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "行政执法",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 15,
+        "片段阅读": 10,
+        "语句表达": 5
+      }
+    },
+    {
+      "id": "guokao-2024-prefectural",
+      "exam": "guokao",
+      "year": 2024,
+      "title": "2024年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "地市级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 11,
+        "语句表达": 9
+      }
+    },
+    {
+      "id": "guokao-2024-provincial",
+      "exam": "guokao",
+      "year": 2024,
+      "title": "2024年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "副省级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 15,
+        "片段阅读": 14,
+        "语句表达": 11
+      }
+    },
+    {
+      "id": "guokao-2024-enforcement",
+      "exam": "guokao",
+      "year": 2024,
+      "title": "2024年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "行政执法",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 11,
+        "语句表达": 9
+      }
+    },
+    {
+      "id": "guokao-2023-prefectural",
+      "exam": "guokao",
+      "year": 2023,
+      "title": "2023年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "地市级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 13,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "guokao-2023-provincial",
+      "exam": "guokao",
+      "year": 2023,
+      "title": "2023年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "副省级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 15,
+        "片段阅读": 18,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "guokao-2023-enforcement",
+      "exam": "guokao",
+      "year": 2023,
+      "title": "2023年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "行政执法",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 14,
+        "语句表达": 6
+      }
+    },
+    {
+      "id": "guokao-2022-prefectural",
+      "exam": "guokao",
+      "year": 2022,
+      "title": "2022年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "地市级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 11,
+        "语句表达": 9
+      }
+    },
+    {
+      "id": "guokao-2022-provincial",
+      "exam": "guokao",
+      "year": 2022,
+      "title": "2022年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "副省级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 15,
+        "片段阅读": 17,
+        "语句表达": 8
+      }
+    },
+    {
+      "id": "guokao-2022-enforcement",
+      "exam": "guokao",
+      "year": 2022,
+      "title": "2022年国家公务员录用考试《行测》题（行政执法卷网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E8%A1%8C%E6%94%BF%E6%89%A7%E6%B3%95%E5%8D%B7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "行政执法",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 11,
+        "语句表达": 9
+      }
+    },
+    {
+      "id": "guokao-2021-prefectural",
+      "exam": "guokao",
+      "year": 2021,
+      "title": "2021年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2021%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "地市级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 13,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "guokao-2021-provincial",
+      "exam": "guokao",
+      "year": 2021,
+      "title": "2021年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2021%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "副省级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 15,
+        "片段阅读": 14,
+        "语句表达": 11
+      }
+    },
+    {
+      "id": "guokao-2020-prefectural",
+      "exam": "guokao",
+      "year": 2020,
+      "title": "2020年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2020%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "地市级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 14,
+        "语句表达": 6
+      }
+    },
+    {
+      "id": "guokao-2020-provincial",
+      "exam": "guokao",
+      "year": 2020,
+      "title": "2020年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2020%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "副省级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 15,
+        "片段阅读": 17,
+        "语句表达": 8
+      }
+    },
+    {
+      "id": "guokao-2019-prefectural",
+      "exam": "guokao",
+      "year": 2019,
+      "title": "2019年国家公务员录用考试《行测》题（地市级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2019%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%9C%B0%E5%B8%82%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "地市级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 13,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "guokao-2019-provincial",
+      "exam": "guokao",
+      "year": 2019,
+      "title": "2019年国家公务员录用考试《行测》题（副省级网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/278984401124db40da5163a31275b8deb9c282f4/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2019%E5%B9%B4%E5%9B%BD%E5%AE%B6%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E5%89%AF%E7%9C%81%E7%BA%A7%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "副省级",
+      "note": "未逐题核对原卷号；来源按模块重新编号，副省级还先排篇章组题",
+      "sourceSha": "278984401124db40da5163a31275b8deb9c282f4",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 16,
+        "片段阅读": 18,
+        "语句表达": 6
+      }
+    },
+    {
+      "id": "fj-sk-2026-xingce",
+      "exam": "fujian",
+      "year": 2026,
+      "title": "2026年福建省公务员录用考试《行测》题（网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2026%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "网友回忆版，非官方原卷",
+      "note": "网友回忆版；未核对官方原卷及原卷题号。",
+      "sourceSha": "fa7e60eb67c76c3c63d923e3bc69333d0e3fae39",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 10,
+        "片段阅读": 14,
+        "语句表达": 6
+      }
+    },
+    {
+      "id": "fj-sk-2025-xingce",
+      "exam": "fujian",
+      "year": 2025,
+      "title": "2025年福建省公务员录用考试《行测》题（网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2025%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "网友回忆版，非官方原卷",
+      "note": "网友回忆版；未核对官方原卷及原卷题号。",
+      "sourceSha": "ab70b3abc2f2678fc05db99b713415dd3d2a16e3",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 10,
+        "片段阅读": 13,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "fj-sk-2024-xingce",
+      "exam": "fujian",
+      "year": 2024,
+      "title": "2024年福建省公务员录用考试《行测》题（网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2024%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "网友回忆版，非官方原卷",
+      "note": "网友回忆版；未核对官方原卷及原卷题号。",
+      "sourceSha": "0ca85c39c06ff93a9a808dc7c93ed9ab21cd3957",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 16,
+        "语句表达": 4
+      }
+    },
+    {
+      "id": "fj-sk-2023-xingce",
+      "exam": "fujian",
+      "year": 2023,
+      "title": "2023年福建省公务员录用考试《行测》题（网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2023%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "网友回忆版，非官方原卷",
+      "note": "网友回忆版；未核对官方原卷及原卷题号。",
+      "sourceSha": "8e1331e252743bc62bc01223078c2820b66bede0",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 13,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "fj-sk-2022-xingce",
+      "exam": "fujian",
+      "year": 2022,
+      "title": "2022年福建省公务员录用考试《行测》题（网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2022%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "网友回忆版，非官方原卷",
+      "note": "网友回忆版；未核对官方原卷及原卷题号。",
+      "sourceSha": "15b454312c48f98c640c509c1c9920f5d4e47a2b",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 19,
+        "片段阅读": 14,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "fj-sk-2021-xingce",
+      "exam": "fujian",
+      "year": 2021,
+      "title": "2021年福建省公务员录用考试《行测》题（网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2021%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E5%BD%95%E7%94%A8%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "网友回忆版，非官方原卷",
+      "note": "网友回忆版；未核对官方原卷及原卷题号。",
+      "sourceSha": "4baefb0b310ffa50e7e20addc4bd195fc1425d63",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 12,
+        "语句表达": 8
+      }
+    },
+    {
+      "id": "fj-sk-2020-xingce",
+      "exam": "fujian",
+      "year": 2020,
+      "title": "2020年福建省公务员考试《行测》试题（网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2020%E5%B9%B4%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%85%AC%E5%8A%A1%E5%91%98%E8%80%83%E8%AF%95%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E8%AF%95%E9%A2%98%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "网友回忆版，非官方原卷",
+      "note": "网友回忆版；未核对官方原卷及原卷题号。",
+      "sourceSha": "6a118cbf1d3553da286ee51203821a2d174012a8",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 11,
+        "语句表达": 9
+      }
+    },
+    {
+      "id": "fj-sk-2019-xingce",
+      "exam": "fujian",
+      "year": 2019,
+      "title": "2019年420联考《行测》题（福建卷）（网友回忆版）",
+      "url": "https://github.com/ERRRC/xingcezhenti/blob/main/03-%E8%A8%80%E8%AF%AD%E7%90%86%E8%A7%A3%E4%B8%8E%E8%A1%A8%E8%BE%BE/2019%E5%B9%B4420%E8%81%94%E8%80%83%E3%80%8A%E8%A1%8C%E6%B5%8B%E3%80%8B%E9%A2%98%EF%BC%88%E7%A6%8F%E5%BB%BA%E5%8D%B7%EF%BC%89%EF%BC%88%E7%BD%91%E5%8F%8B%E5%9B%9E%E5%BF%86%E7%89%88%EF%BC%89.md",
+      "edition": "网友回忆版，非官方原卷",
+      "note": "网友回忆版；未核对官方原卷及原卷题号。",
+      "sourceSha": "83a3df58461aeb7978eccf5d3b5c8e71ba07116a",
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 20,
+        "片段阅读": 14,
+        "语句表达": 6
+      }
+    },
+    {
+      "id": "fj-sy-2026-0425",
+      "exam": "shiye",
+      "year": 2026,
+      "title": "2026年4月25日福建省事业单位统考《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1781431538490",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 5,
+        "片段阅读": 16,
+        "语句表达": 4
+      }
+    },
+    {
+      "id": "fj-sy-2025-0511-aptitude",
+      "exam": "shiye",
+      "year": 2025,
+      "title": "2025年5月11日福建省事业单位统考《行政职业能力测试》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1748833073122",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 10,
+        "片段阅读": 17,
+        "语句表达": 3
+      }
+    },
+    {
+      "id": "fj-sy-2025-0511-comprehensive",
+      "exam": "shiye",
+      "year": 2025,
+      "title": "2025年5月11日福建省事业单位统考《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1748833073222",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 5,
+        "片段阅读": 17,
+        "语句表达": 3
+      }
+    },
+    {
+      "id": "fj-sy-2025-0927",
+      "exam": "shiye",
+      "year": 2025,
+      "title": "2025年9月27日福建省事业单位统考《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1772852751217",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 5,
+        "片段阅读": 17,
+        "语句表达": 3
+      }
+    },
+    {
+      "id": "fj-sy-2024-0427",
+      "exam": "shiye",
+      "year": 2024,
+      "title": "2024年4月27日福建省事业单位《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1720413492473",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 4,
+        "片段阅读": 16,
+        "语句表达": 5
+      }
+    },
+    {
+      "id": "fj-sy-2024-0928-aptitude",
+      "exam": "shiye",
+      "year": 2024,
+      "title": "2024年9月28日福建省事业单位统考《行政职业能力测试》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1727924091298",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 10,
+        "片段阅读": 20,
+        "语句表达": 5
+      }
+    },
+    {
+      "id": "fj-sy-2023-0422-ningde",
+      "exam": "shiye",
+      "year": 2023,
+      "title": "2023年4月22日福建省宁德市事业单位《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1685967006709",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 14,
+        "片段阅读": 9,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "fj-sy-2023-0429",
+      "exam": "shiye",
+      "year": 2023,
+      "title": "2023年4月29日福建省事业单位《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1685967007482",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 4,
+        "片段阅读": 18,
+        "语句表达": 3
+      }
+    },
+    {
+      "id": "fj-sy-2023-0924-ningde",
+      "exam": "shiye",
+      "year": 2023,
+      "title": "2023年9月24日福建省宁德市事业单位《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1702961783740",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 11,
+        "片段阅读": 11,
+        "语句表达": 8
+      }
+    },
+    {
+      "id": "fj-sy-2022-0521",
+      "exam": "shiye",
+      "year": 2022,
+      "title": "2022年5月21日福建省事业单位《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1655119618441",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 4,
+        "片段阅读": 18,
+        "语句表达": 3
+      }
+    },
+    {
+      "id": "fj-sy-2021-1113",
+      "exam": "shiye",
+      "year": 2021,
+      "title": "2021年11月13日福建省事业单位联考《综合基础知识》试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1637848691485",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 4,
+        "片段阅读": 18,
+        "语句表达": 3
+      }
+    },
+    {
+      "id": "fj-sy-2021-1107-ningde",
+      "exam": "shiye",
+      "year": 2021,
+      "title": "2021年11月7日宁德事业单位公开招聘考试《综合基础知识》笔试试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1655119616340",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 11,
+        "片段阅读": 12,
+        "语句表达": 7
+      }
+    },
+    {
+      "id": "fj-sy-2021-0529",
+      "exam": "shiye",
+      "year": 2021,
+      "title": "2021年5月29日福建省事业单位联考《综合基础知识》试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1625569908047",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 4,
+        "片段阅读": 19,
+        "语句表达": 2
+      }
+    },
+    {
+      "id": "fj-sy-2020-0905-xiamen",
+      "exam": "shiye",
+      "year": 2020,
+      "title": "2020年9月5日福建省事业单位公开招聘考试《综合基础知识》（厦门卷客观题部分）试题（网友回忆版）",
+      "url": "https://gwy.gkzhenti.cn/paper/1625569899829",
+      "edition": "网友回忆版",
+      "note": "题号按来源页面；未核对官方原卷",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 1,
+        "片段阅读": 14,
+        "语句表达": 0
+      }
+    },
+    {
+      "id": "fj-sy-2019-h2-ningde-selected",
+      "exam": "shiye",
+      "year": 2019,
+      "title": "2019年下半年福建宁德市市直及部分县（区）事业单位考试《综合基础知识》精选题",
+      "url": "https://gwy.gkzhenti.cn/paper/1616423233810m8e",
+      "edition": "精选题",
+      "note": "精选版按题型重新编排；来源编号不是原卷题号，originalNumber留空。来源标题仅确认2019下半年，具体场次日期待核。",
+      "sourceSha": null,
+      "indexed": true,
+      "parts": {
+        "逻辑填空": 3,
+        "片段阅读": 14,
+        "语句表达": 6
+      }
+    }
+  ],
+  "gaps": [
+    "所有目录题均未在本站新增完整题面与独立解析；已有9道讲解沿用错题库，其中4道属于本次目标国考真题，5道为另列的补充练习。",
+    "国考21卷与福建省考8卷使用上游言语模块序号，原卷题号尚未核实；副省级篇章题被前置，不能统一加固定偏移量。",
+    "三类按设问进行规则初分并复核例外；保留分类边界，后续与完整原卷逐题复核，不宣称全部人工精校。",
+    "福建事业单位已收录场次不等于该年全部场次；市县独立卷、不同科目版本和缺失材料仍需补齐。",
+    "上游回忆版题库未见明确允许整库公开转载的授权。本轮仅公开来源元数据；原题需用户提供或取得可使用版本后再逐题整理。",
+    "2026年截至10月23日；尚未发生的场次不计入已整理范围。"
+  ],
+  "sourceCatalog": {
+    "shiyeCandidates": [
+      {
+        "id": "fj-sydw-20190323-zonghe",
+        "year": 2019,
+        "examDate": "2019-03-23",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj"
+        ],
+        "sourceStatus": "catalog_or_announcement_only",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "id": "fj-sydw-20190525-zonghe-a",
+        "year": 2019,
+        "examDate": "2019-05-25",
+        "subject": "综合基础知识A类",
+        "evidenceSources": [
+          "kkgwy-fj"
+        ],
+        "sourceStatus": "catalog_or_announcement_only",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "id": "fj-sydw-20190907-zonghe",
+        "year": 2019,
+        "examDate": "2019-09-07",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj"
+        ],
+        "sourceStatus": "catalog_or_announcement_only",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "id": "fj-sydw-20191116-zonghe",
+        "year": 2019,
+        "examDate": "2019-11-16",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj"
+        ],
+        "sourceStatus": "catalog_or_announcement_only",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "id": "fj-sydw-20200905-zonghe",
+        "year": 2020,
+        "examDate": "2020-09-05",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj"
+        ],
+        "sourceStatus": "catalog_or_announcement_only",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "id": "fj-sydw-20201121-zonghe",
+        "year": 2020,
+        "examDate": "2020-11-21",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj"
+        ],
+        "sourceStatus": "catalog_or_announcement_only",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "id": "fj-sydw-20210529-zonghe",
+        "year": 2021,
+        "examDate": "2021-05-29",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj",
+          "fj-sy-2021-0529"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 25,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2021-0529",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1625569908047"
+      },
+      {
+        "id": "fj-sydw-20210904-zonghe",
+        "year": 2021,
+        "examDate": "2021-09-04",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj"
+        ],
+        "sourceStatus": "catalog_or_announcement_only",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "id": "fj-sydw-20211113-zonghe",
+        "year": 2021,
+        "examDate": "2021-11-13",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj",
+          "fj-sy-2021-1113"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 25,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2021-1113",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1637848691485"
+      },
+      {
+        "id": "fj-sydw-20220521-zonghe",
+        "year": 2022,
+        "examDate": "2022-05-21",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj",
+          "fj-sy-2022-0521"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 25,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2022-0521",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1655119618441"
+      },
+      {
+        "id": "fj-sydw-20220903-zonghe",
+        "year": 2022,
+        "examDate": "2022-09-03",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj"
+        ],
+        "sourceStatus": "catalog_or_announcement_only",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "id": "fj-sydw-20230429-zonghe",
+        "year": 2023,
+        "examDate": "2023-04-29",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "official-2023",
+          "kkgwy-fj",
+          "fj-sy-2023-0429"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 25,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2023-0429",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1685967007482"
+      },
+      {
+        "id": "fj-sydw-20230826-zonghe",
+        "year": 2023,
+        "examDate": "2023-08-26",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "official-2023",
+          "kkgwy-fj"
+        ],
+        "sourceStatus": "catalog_or_announcement_only",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "id": "fj-sydw-20240427-zonghe",
+        "year": 2024,
+        "examDate": "2024-04-27",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "kkgwy-fj",
+          "fj-sy-2024-0427"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 25,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2024-0427",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1720413492473"
+      },
+      {
+        "id": "fj-sydw-20240928-xingce",
+        "year": 2024,
+        "examDate": "2024-09-28",
+        "subject": "行政职业能力测试",
+        "evidenceSources": [
+          "kkgwy-fj",
+          "fj-sy-2024-0928-aptitude"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 35,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2024-0928-aptitude",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1727924091298"
+      },
+      {
+        "id": "fj-sydw-20250511-zonghe",
+        "year": 2025,
+        "examDate": "2025-05-11",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "official-2025spring",
+          "gk-20250511",
+          "kkgwy-fj",
+          "fj-sy-2025-0511-comprehensive"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 25,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2025-0511-comprehensive",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1748833073222"
+      },
+      {
+        "id": "fj-sydw-20250511-xingce",
+        "year": 2025,
+        "examDate": "2025-05-11",
+        "subject": "行政职业能力测试",
+        "evidenceSources": [
+          "kkgwy-fj",
+          "fj-sy-2025-0511-aptitude"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 30,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2025-0511-aptitude",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1748833073122"
+      },
+      {
+        "id": "fj-sydw-20250927-zonghe",
+        "year": 2025,
+        "examDate": "2025-09-27",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "official-2025autumn",
+          "kkgwy-fj",
+          "fj-sy-2025-0927"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 25,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2025-0927",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1772852751217"
+      },
+      {
+        "id": "fj-sydw-20260425-zonghe",
+        "year": 2026,
+        "examDate": "2026-04-25",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "official-2026",
+          "fj-sy-2026-0425"
+        ],
+        "sourceStatus": "recollection_classification_verified",
+        "verbalCount": 25,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2026-0425",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1781431538490"
+      }
+    ],
+    "municipalCandidates": [
+      {
+        "year": 2019,
+        "examDate": "2019-06-30",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "shiyebian-list"
+        ],
+        "status": "candidate_needs_paper_identity_verification",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "year": 2019,
+        "examDate": "2019-11-17",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "huatu-old"
+        ],
+        "status": "candidate_needs_paper_identity_verification",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "year": 2019,
+        "examDate": "2019-09",
+        "city": "厦门",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "shiyebian-list"
+        ],
+        "status": "candidate_needs_paper_identity_verification",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "year": 2020,
+        "examDate": "2020-07-26",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "huatu-old"
+        ],
+        "status": "candidate_needs_paper_identity_verification",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "year": 2020,
+        "examDate": "2020-12-06",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "huatu-old"
+        ],
+        "status": "candidate_needs_paper_identity_verification",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "year": 2020,
+        "examDate": "2020-09-05",
+        "city": "厦门",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "shiyebian-list",
+          "fj-sy-2020-0905-xiamen"
+        ],
+        "status": "recollection_classification_verified",
+        "verbalCount": 15,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2020-0905-xiamen",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1625569899829"
+      },
+      {
+        "year": 2021,
+        "examDate": "2021-05-05",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "shiyebian-list"
+        ],
+        "status": "candidate_needs_paper_identity_verification",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "year": 2021,
+        "examDate": "2021-11-07",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "huatu-catalog",
+          "fj-sy-2021-1107-ningde"
+        ],
+        "status": "recollection_classification_verified",
+        "verbalCount": 30,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2021-1107-ningde",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1655119616340"
+      },
+      {
+        "year": 2022,
+        "examDate": "2022-06-12",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "huatu-catalog"
+        ],
+        "status": "candidate_needs_paper_identity_verification",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "year": 2023,
+        "examDate": "2023-01-15",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "https://www.kkgwy.com/stk/fj/"
+        ],
+        "status": "candidate_needs_paper_identity_verification",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "year": 2023,
+        "examDate": "2023-04-22",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "https://www.kkgwy.com/stk/fj/",
+          "fj-sy-2023-0422-ningde"
+        ],
+        "status": "recollection_classification_verified",
+        "verbalCount": 30,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2023-0422-ningde",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1685967006709"
+      },
+      {
+        "year": 2023,
+        "examDate": "2023-09-24",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "pdf-202309-ningde",
+          "fj-sy-2023-0924-ningde"
+        ],
+        "status": "recollection_classification_verified",
+        "verbalCount": 30,
+        "rightsStatus": "not_cleared_for_bulk_publication",
+        "indexPaperId": "fj-sy-2023-0924-ningde",
+        "paperUrl": "https://gwy.gkzhenti.cn/paper/1702961783740"
+      },
+      {
+        "year": 2026,
+        "examDate": "2026-09-05",
+        "city": "上杭",
+        "subject": "综合基础知识",
+        "evidenceSources": [
+          "official-2026autumn-shanghang"
+        ],
+        "status": "official_announcement_no_paper",
+        "verbalCount": null,
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      },
+      {
+        "year": 2019,
+        "examDate": null,
+        "session": "下半年",
+        "city": "宁德",
+        "subject": "综合基础知识",
+        "status": "selected_recollection_classification_verified_exact_date_unconfirmed",
+        "indexPaperId": "fj-sy-2019-h2-ningde-selected",
+        "verbalCount": 23,
+        "note": "来源仅写2019下半年，不直接与2019-11-17候选场次合并；精选版原卷题号未知。",
+        "rightsStatus": "not_cleared_for_bulk_publication"
+      }
+    ],
+    "sources": [
+      {
+        "id": "kkgwy-fj",
+        "name": "考考公务员福建事业单位职测目录",
+        "url": "https://www.kkgwy.com/e/extend/exam/index.php?cid=239",
+        "type": "third_party_catalog",
+        "access": "目录可读，开考标注5积分/VIP",
+        "license": "页面显示版权所有，未见开放许可证",
+        "note": "目录提供2019—2025场次；部分卷题数105或109，不能据标题认定完整"
+      },
+      {
+        "id": "huatu-catalog",
+        "name": "福建华图笔试真题目录",
+        "url": "https://m.fj.huatu.com/list/sydw/shiti/bszt/",
+        "type": "training_provider_catalog",
+        "access": "目录可读，部分具体内容链接抓取失败",
+        "license": "未查到公开转载许可",
+        "note": "含2021—2023省统考及宁德言语分类入口；标注网友回忆"
+      },
+      {
+        "id": "huatu-old",
+        "name": "福建华图历史笔试真题目录第2页",
+        "url": "https://fj.huatu.com/sydw/shiti/bszt/2.html",
+        "type": "training_provider_catalog",
+        "access": "目录可读",
+        "license": "未查到公开转载许可"
+      },
+      {
+        "id": "gk-20250511",
+        "name": "2025-05-11福建综合基础知识网友回忆版",
+        "url": "https://gwy.gkzhenti.cn/paper/1748833073222",
+        "type": "third_party_recollection",
+        "access": "无需登录可读HTML",
+        "attributedSource": "fenbi",
+        "license": "未见题目及解析的开放转载许可",
+        "note": "网页可见言语31—55，共25题；已按用户三分法手动分类；不复制题干"
+      },
+      {
+        "id": "official-2026",
+        "name": "福建省工信厅：2026省属事业单位方案一",
+        "url": "https://gxt.fujian.gov.cn/zwgk/rsxx/zkxx/202603/t20260319_7113311.htm",
+        "type": "official_announcement",
+        "access": "可读",
+        "note": "核实2026-04-25综合基础知识；非原卷"
+      },
+      {
+        "id": "official-2025spring",
+        "name": "福建省生态环境厅：2025省属事业单位招聘方案",
+        "url": "https://sthjt.fujian.gov.cn/zwgk/rsxx/202504/t20250408_6842693.htm",
+        "type": "official_announcement",
+        "access": "可读",
+        "note": "核实2025-05-11综合基础知识，全部客观题；非原卷"
+      },
+      {
+        "id": "official-2025autumn",
+        "name": "福建省教育厅：2025直属单位招聘",
+        "url": "https://jyt.fujian.gov.cn/xxgk/rsxx/202509/t20250902_6999891.htm",
+        "type": "official_announcement",
+        "access": "可读",
+        "note": "核实2025-09-27综合基础知识；非原卷"
+      },
+      {
+        "id": "official-2024spring",
+        "name": "福建省体育局：2024省属事业单位方案一",
+        "url": "https://tyj.fujian.gov.cn/zwgk/gsgg/202404/t20240403_6424116.htm",
+        "type": "official_announcement",
+        "access": "搜索可见正式方案",
+        "note": "2024春季场次公告；非原卷"
+      },
+      {
+        "id": "official-2023",
+        "name": "福建省人社厅：2023事业单位公开招聘工作通知",
+        "url": "https://rst.fujian.gov.cn/zw/zfxxgk/zfxxgkml/zyywgz/zynljs/202307/t20230702_6196665.htm",
+        "type": "official_announcement",
+        "access": "可读",
+        "note": "明确2023-04-29及2023-08-26为全省统一委托命题考试"
+      },
+      {
+        "id": "official-2026autumn-shanghang",
+        "name": "2026下半年上杭县事业单位招聘方案",
+        "url": "https://www.shanghang.gov.cn/bm/rsj/zwgk/sydwzp/zkfb/202608/t20260817_2308044.htm",
+        "type": "official_announcement",
+        "access": "可读",
+        "note": "核实2026-09-05综合基础知识；不能仅凭同日考试认定与省属卷完全相同"
+      },
+      {
+        "id": "official-2026autumn-art",
+        "name": "2026下半年福建艺术职业学院招聘方案",
+        "url": "https://wlt.fujian.gov.cn/zwgk/rsxx/202608/t20260819_7201412.htm",
+        "type": "official_announcement",
+        "access": "可读",
+        "note": "2026-09-05综合基础知识；用作该日场次旁证，非完整统一卷证明"
+      },
+      {
+        "id": "pdf-201905",
+        "name": "2019年5月福建综合基础知识PDF线索",
+        "url": "https://www.chinagwy.org/files/20190719165503_75008.pdf",
+        "type": "third_party_pdf",
+        "access": "搜索引擎收录；本次打开返回502，未下载",
+        "license": "未核实"
+      },
+      {
+        "id": "pdf-202308",
+        "name": "2023-08-26福建综合基础知识PDF线索",
+        "url": "https://www.chinagwy.org/files/20240625141431_68566.pdf",
+        "type": "third_party_pdf",
+        "access": "搜索引擎收录；本次打开返回502，未下载",
+        "license": "未核实"
+      },
+      {
+        "id": "pdf-202309-ningde",
+        "name": "2023-09-24宁德综合基础知识PDF线索",
+        "url": "https://www.chinagwy.org/files/20240708143007_69540.pdf",
+        "type": "third_party_pdf",
+        "access": "搜索引擎收录；本次打开返回502，未下载",
+        "license": "未核实"
+      },
+      {
+        "id": "shiyebian-list",
+        "name": "事业单位试题精选目录",
+        "url": "https://www.shiyebian.net/zhenti/",
+        "type": "third_party_catalog",
+        "access": "搜索可见",
+        "license": "未核实",
+        "note": "精选不等于整卷，宁德/厦门等需核实正式试卷身份"
+      },
+      {
+        "id": "gk-fujian-catalog",
+        "name": "公开真题库福建事业单位职测目录",
+        "url": "https://gwy.gkzhenti.cn/paper?cls=%E4%BA%8B%E4%B8%9A%E5%8D%95%E4%BD%8D-%E8%81%8C%E6%B5%8B&province=%E7%A6%8F%E5%BB%BA",
+        "type": "third_party_catalog",
+        "access": "目录可读，部分卷正文本次抓取失败",
+        "license": "未发现开放转载授权"
+      },
+      {
+        "id": "fj-sy-2026-0425",
+        "name": "2026年4月25日福建省事业单位统考《综合基础知识》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1781431538490",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2024-0427",
+        "name": "2024年4月27日福建省事业单位《综合基础知识》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1720413492473",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2023-0429",
+        "name": "2023年4月29日福建省事业单位《综合基础知识》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1685967007482",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2022-0521",
+        "name": "2022年5月21日福建省事业单位《综合基础知识》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1655119618441",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2021-0529",
+        "name": "2021年5月29日福建省事业单位联考《综合基础知识》试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1625569908047",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2020-0905-xiamen",
+        "name": "2020年9月5日福建省事业单位公开招聘考试《综合基础知识》（厦门卷客观题部分）试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1625569899829",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2019-h2-ningde-selected",
+        "name": "2019年下半年福建宁德市市直及部分县（区）事业单位考试《综合基础知识》精选题",
+        "url": "https://gwy.gkzhenti.cn/paper/1616423233810m8e",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2025-0927",
+        "name": "2025年9月27日福建省事业单位统考《综合基础知识》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1772852751217",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2024-0928-aptitude",
+        "name": "2024年9月28日福建省事业单位统考《行政职业能力测试》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1727924091298",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2021-1113",
+        "name": "2021年11月13日福建省事业单位联考《综合基础知识》试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1637848691485",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2025-0511-aptitude",
+        "name": "2025年5月11日福建省事业单位统考《行政职业能力测试》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1748833073122",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2023-0924-ningde",
+        "name": "2023年9月24日福建省宁德市事业单位《综合基础知识》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1702961783740",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2023-0422-ningde",
+        "name": "2023年4月22日福建省宁德市事业单位《综合基础知识》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1685967006709",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      },
+      {
+        "id": "fj-sy-2021-1107-ningde",
+        "name": "2021年11月7日宁德事业单位公开招聘考试《综合基础知识》笔试试题（网友回忆版）",
+        "url": "https://gwy.gkzhenti.cn/paper/1655119616340",
+        "type": "third_party_recollection",
+        "access": "本次HTML可读；言语部分已逐题核对分类",
+        "license": "未发现开放转载授权",
+        "originalPaperVerified": false
+      }
+    ],
+    "unreadPaperLinks": [
+      {
+        "title": "2019年3月福建综合",
+        "url": "https://gwy.gkzhenti.cn/paper/155833959523105v",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2019年5月福建综合精选入口一",
+        "url": "https://gwy.gkzhenti.cn/paper/1562759311003kee",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2019年5月福建综合精选入口二",
+        "url": "https://gwy.gkzhenti.cn/paper/161642323381009u",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2019上半年宁德",
+        "url": "https://gwy.gkzhenti.cn/paper/1565156805339iub",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2019年8月将乐部分事业单位精选",
+        "url": "https://gwy.gkzhenti.cn/paper/1644839387712",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2019年9月厦门精选",
+        "url": "https://gwy.gkzhenti.cn/paper/1596026208350d9t",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2020年11月21日福建综合",
+        "url": "https://gwy.gkzhenti.cn/paper/16110566247380at",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2020年12月6日宁德综合",
+        "url": "https://gwy.gkzhenti.cn/paper/1611056624738eqi",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2021年5月5日宁德综合",
+        "url": "https://gwy.gkzhenti.cn/paper/1655119615792",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2021年9月4日福建综合",
+        "url": "https://gwy.gkzhenti.cn/paper/1632406009180",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2022上半年宁德综合",
+        "url": "https://gwy.gkzhenti.cn/paper/1658230430865",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2022年9月3日福建综合",
+        "url": "https://gwy.gkzhenti.cn/paper/1663252225471",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2023年1月15日宁德综合",
+        "url": "https://gwy.gkzhenti.cn/paper/1675914917651",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      },
+      {
+        "title": "2023年8月26日福建综合",
+        "url": "https://gwy.gkzhenti.cn/paper/1702961782633",
+        "status": "web_fetch_cache_miss",
+        "classificationStatus": "not_classified",
+        "questionCount": null,
+        "note": "本次工具无法读取，不代表网站永久失效，也不代表没有该试卷。"
+      }
+    ],
+    "batchStatus": "complete_for_readable_catalog_sources"
+  }
+}

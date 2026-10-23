@@ -22,6 +22,7 @@ export function questionMessage(id,q){
 
 export function createQuestionBoard({getStudy,setStudy,openModal,toast,navigate=()=>{},closeModal=()=>{}}){
  let answers=[],loadState='loading',tab='published',status='all',query='',paper='all',requestSequence=0;
+ let initialAnswer=typeof location!=='undefined'?new URLSearchParams(location.search).get('answer'):null;
  const unsaved=new Map();
  function snapshot(){const copy=structuredClone(getStudy());for(const task of unsaved.values())task.apply(copy);return copy;}
  const state=()=>unsaved.size?snapshot():getStudy();
@@ -81,6 +82,7 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast,navigate=
    if(data.answers.some(a=>a.addedAt!==undefined&&(typeof a.addedAt!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(a.addedAt))))throw Error('收录日期格式不正确');
    // Stable sorting preserves same-day and undated legacy order; revisions do not move a question.
    if(seq!==requestSequence)return;answers=[...data.answers].sort((a,b)=>(b.addedAt||'').localeCompare(a.addedAt||''));loadState='ready';
+   if(initialAnswer){const requested=initialAnswer;initialAnswer=null;const url=new URL(location.href);url.searchParams.delete('answer');history.replaceState(history.state,'',url.pathname+url.search+url.hash);const found=answers.find(a=>a.id===requested);if(found){navigate('qa');openAnswer(found);}else toast('这道题暂未收录，请在错题库搜索。');}
   }catch{if(seq!==requestSequence)return;loadState='error';}render();
  }
  function render(){

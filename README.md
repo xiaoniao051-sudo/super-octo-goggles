@@ -1,3 +1,7 @@
+# 维护入口
+
+当前交接规范请先读 [CODEX_HANDOFF.md](./CODEX_HANDOFF.md)。独立言语专项在 [verbal.html](./verbal.html)，实际覆盖见 [maintenance/verbal-coverage.json](./maintenance/verbal-coverage.json)。下文包含历史版本记录；申论卡现已去掉练习与笔记入口，旧笔记保留。
+
 # 国考精选 · 2027
 
 面向2027年度国考行政执法备考的轻量知识库，现有190张精选卡、21道错题，其中18题可按本站参考答案判分。

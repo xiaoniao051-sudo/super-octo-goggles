@@ -1,6 +1,6 @@
 import {searchExcerpt,orderCards} from './study-ui.js?v=20261022-ux';
 import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261020-review2';
-import {createQuestionBoard} from './questions.js?v=20261020-review2';
+import {createQuestionBoard} from './questions.js?v=20261023-verbal';
 const $=s=>document.querySelector(s);
 const categories=['词语辨析','申论','政治理论','法律常识','科技常识','资料分析','判断推理','言语理解','数量关系'];
 const browseCategories=['预测','词语辨析','申论','政治理论','常识','资料分析','判断推理','言语理解','数量关系'];

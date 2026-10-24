@@ -8,8 +8,8 @@ assert.equal(new Set(bank.items.map(q=>q.id)).size,bank.items.length);
 assert.equal(bank.stats.occurrences,bank.items.reduce((n,q)=>n+q.occurrences.length,0));
 assert.equal(bank.stats.uniqueItems,bank.items.length);
 for(const part of PARTS)assert.equal(bank.stats.parts[part],bank.items.filter(q=>q.part===part).length);
-assert.equal(bank.stats.newIndependentSolutions,5);
-assert.equal(bank.stats.newFullText,5);
+assert.equal(bank.stats.newIndependentSolutions,2);
+assert.equal(bank.stats.newFullText,2);
 const seenOccurrences=new Set();
 for(const q of bank.items){assert(!Object.hasOwn(q,'stem'));assert(!Object.hasOwn(q,'answer'));assert(!Object.hasOwn(q,'options'));assert(q.occurrences.length);for(const o of q.occurrences){assert(!seenOccurrences.has(o.sourceOccurrenceId));seenOccurrences.add(o.sourceOccurrenceId);assert(papers.has(o.paperId));assert(o.moduleNumber>0);if(['guokao','fujian'].includes(papers.get(o.paperId).exam))assert.equal(o.originalNumber,null);}}
 for(const a of bank.explained)assert(answers.some(q=>q.id===a.answerId),'Broken existing explanation ID');

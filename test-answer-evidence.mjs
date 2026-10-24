@@ -34,7 +34,8 @@ const addedId='gk-2023-enforcement-024';
 const growthId='ziliao-feisheng-200-part2-007';
 const climateId='verbal-exercise27-001';
 const enforcement2022Ids=["verbal-a5168b49d026064bf459a94f", "verbal-5a0d1d1bcc4381dd16842247", "verbal-d91a592170c7c9825085c7c6", "verbal-468ec5de3b18fa4c3c62738b", "verbal-9a55730921f0aca3c203d635"];
-const addedIds=[addedId,growthId,climateId,...enforcement2022Ids];
+const readingTwoIds=['verbal-privacy-convenience-006','cq-2022-selected-043'];
+const addedIds=[addedId,growthId,climateId,...enforcement2022Ids,...readingTwoIds];
 const originalIds=[...Object.keys(expectedOptions),...Object.keys(unresolved)];
 
 test('five 2022 questions reuse indexed identities and explicitly map this edition to B/D/A/A/B',()=>{
@@ -59,7 +60,7 @@ test('five 2022 questions reuse indexed identities and explicitly map this editi
   for(const letter of 'ABCD')assert.equal(gradeAnswer(q,letter),letter===key);
   assert.doesNotMatch(JSON.stringify(q),/你选了|你当时|你的选项|你的思考/);
  }
- assert.deepEqual(data.answers.slice(0,5).map(q=>q.id),enforcement2022Ids);
+ assert.deepEqual(data.answers.filter(q=>enforcement2022Ids.includes(q.id)).map(q=>q.id),enforcement2022Ids);
 });
 
 test('source edition and checked edition share a note key without mixing answer letters or grading evidence',()=>{
@@ -97,8 +98,8 @@ test('original IDs, questions and sources stay fixed; only two approved editoria
  // Their original questions, options, sources and addedAt remain fingerprinted,
  // as does every other old record; unrelated changes must still fail.
  assert.equal(digest,'7774c63f5425953c0a4caa825a810d9a8b28b590b525930f3fd7db0c80094dc8');
- assert.equal(data.answers.length,26);
- assert.equal(answers.size,26,'IDs remain unique');
+ assert.equal(data.answers.length,28);
+ assert.equal(answers.size,28,'IDs remain unique');
  assert.deepEqual([...answers.keys()].sort(),[...originalIds,...addedIds].sort());
 });
 
@@ -193,7 +194,7 @@ test('exercise 27 keeps its unidentified provenance, full option order and refer
  assert.equal(answer.paper,'练习题27（书名、版次未显示）');
  assert.equal(answer.number,'1');
  assert.equal(answer.addedAt,'2026-10-22');
- assert.equal(data.answers.filter(a=>!enforcement2022Ids.includes(a.id))[0].id,climateId,'older additions retain their order');
+ assert.equal(data.answers.filter(a=>![...enforcement2022Ids,...readingTwoIds].includes(a.id))[0].id,climateId,'older additions retain their order');
  assert.deepEqual(answer.question.options.map(option=>[option.label,option.text.trim()]),[
   ['A','回顾历史上的气候变迁过程'],
   ['B','强调气候对粮食生产的意义'],
@@ -214,8 +215,8 @@ test('exercise 27 keeps its unidentified provenance, full option order and refer
  const sameDay=data.answers.filter(item=>item.addedAt==='2026-10-22').map(item=>item.id);
  assert.deepEqual(sameDay,[climateId,growthId],'same-day additions retain their insertion order');
  const sorted=[...data.answers].sort((a,b)=>(b.addedAt||'').localeCompare(a.addedAt||''));
- assert.deepEqual(sorted.filter(a=>!enforcement2022Ids.includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'stable date sorting keeps the newest addition before FIC');
- assert.deepEqual(getReviewSummary(data.answers,{}).newItems.filter(a=>!enforcement2022Ids.includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'the new-question queue preserves the same order');
+ assert.deepEqual(sorted.filter(a=>![...enforcement2022Ids,...readingTwoIds].includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'stable date sorting keeps the newest addition before FIC');
+ assert.deepEqual(getReviewSummary(data.answers,{}).newItems.filter(a=>![...enforcement2022Ids,...readingTwoIds].includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'the new-question queue preserves the same order');
 });
 
 test('missing material, ambiguous readings and disputed answers have no grading key',()=>{
@@ -232,6 +233,9 @@ test('missing material, ambiguous readings and disputed answers have no grading 
 
 test('pre-answer verification notices are neutral and contain no answer letters or solution hints',()=>{
  const allowedNotes=new Set([
+  "题面与选项按图片核对，已完成本站独立参考解答及原文语境核对；考试来源、年份和原卷号未确认，未取得官方或机构答案。",
+  "题面与本页选项顺序已按图片及公开整理资料核对，采用本站参考解析进行复测，并非官方标准答案；图片号与公开整理卷题号分别说明。",
+
   '按现有题面、本页选项顺序及已记录的核对依据整理，复测使用本站参考解析，并非官方标准答案。',
   '已按公开整理资料核对题面及本页选项顺序，采用本站参考解析进行复测；不同资料顺序有差异，并非官方标准答案。',
   '原卷统计材料页缺失；现有补充来源不能替代原材料。暂不自动判分，不计入正确率。',
@@ -242,4 +246,28 @@ test('pre-answer verification notices are neutral and contain no answer letters 
   assert.ok(allowedNotes.has(answer.verification.note),answer.id);
   assert.doesNotMatch(answer.verification.note,/[A-H]/,answer.id);
  }
+});
+
+
+test('uploaded reading questions preserve numbering, negation, all choices and independent grading',()=>{
+ const privacy=answers.get(readingTwoIds[0]),service=answers.get(readingTwoIds[1]);
+ assert.equal(privacy.number,'6');assert.equal(service.number,'16');
+ assert.equal(privacy.question.prompt,'这段文字主要表达的是：');
+ assert.equal(service.question.prompt,'这段文字没有提到的是：');
+ assert.match(privacy.question.versionNote,/年份.*未显示/);
+ assert.match(service.question.versionNote,/2022年重庆选调第43题/);
+ assert.deepEqual(service.question.options.map(x=>x.text),['我国社会保障体系逐步完善','我国教育公平质量显著提升','我国公共服务尚需均衡发展','我国公共服务能力需要提升']);
+ assert.deepEqual(privacy.question.options.map(x=>x.text),['制定保护隐私的相关法规是当务之急','公众个人隐私和便捷性相关联','便捷性必须以隐私交换为条件','大数据时代更应保护公众隐私']);
+ for(const q of [privacy,service]){
+  assert.deepEqual(q.question.options.map(x=>x.label),['A','B','C','D']);
+  assert.equal(q.correctOption,'D');assert.ok(q.answer.includes(q.question.options[3].text));
+  for(const letter of 'ABCD')assert.equal(gradeAnswer(q,letter),letter==='D');
+  assert.equal(q.addedAt,'2026-10-24');assert.equal(q.reviewedAt,'2026-10-24');
+  assert(q.sections.length>=6);assert(q.sources.length>=1);
+ }
+ assert.match(privacy.answer,/本站参考答案/);assert.match(privacy.answer,/未查得本题官方答案或可核实的机构答案页/);
+ assert.match(service.question.stem,/13\.5亿.*8000多万.*95\.2%/);
+ const bank=JSON.parse(readFileSync(new URL('./verbal-bank.json',import.meta.url),'utf8'));
+ for(const id of readingTwoIds)assert.equal(bank.explained.filter(x=>x.answerId===id&&x.exam==='supplement'&&x.part==='片段阅读').length,1);
+ assert.equal(bank.explained.find(x=>x.answerId===privacy.id).year,null);
 });

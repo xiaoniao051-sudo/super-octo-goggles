@@ -45,7 +45,7 @@ const pausedAnswers=answers.filter(a=>a.verification?.status!=='checked');
 const checkedIds=checkedAnswers.map(answer=>answer.id);
 const checked=checkedAnswers[0];
 assert.ok(checked,'At least one explicitly checked answer is required');
-assert.equal(checkedAnswers.length,23);
+assert.equal(checkedAnswers.length,25);
 assert.equal(pausedAnswers.length,3);
 assert.equal(answers.length,checkedAnswers.length+pausedAnswers.length);
 const draft={paper:'未完成测试草稿',number:'21',subject:'行测',source:'',myAnswer:'',doubt:'保留草稿疑问',stem:''};

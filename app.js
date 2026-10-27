@@ -1,6 +1,7 @@
 import {searchExcerpt,orderCards} from './study-ui.js?v=20261022-ux';
 import {loadStudy,saveCard,saveScratchpad,mergeStudy} from './storage.js?v=20261020-review2';
-import {createQuestionBoard} from './questions.js?v=20261023-verbal';
+import {createQuestionBoard} from './questions.js?v=20261027-ux';
+import {fetchJson} from './network.js?v=20261027-ux';
 const $=s=>document.querySelector(s);
 const categories=['词语辨析','申论','政治理论','法律常识','科技常识','资料分析','判断推理','言语理解','数量关系'];
 const browseCategories=['预测','词语辨析','申论','政治理论','常识','资料分析','判断推理','言语理解','数量关系'];
@@ -21,7 +22,7 @@ function tracked(p){activeSaves.add(p);p.then(()=>activeSaves.delete(p),()=>acti
 function getCardState(id){return study.cards[id]||{note:'',starred:false,mastered:false};}
 const flat=c=>[c.title,c.category,c.theme,...(c.terms||[]),c.summary,c.why,...c.tags,...c.sections.map(s=>s.heading+' '+s.body),c.example.question,c.example.answer,c.example.explanation,...c.pitfalls,getCardState(c.id).note].join(' ').toLowerCase();
 async function api(url,data){
- if(url==='/api/library'){const r=await fetch('./library.json',{cache:'no-cache'});if(!r.ok)throw Error('资料暂时无法加载');return r.json();}
+ if(url==='/api/library')return fetchJson('./library.json',{label:'知识库'});
  if(url==='/api/state')return loadStudy(localStorage);
  const ids=library.cards.map(c=>c.id);
  if(url==='/api/card'){const state=saveCard(localStorage,data.id,data,ids);return {saved:true,card:state.cards[data.id]};}
@@ -83,6 +84,7 @@ function renderReview(){const target=$('#review-list');target.replaceChildren();
 }
 function renderHome(){
  $('#home-search').onclick=()=>{category='全部精选';essayTheme='执法背诵';$('#search').value='';$('#filter').value='all';navigate('library');$('#search').focus();};$('#home-favorites').onclick=()=>{review='starred';navigate('review');};
+ $('#home-essay').onclick=()=>{category='申论';essayTheme='执法背诵';$('#search').value='';$('#filter').value='all';navigate('library');};
  $('#prediction-count').textContent=library.cards.filter(c=>c.collection==='prediction').length+' 张精选 · 老师建议、背景句与写法';
  $('#prediction-entry').onclick=()=>{category='预测';$('#search').value='';$('#filter').value='all';navigate('library');};
  const c=library.cards.find(c=>c.id===lastRead)||library.cards.find(c=>c.category==='词语辨析'&&!getCardState(c.id).mastered)||library.cards.find(c=>!getCardState(c.id).mastered)||library.cards[0];
@@ -90,7 +92,7 @@ function renderHome(){
  const grid=$('#topic-grid');grid.replaceChildren();for(const[cat,label,symbol,caption]of [['词语辨析','词语辨析','chat','近义词，分清一处差别'],['申论','执法申论','pen','短案例 · 背景句 · 名言'],['政治理论','政治理论','flag','概念、表述与辨析'],['常识','常识积累','law','法律与科技，温故知新']]){const items=library.cards.filter(c=>inCategory(c,cat)&&(cat!=='申论'||c.kind==='recitation')),b=el('button','topic-card');const badge=el('span','topic-icon');badge.append(icon(symbol));b.append(badge,el('span','topic-label',label),el('span','topic-caption',caption),el('span','topic-count',items.length+(cat==='申论'?' 张先背卡':' 张积累卡')));b.onclick=()=>{category=cat;essayTheme='执法背诵';$('#search').value='';$('#filter').value='all';navigate('library');};grid.append(b);}
  const picks=$('#home-picks');picks.replaceChildren();for(const[cat,title,time,method]of [['词语辨析','说出一组词的区别','3 分钟','先看词，再回忆含义、搭配和感情色彩，最后用例句检验。'],['申论','选一个案例，写一句分析','5 分钟','按题目选择相关行动，解释它如何支持本段观点。'],['政治理论','合上答案，自己复述','3–5 分钟','回忆一个概念及其边界，分清相近表述，别只记熟悉感。']]){const pool=library.cards.filter(c=>c.category===cat&&(cat!=='申论'||c.kind==='recitation')),c=pool.find(c=>!getCardState(c.id).mastered)||pool[0];if(!c)continue;const b=el('button','knowledge-card compact');b.append(el('span','edition',time+' · '+cat),el('h3','',title),el('p','',method),el('div','card-state','开始这一小步 →'));b.onclick=()=>openCard(c.id);picks.append(b);}
 }
-function renderPanels(){nav();renderHome();list(matching());renderReview();questionBoard?.render();}
+function renderPanels(){nav();if(screen==='home')renderHome();if(screen==='library')list(matching());if(screen==='review')renderReview();questionBoard?.render();}
 function status(id,text,error=false){const node=id==='scratchpad'?$('#scratch-status'):$('#reader').dataset.card===id?$('#note-status'):null;if(node){node.textContent=text;node.classList.toggle('error',error);}}
 function saveTask(key,task){return tracked(performSave(key,task));}
 async function performSave(key,task){pending.delete(key);try{await api(task.url,task.data);if(latestTasks.get(key)===task)status(key,'已保存到此设备');nav();}catch(e){status(key,'保存失败，请重试',true);toast('笔记尚未保存：'+e.message);if(latestTasks.get(key)===task&&!pending.has(key))pending.set(key,task);}}
@@ -191,6 +193,6 @@ async function init(){try{[library,study]=await Promise.all([api('/api/library')
  $('#export-btn').onclick=exportNotes;$('#import-btn').onclick=()=>$('#import-file').click();$('#import-file').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{await flush();const result=await api('/api/import',JSON.parse(await file.text()));study=result.state;renderPanels();toast('已合并 '+result.count+' 条知识记录、'+(result.questionCount||0)+' 道问题、'+(result.answerNoteCount||0)+' 条解析复盘、'+(result.reviewAttemptCount||0)+' 次复测');if(result.warnings?.length){const box=openModal('备份合并说明');result.warnings.forEach(t=>box.append(el('p','modal-caption',t)));}}catch(e){toast('导入失败：'+e.message);}finally{$('#import-file').value='';}};
  $('#close-modal').onclick=closeModal;$('#modal').addEventListener('cancel',e=>{e.preventDefault();closeModal();});$('#modal').addEventListener('click',e=>{if(e.target===$('#modal')){const r=$('#modal').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeModal();}});
  document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)&&!$('#modal').open){e.preventDefault();if(screen==='qa')$('#qa-search').focus();else{if(screen!=='library')navigate('library');$('#search').focus();}}});history.scrollRestoration='manual';addEventListener('popstate',routeChanged);addEventListener('hashchange',routeChanged);renderPanels();routeChanged();addEventListener('beforeunload',e=>{if(pending.size||activeSaves.size||questionBoard?.hasUnsaved()){e.preventDefault();e.returnValue='';}});
- }catch(e){showScreen('reading');$('#reader').replaceChildren(el('h2','','资料库暂时无法读取'),el('p','text',e.message));$('#reader-progress').textContent='加载失败';$('#jump-note').hidden=true;$('#next-card').hidden=true;$('#back-list').onclick=()=>location.reload();const b=el('button','quiet-btn','导出当前设备原始笔记');b.onclick=()=>{try{const raw=localStorage.getItem('guokao-2027-study-v1');if(raw)downloadBackup(raw);else toast('当前设备没有已保存笔记');}catch(err){toast('浏览器暂时不允许读取笔记');}};$('#reader').append(b);}
+ }catch(e){showScreen('reading');$('#reader').replaceChildren(el('h2','','资料库暂时无法读取'),el('p','text',e.message));$('#reader-progress').textContent='加载失败';$('#jump-note').hidden=true;$('#next-card').hidden=true;$('#back-list').onclick=()=>location.reload();const b=el('button','quiet-btn','导出当前设备原始笔记');b.onclick=()=>{try{const raw=localStorage.getItem('guokao-2027-study-v1');if(raw)downloadBackup(raw);else toast('当前设备没有已保存笔记');}catch(err){toast('浏览器暂时不允许读取笔记');}};const retry=el('button','primary-btn','重新加载');retry.onclick=()=>location.reload();const actions=el('div','load-actions');actions.append(retry,b);$('#reader').append(actions);}
 }
 init();

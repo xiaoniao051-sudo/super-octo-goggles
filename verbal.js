@@ -1,4 +1,5 @@
-import {createPractice} from './verbal-practice.js?v=20261023-audit1';
+import {createPractice} from './verbal-practice.js?v=20261027-ux';
+import {fetchJson} from './network.js?v=20261027-ux';
 import {PARTS,EXAMS,GUIDES,safeUrl,validateBank,numberLabel,filterItems,sourceLink,requestText,toCsv} from './verbal-model.js?v=20261023-1';
 const $=s=>document.querySelector(s),el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const button=(text,cls,fn)=>{const n=el('button',cls,text);n.type='button';n.onclick=fn;return n;};
@@ -25,6 +26,7 @@ function render(){
  for(const b of document.querySelectorAll('[data-part]'))b.setAttribute('aria-pressed',String(b.dataset.part===state.part));
  for(const b of document.querySelectorAll('[data-view]'))b.setAttribute('aria-pressed',String(b.dataset.view===state.view));
  $('#part-guide').textContent=GUIDES[state.part];$('#exam-filter').value=state.exam;$('#year-filter').value=state.year;$('#bank-search').value=state.query;
+ const activeFilters=Number(state.exam!=='all')+Number(state.year!=='all')+Number(!!state.query.trim());$('#filter-summary').textContent=activeFilters?`${activeFilters} 项筛选 · ${state.exam==='all'?'全部考试':EXAMS[state.exam]}${state.year==='all'?'':' · '+state.year+'年'}${state.query.trim()?' · 查题中':''}`:'全部考试 · 全部年度';$('#clear-filters').hidden=!activeFilters;
  if(state.view==='practice'||state.view==='mistakes'){$('#download-index').hidden=true;$('#bank-pager').replaceChildren();$('#part-tabs').hidden=false;$('#part-guide').hidden=false;$('#view-note').textContent=state.view==='practice'?'先选答案，提交后看结果和解析。作答与笔记保存在此设备，可到“我的”导出备份。':'这里查看本板块练习产生的错题；提交后自动记录。';practice.show(state);return;}
  $('#part-tabs').hidden=state.view==='coverage';$('#part-guide').hidden=state.view==='coverage';$('#download-index').hidden=state.view!=='index';$('#bank-list').replaceChildren();$('#bank-pager').replaceChildren();
  if(state.view==='coverage'){$('#view-note').textContent='按试卷记录实际覆盖；2026年尚未举行的场次不纳入已完成范围。';$('#bank-list').append(coverage());return;}
@@ -35,8 +37,8 @@ function render(){
  const total=Math.ceil(items.length/pageSize);page=Math.min(page,total);for(const q of items.slice((page-1)*pageSize,page*pageSize))$('#bank-list').append(state.view==='index'?indexCard(q):explainedCard(q));
  const prev=button('上一页','quiet-btn',()=>{page--;render();$('#bank-count').scrollIntoView({block:'start'});}),next=button('下一页','quiet-btn',()=>{page++;render();$('#bank-count').scrollIntoView({block:'start'});});prev.disabled=page<=1;next.disabled=page>=total;$('#bank-pager').append(prev,el('span','',page+' / '+total),next);
 }
-async function init(){try{const [r,a]=await Promise.all([fetch('./verbal-bank.json',{cache:'no-cache'}),fetch('./answers.json',{cache:'no-cache'})]);if(!r.ok||!a.ok)throw Error('资料暂时没有加载成功');bank=validateBank(await r.json());answers=new Map((await a.json()).answers.map(a=>[a.id,a]));papers=new Map(bank.papers.map(p=>[p.id,p]));practice=createPractice({bank,answers,mount:$('#bank-list'),toast,onCount:text=>$('#bank-count').textContent=text});$('#bank-status').replaceChildren(el('strong','','选题 → 作答 → 提交 → 看解析'),el('span','','本站已有讲解可直接做；国考和福建省考29卷按选卷读取题面，答案标注为来源参考。福建事业单位仍在补齐。'));
- for(const [i,part]of PARTS.entries()){const b=button('','',()=>update({part}));b.dataset.part=part;b.append(el('small','','PART '+(i+1)),el('b','',part),el('span','','点击开始练习'));$('#part-tabs').append(b);}
+async function init(){try{const [r,a]=await Promise.all([fetchJson('./verbal-bank.json',{label:'言语题库'}),fetchJson('./answers.json',{label:'题目解析'})]);bank=validateBank(r);answers=new Map(a.answers.map(a=>[a.id,a]));papers=new Map(bank.papers.map(p=>[p.id,p]));practice=createPractice({bank,answers,mount:$('#bank-list'),toast,onCount:text=>$('#bank-count').textContent=text});$('#bank-status').hidden=true;$('#bank-scope').textContent='本站已有讲解可直接做；国考和福建省考29卷按选卷读取题面，答案标注为来源参考。福建事业单位仍在补齐。';
+ for(const [i,part]of PARTS.entries()){const b=button('','',()=>update({part}));b.dataset.part=part;b.append(el('small','','0'+(i+1)),el('b','',part));$('#part-tabs').append(b);}
  for(let year=2026;year>=2019;year--){const o=el('option','',year+' 年');o.value=String(year);$('#year-filter').append(o);}document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>update({view:b.dataset.view}));$('#exam-filter').onchange=e=>update({exam:e.target.value});$('#year-filter').onchange=e=>update({year:e.target.value});$('#bank-search').oninput=e=>update({query:e.target.value});$('#clear-filters').onclick=()=>update({exam:'all',year:'all',query:''});$('#download-index').onclick=()=>{const text=toCsv(filterItems(bank.items,papers,state),papers),url=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'})),a=link('',url);a.download='言语-'+state.part+'-题号目录.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};render();
- }catch(e){$('#bank-status').textContent='加载失败：'+e.message;$('#bank-list').append(button('重新读取','primary-btn',()=>location.reload()));}}
+ }catch(e){$('#bank-status').hidden=false;$('#bank-status').textContent='加载失败：'+e.message;$('#bank-list').append(button('重新读取','primary-btn',()=>location.reload()));}}
 init();

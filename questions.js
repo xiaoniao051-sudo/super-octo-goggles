@@ -1,5 +1,6 @@
 import {saveQuestion,saveAnswerNote,saveQuestionDraft,recordReviewAttempt} from './storage.js?v=20261020-review2';
 import {getVerification,getReviewSummary,reviewProgress,localDate} from './review.js?v=20261020-review2';
+import {fetchJson} from './network.js?v=20261027-ux';
 
 const $=s=>document.querySelector(s);
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
@@ -62,7 +63,7 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast,navigate=
    if(loadState!=='ready'){target.append(paragraph(loadState==='error'?'错题暂未加载，刷新后查看今日队列。':'正在读取复习记录…','muted'));continue;}
    const summary=getReviewSummary(answers,state()),count=summary.due.length;
    target.append(paragraph(`${count} 道到期 · ${summary.newItems.length} 道未开始 · ${summary.paused.length} 道待核`,'qa-today-count'));
-   target.append(paragraph(summary.gradedCount?`复测通过 ${summary.passedCount} 题 · 有效作答 ${summary.correctCount}/${summary.gradedCount} 正确（${Math.round(summary.correctCount/summary.gradedCount*100)}%）`:'还没有有效复测记录。先从一道错题开始，未做过的题不会算作逾期。','muted'));
+   const detailText=paragraph(summary.gradedCount?`复测通过 ${summary.passedCount} 题 · 有效作答 ${summary.correctCount}/${summary.gradedCount} 正确（${Math.round(summary.correctCount/summary.gradedCount*100)}%）`:'还没有有效复测记录。先从一道错题开始，未做过的题不会算作逾期。','muted');
    if(!count&&summary.scheduled.length)target.append(paragraph('今天没有到期题。下次复习：'+summary.scheduled.map(a=>reviewProgress(a,state()).dueDate).sort()[0],'muted'));
    const actions=el('div','qa-actions');
    const start=items=>{setTab('practice');navigate('qa');if(items.length)openPractice(items[0],items.map(a=>a.id));};
@@ -70,12 +71,12 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast,navigate=
    if(summary.newItems.length)actions.append(button('连续做新题','quiet-btn',()=>start(getReviewSummary(answers,state()).newItems)));
    actions.append(button('全部重做题目','text-btn',()=>{setTab('practice');navigate('qa');}));
    target.append(actions);
-   const rule=el('details','qa-review-rule');rule.append(el('summary','','复习怎么安排'),paragraph('按本机日期计算。连续答对后依次间隔 1、3、7、14 天，再次答错回到 1 天；同日反复答对不加快升级。已弄懂是你原来的主观标记，复测通过只来自有效作答。待核题不判分；核验依据变化后重新复测。'));target.append(rule);
+   const rule=el('details','qa-review-rule');rule.append(el('summary','','复习记录与安排'),detailText,paragraph('按本机日期计算。连续答对后依次间隔 1、3、7、14 天，再次答错回到 1 天；同日反复答对不加快升级。已弄懂是你原来的主观标记，复测通过只来自有效作答。待核题不判分；核验依据变化后重新复测。'));target.append(rule);
   }
  }
  async function loadAnswers(){
   const seq=++requestSequence;loadState='loading';render();
-  try{const response=await fetch('./answers.json',{cache:'no-cache'});if(!response.ok)throw Error('解析暂时无法加载');const data=await response.json();
+  try{const data=await fetchJson('./answers.json',{label:'错题解析'});
    const ids=new Set();if(data.schema!==1||!Array.isArray(data.answers))throw Error('解析文件格式不正确');
    for(const a of data.answers){if(!/^[a-z0-9-]{1,64}$/.test(a.id)||['constructor','prototype','__proto__'].includes(a.id)||ids.has(a.id)||!Array.isArray(a.requestIds)||!a.requestIds.every(id=>/^qa-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id))||!['paper','number','subject','sourceVersion','title','summary','answer','reviewedAt'].every(k=>typeof a[k]==='string')||!Array.isArray(a.sections)||!a.sections.every(s=>typeof s.heading==='string'&&typeof s.body==='string')||!Array.isArray(a.sources)||!a.sources.every(s=>typeof s.title==='string'&&typeof s.url==='string'))throw Error('解析内容格式不正确');ids.add(a.id);}
    if(data.answers.some(a=>a.question!==undefined&&!validQuestion(a.question)))throw Error('题目内容格式不正确');

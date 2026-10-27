@@ -73,8 +73,8 @@ test('source edition and checked edition share a note key without mixing answer 
  assert.equal(runtime.id,q.id);assert.equal(submissionResult(runtime,'C').kind,'reference-match');
  assert.equal(submissionResult(runtime,'C').correct,null);assert.equal(gradeAnswer(q,'C'),false);
  saveAnswerNote(storage,runtime.id,{note:'既有笔记'});
- recordReviewAttempt(storage,runtime,{selectedOption:'C',attemptId:'attempt-source-edition-test'});
- recordReviewAttempt(storage,q,{selectedOption:'B',attemptId:'attempt-checked-edition-test'});
+ recordReviewAttempt(storage,runtime,{selectedOption:'C',attemptId:'attempt-source-edition-test'},new Date('2026-10-23T10:00:00+08:00'));
+ recordReviewAttempt(storage,q,{selectedOption:'B',attemptId:'attempt-checked-edition-test'},new Date('2026-10-23T10:00:01+08:00'));
  const study=loadStudy(storage);
  assert.deepEqual(Object.keys(study.answerNotes),[q.id]);assert.equal(study.answerNotes[q.id].note,'既有笔记');
  assert.equal(study.reviewAttempts[q.id].length,2);

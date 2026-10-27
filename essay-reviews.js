@@ -1,3 +1,4 @@
+import {fetchJson} from './network.js?v=20261027-ux';
 const REQUIRED_TEXT=['title','paper','date','scoreLabel','summary','questionText','userAnswer','reportText','provenance'];
 export function validateReviews(data){
  if(!data||data.schema!==1||!Array.isArray(data.reviews))throw Error('批改记录格式不正确');
@@ -84,7 +85,7 @@ function start(){
    current=null;document.title='申论批改 · 国考精选';$('#reader-view').hidden=true;$('#archive-view').hidden=false;renderList();requestAnimationFrame(()=>window.scrollTo({top:saved?.kind==='list'?saved.y||0:0,left:0,behavior:'instant'}));
   }
  }
- async function load(){const request=++sequence;loadState='loading';route();$('#essay-refresh').disabled=true;try{const response=await fetch('./essay-reviews.json',{cache:'no-cache'});if(!response.ok)throw Error('读取失败');const data=validateReviews(await response.json());if(request!==sequence)return;reviews=data;loadState='ready';}catch{if(request!==sequence)return;loadState='error';}finally{if(request===sequence){$('#essay-refresh').disabled=false;route();}}}
+ async function load(){const request=++sequence;loadState='loading';route();$('#essay-refresh').disabled=true;try{const data=validateReviews(await fetchJson('./essay-reviews.json',{label:'申论批改'}));if(request!==sequence)return;reviews=data;loadState='ready';}catch{if(request!==sequence)return;loadState='error';}finally{if(request===sequence){$('#essay-refresh').disabled=false;route();}}}
  $('#essay-search').oninput=e=>{query=e.target.value;renderList();rememberList();};$('#essay-clear').onclick=resetSearch;$('#essay-refresh').onclick=load;$('#back-reviews').onclick=backToList;
  document.querySelectorAll('[data-review-tab]').forEach(b=>b.onclick=()=>selectTab(b.dataset.reviewTab));
  $('#download-review').onclick=()=>{if(!current)return;const blob=new Blob([plainReview(current)],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download=current.title.replace(/[\\/:*?"<>|]/g,'_')+'-申论批改.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);$('#action-status').hidden=false;$('#action-status').textContent='已生成文字版；请在浏览器下载或共享菜单中保存。';};

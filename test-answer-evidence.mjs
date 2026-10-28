@@ -35,7 +35,7 @@ const growthId='ziliao-feisheng-200-part2-007';
 const climateId='verbal-exercise27-001';
 const enforcement2022Ids=["verbal-a5168b49d026064bf459a94f", "verbal-5a0d1d1bcc4381dd16842247", "verbal-d91a592170c7c9825085c7c6", "verbal-468ec5de3b18fa4c3c62738b", "verbal-9a55730921f0aca3c203d635"];
 const readingTwoIds=['verbal-privacy-convenience-006','cq-2022-selected-043'];
-const addedIds=[addedId,growthId,climateId,...enforcement2022Ids,...readingTwoIds];
+const addedIds=[addedId,growthId,climateId,...enforcement2022Ids,...readingTwoIds,'fenbi-2027-s40-enforcement-059','fenbi-2027-s40-enforcement-087'];
 const originalIds=[...Object.keys(expectedOptions),...Object.keys(unresolved)];
 
 test('five 2022 questions reuse indexed identities and explicitly map this edition to B/D/A/A/B',()=>{
@@ -98,8 +98,8 @@ test('original IDs, questions and sources stay fixed; only two approved editoria
  // Their original questions, options, sources and addedAt remain fingerprinted,
  // as does every other old record; unrelated changes must still fail.
  assert.equal(digest,'7774c63f5425953c0a4caa825a810d9a8b28b590b525930f3fd7db0c80094dc8');
- assert.equal(data.answers.length,28);
- assert.equal(answers.size,28,'IDs remain unique');
+ assert.equal(data.answers.length,30);
+ assert.equal(answers.size,30,'IDs remain unique');
  assert.deepEqual([...answers.keys()].sort(),[...originalIds,...addedIds].sort());
 });
 
@@ -194,7 +194,7 @@ test('exercise 27 keeps its unidentified provenance, full option order and refer
  assert.equal(answer.paper,'练习题27（书名、版次未显示）');
  assert.equal(answer.number,'1');
  assert.equal(answer.addedAt,'2026-10-22');
- assert.equal(data.answers.filter(a=>![...enforcement2022Ids,...readingTwoIds].includes(a.id))[0].id,climateId,'older additions retain their order');
+ assert.equal(data.answers.filter(a=>![...enforcement2022Ids,...readingTwoIds,'fenbi-2027-s40-enforcement-059','fenbi-2027-s40-enforcement-087'].includes(a.id))[0].id,climateId,'older additions retain their order');
  assert.deepEqual(answer.question.options.map(option=>[option.label,option.text.trim()]),[
   ['A','回顾历史上的气候变迁过程'],
   ['B','强调气候对粮食生产的意义'],
@@ -215,8 +215,8 @@ test('exercise 27 keeps its unidentified provenance, full option order and refer
  const sameDay=data.answers.filter(item=>item.addedAt==='2026-10-22').map(item=>item.id);
  assert.deepEqual(sameDay,[climateId,growthId],'same-day additions retain their insertion order');
  const sorted=[...data.answers].sort((a,b)=>(b.addedAt||'').localeCompare(a.addedAt||''));
- assert.deepEqual(sorted.filter(a=>![...enforcement2022Ids,...readingTwoIds].includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'stable date sorting keeps the newest addition before FIC');
- assert.deepEqual(getReviewSummary(data.answers,{}).newItems.filter(a=>![...enforcement2022Ids,...readingTwoIds].includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'the new-question queue preserves the same order');
+ assert.deepEqual(sorted.filter(a=>![...enforcement2022Ids,...readingTwoIds,'fenbi-2027-s40-enforcement-059','fenbi-2027-s40-enforcement-087'].includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'stable date sorting keeps the newest addition before FIC');
+ assert.deepEqual(getReviewSummary(data.answers,{}).newItems.filter(a=>![...enforcement2022Ids,...readingTwoIds,'fenbi-2027-s40-enforcement-059','fenbi-2027-s40-enforcement-087'].includes(a.id)).slice(0,2).map(item=>item.id),[climateId,growthId],'the new-question queue preserves the same order');
 });
 
 test('missing material, ambiguous readings and disputed answers have no grading key',()=>{

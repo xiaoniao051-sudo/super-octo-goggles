@@ -1,10 +1,11 @@
-import {createPractice} from './verbal-practice.js?v=20261027-ux';
+import {createPractice} from './verbal-practice.js?v=20261028-explanations';
+import {createExplanationIndex} from './verbal-explanations.js?v=20261028-explanations';
 import {fetchJson} from './network.js?v=20261027-ux';
 import {PARTS,EXAMS,GUIDES,safeUrl,validateBank,numberLabel,filterItems,sourceLink,requestText,toCsv} from './verbal-model.js?v=20261023-1';
 const $=s=>document.querySelector(s),el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const button=(text,cls,fn)=>{const n=el('button',cls,text);n.type='button';n.onclick=fn;return n;};
 const link=(text,url)=>{const n=el('a','',text);n.href=url;if(/^https?:/.test(url)){n.target='_blank';n.rel='noopener noreferrer';}return n;};
-let bank,papers,answers,practice,page=1,timer;const pageSize=24;
+let bank,papers,answers,explanations,practice,page=1,timer;const pageSize=24;
 const params=new URLSearchParams(location.search),state={part:PARTS.includes(params.get('part'))?params.get('part'):PARTS[0],view:['practice','mistakes','index','explained','coverage'].includes(params.get('view'))?params.get('view'):'practice',exam:EXAMS[params.get('exam')]?params.get('exam'):'all',year:/^(2019|202[0-6])$/.test(params.get('year'))?params.get('year'):'all',query:params.get('q')||''};
 function toast(text){$('#bank-toast').textContent=text;clearTimeout(timer);timer=setTimeout(()=>$('#bank-toast').textContent='',4500);}
 function syncUrl(){const p=new URLSearchParams();p.set('part',state.part);if(state.view!=='practice')p.set('view',state.view);if(state.exam!=='all')p.set('exam',state.exam);if(state.year!=='all')p.set('year',state.year);if(state.query)p.set('q',state.query);history.replaceState(null,'',location.pathname+'?'+p);}
@@ -12,7 +13,7 @@ function update(patch){if(practice&&!practice.canLeave())return;Object.assign(st
 function meta(item){const m=el('div','bank-meta');m.append(el('span','bank-tag',item.part),el('span','',item.subtype));return m;}
 function occurrenceLine(o){const p=papers.get(o.paperId),li=el('li');li.append(link(p.title+' · '+numberLabel(o),sourceLink(p,o)));if(o.qid)li.append(el('span','',' · 来源编号 '+o.qid));return li;}
 function indexCard(q){const o=q.matched[0],p=papers.get(o.paperId),card=el('article','bank-item');card.append(meta(q),el('h2','',p.title+' · '+numberLabel(o)));
- card.append(el('p','muted','回忆版索引 · 原文与解析在来源页面。本条尚未独立解答。'));
+ card.append(el('p','muted',explanations.has(q.id)?'回忆版索引 · 已补本站逐题讲解。在“开始做题”切换到这份试卷，提交后查看。':'回忆版索引 · 原文在来源页面，尚未接通本站做题与讲解。'));
  if(q.classificationNote)card.append(el('p','coverage-gap',q.classificationNote));
  const actions=el('div','bank-actions');actions.append(link('打开原题来源 ↗',sourceLink(p,o)),button('复制题号去问','text-btn',async()=>{try{await navigator.clipboard.writeText(requestText(q,p,o));toast('已复制。粘贴到微信，补上不懂的地方即可。');}catch{const text=el('textarea');text.value=requestText(q,p,o);text.readOnly=true;text.setAttribute('aria-label','可手动复制的题号与疑问');card.append(text);text.focus();text.select();toast('请长按复制题号。');}}));card.append(actions);
  if(q.occurrences.length>1){const details=el('details'),ul=el('ul');details.append(el('summary','',`相同题面收录于 ${q.occurrences.length} 处 · 查看全部出处`));q.occurrences.forEach(o=>ul.append(occurrenceLine(o)));details.append(ul);card.append(details);}return card;
@@ -37,7 +38,7 @@ function render(){
  const total=Math.ceil(items.length/pageSize);page=Math.min(page,total);for(const q of items.slice((page-1)*pageSize,page*pageSize))$('#bank-list').append(state.view==='index'?indexCard(q):explainedCard(q));
  const prev=button('上一页','quiet-btn',()=>{page--;render();$('#bank-count').scrollIntoView({block:'start'});}),next=button('下一页','quiet-btn',()=>{page++;render();$('#bank-count').scrollIntoView({block:'start'});});prev.disabled=page<=1;next.disabled=page>=total;$('#bank-pager').append(prev,el('span','',page+' / '+total),next);
 }
-async function init(){try{const [r,a]=await Promise.all([fetchJson('./verbal-bank.json',{label:'言语题库'}),fetchJson('./answers.json',{label:'题目解析'})]);bank=validateBank(r);answers=new Map(a.answers.map(a=>[a.id,a]));papers=new Map(bank.papers.map(p=>[p.id,p]));practice=createPractice({bank,answers,mount:$('#bank-list'),toast,onCount:text=>$('#bank-count').textContent=text});$('#bank-status').hidden=true;$('#bank-scope').textContent='本站已有讲解可直接做；国考和福建省考29卷按选卷读取题面，答案标注为来源参考。福建事业单位仍在补齐。';
+async function init(){try{const [r,a,e]=await Promise.all([fetchJson('./verbal-bank.json',{label:'言语题库'}),fetchJson('./answers.json',{label:'题目解析'}),fetchJson('./verbal-explanations.json',{label:'言语逐题讲解'})]);bank=validateBank(r);explanations=createExplanationIndex(e);answers=new Map(a.answers.map(a=>[a.id,a]));papers=new Map(bank.papers.map(p=>[p.id,p]));practice=createPractice({bank,answers,explanations,mount:$('#bank-list'),toast,onCount:text=>$('#bank-count').textContent=text});$('#bank-status').hidden=true;$('#bank-scope').textContent='国考和福建省考29卷可按卷做题；1080题次、去重809题均附本站讲解（含争议说明），另保留16道原有讲解。来源为回忆版，非官方答案；福建事业单位题面仍在补齐。';
  for(const [i,part]of PARTS.entries()){const b=button('','',()=>update({part}));b.dataset.part=part;b.append(el('small','','0'+(i+1)),el('b','',part));$('#part-tabs').append(b);}
  for(let year=2026;year>=2019;year--){const o=el('option','',year+' 年');o.value=String(year);$('#year-filter').append(o);}document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>update({view:b.dataset.view}));$('#exam-filter').onchange=e=>update({exam:e.target.value});$('#year-filter').onchange=e=>update({year:e.target.value});$('#bank-search').oninput=e=>update({query:e.target.value});$('#clear-filters').onclick=()=>update({exam:'all',year:'all',query:''});$('#download-index').onclick=()=>{const text=toCsv(filterItems(bank.items,papers,state),papers),url=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'})),a=link('',url);a.download='言语-'+state.part+'-题号目录.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};render();
  }catch(e){$('#bank-status').hidden=false;$('#bank-status').textContent='加载失败：'+e.message;$('#bank-list').append(button('重新读取','primary-btn',()=>location.reload()));}}

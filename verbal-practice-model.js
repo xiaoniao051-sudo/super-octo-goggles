@@ -12,6 +12,7 @@ export function adaptSourceQuestion(parsed,item,occurrence,paper){
 export function submissionResult(answer,choice){
  const correct=gradeAnswer(answer,choice);
  if(typeof correct==='boolean')return {kind:correct?'correct':'incorrect',correct,reference:false};
+ if(answer.sourceOnly&&answer.explanation?.status==='disputed')return {kind:'disputed',correct:null,reference:false};
  if(answer.sourceOnly&&answer.correctOption&&answer.question.options.some(o=>o.label===answer.correctOption))return {kind:choice===answer.correctOption?'reference-match':'reference-different',correct:null,reference:true};
  return {kind:'ungraded',correct:null,reference:false};
 }

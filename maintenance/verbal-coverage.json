@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-10-24",
-  "scopeNote": "2019—2026国考与福建省考29个卷型可选卷载入题面并作答，来源参考答案未独立核验；另有16道本站讲解可直接练习。福建事业单位目前仍为目录，尚不能在本站做题。",
+  "updatedAt": "2026-10-28",
+  "scopeNote": "2019—2026国考与福建省考29卷可选卷做题，1080题次去重809题均附本站原创讲解（含争议说明）。来源为公开回忆版，不是官方答案；另保留16道原有完整讲解。福建事业单位仍为目录，尚不能在本站做题。",
   "stats": {
     "occurrences": 1498,
     "uniqueItems": 1202,
@@ -36,7 +36,11 @@
     "model": "user_selected_public_source_reader",
     "answers": "source_reference_not_independently_verified",
     "shiyeReady": false,
-    "localAttempts": "guokao-2027-study-v1/reviewAttempts"
+    "localAttempts": "guokao-2027-study-v1/reviewAttempts",
+    "originalExplanations": 809,
+    "explanationsFile": "verbal-explanations.json",
+    "explanationBinding": "exact_question_ordered_options_source_version_and_reference_answer",
+    "disputedGrading": "not_scored"
   },
   "papers": [
     {
@@ -794,7 +798,7 @@
     }
   ],
   "gaps": [
-    "国考和福建省考29卷共1080题次支持选卷读取原文并作答，包含跨卷重复；来源答案仍未逐题独立核验。本站言语完整讲解16条，其中15题可判分、1题有争议；目标国考9条（含争议1条）、补充练习7条。",
+    "当前可做的国考和福建省考29卷共1080题次，去重809题已补原创讲解：最快判断、选择依据、其余三项比较。题面与来源参考答案仍来自固定版本的公开回忆版；来源比较不计入已核对正确率，有争议的题不自动判断对错。原有16道讲解保留。",
     "国考21卷与福建省考8卷使用上游言语模块序号，原卷题号尚未核实；副省级篇章题被前置，不能统一加固定偏移量。",
     "三类按设问进行规则初分并复核例外；保留分类边界，后续与完整原卷逐题复核，不宣称全部人工精校。",
     "福建事业单位已收录场次不等于该年全部场次；市县独立卷、不同科目版本和缺失材料仍需补齐。",

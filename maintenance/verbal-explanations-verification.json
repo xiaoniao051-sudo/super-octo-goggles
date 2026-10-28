@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-28",
+  "partial": false,
+  "method": "原创逐题编写；自动核对ID/题面绑定/选项完整性/判分隔离，不等同官方答案验收",
+  "papers": 29,
+  "questionOccurrences": 1080,
+  "uniqueExpected": 809,
+  "explanations": 809,
+  "disputed": [
+    {
+      "id": "verbal-07a65c54639315d76d7172af",
+      "sourceAnswer": "B",
+      "explanationAnswer": "B"
+    },
+    {
+      "id": "verbal-10fea2b1cbcb0f046266d963",
+      "sourceAnswer": "B",
+      "explanationAnswer": "D"
+    },
+    {
+      "id": "verbal-36339f62099f5fb7d7fb08fb",
+      "sourceAnswer": "C",
+      "explanationAnswer": "C"
+    },
+    {
+      "id": "verbal-3a76b4101903841a2510d4ff",
+      "sourceAnswer": "C",
+      "explanationAnswer": "B"
+    },
+    {
+      "id": "verbal-5258ae965bc252d341ba06c8",
+      "sourceAnswer": "C",
+      "explanationAnswer": "A"
+    },
+    {
+      "id": "verbal-6c931d04ccdaf85e6dbf071c",
+      "sourceAnswer": "D",
+      "explanationAnswer": "C"
+    },
+    {
+      "id": "verbal-6e54fff1896924be2c27c1d2",
+      "sourceAnswer": "C",
+      "explanationAnswer": "C"
+    },
+    {
+      "id": "verbal-6f5d40640008dfba50f9afba",
+      "sourceAnswer": "B",
+      "explanationAnswer": "D"
+    },
+    {
+      "id": "verbal-729503f4db290f0634e10bf2",
+      "sourceAnswer": "D",
+      "explanationAnswer": "D"
+    },
+    {
+      "id": "verbal-7a46b52335e242d2a8bb1d30",
+      "sourceAnswer": "A",
+      "explanationAnswer": "A"
+    },
+    {
+      "id": "verbal-924871ac011fa70e855732b8",
+      "sourceAnswer": "D",
+      "explanationAnswer": "A"
+    },
+    {
+      "id": "verbal-9a0e3c327b8c9904c352d05a",
+      "sourceAnswer": "A",
+      "explanationAnswer": "C"
+    },
+    {
+      "id": "verbal-a058843654cf2f9a717d2f1b",
+      "sourceAnswer": "A",
+      "explanationAnswer": "A"
+    },
+    {
+      "id": "verbal-a164d167922f11aaf7e5a0a3",
+      "sourceAnswer": "B",
+      "explanationAnswer": "C"
+    },
+    {
+      "id": "verbal-a8bce702f059bb9bceb8a454",
+      "sourceAnswer": "D",
+      "explanationAnswer": "D"
+    },
+    {
+      "id": "verbal-a9bda563cd7ddbaadfd118bb",
+      "sourceAnswer": "C",
+      "explanationAnswer": "C"
+    },
+    {
+      "id": "verbal-d31f4d0158d95f2c03e3f068",
+      "sourceAnswer": "C",
+      "explanationAnswer": "D"
+    },
+    {
+      "id": "verbal-ed3f43d3d20211aafb8ed480",
+      "sourceAnswer": "B",
+      "explanationAnswer": "B"
+    }
+  ],
+  "sourceQuestionsEmbedded": false,
+  "thirdPartyExplanationsCopied": false,
+  "verifiedGradingPromoted": false,
+  "sha256": "38fc8eba516ea49e8969d608c237b71344cc3d19574a57e307cbc9e780441d6a"
+}

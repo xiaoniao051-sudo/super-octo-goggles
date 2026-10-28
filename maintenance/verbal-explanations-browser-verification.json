@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-28",
+  "environment": "Desktop in-app Chromium, 390x844 and 320x720 responsive viewports; not iPhone or WeChat device testing",
+  "testOrigin": "http://127.0.0.1:3189",
+  "sourceMode": "Live browser fetch of pinned public source; no intercepted fixture",
+  "sourcePapersLoaded": ["guokao-2023-enforcement", "guokao-2026-prefectural"],
+  "checks": {
+    "visibleCurrentPaperAnd48pxSwitch": true,
+    "searchAndSelectAutoLoads": true,
+    "threePartsSwitch": true,
+    "explanationHiddenUntilSubmit": true,
+    "specificCorrectAndDistractorReasonsAfterSubmit": true,
+    "referenceComparisonExcludedFromVerifiedStats": true,
+    "disputedAirStrikeQuestionShowsBothKeysAndNoWrongJudgment": true,
+    "draftNoteSurvivesPaperSwitch": true,
+    "historicalMistakeSurvivesReloadAndSourceReload": true,
+    "noHorizontalOverflowAt320": true
+  },
+  "privacy": "Synthetic attempts and notes exist only on the isolated localhost origin. Production learner records were not written during QA.",
+  "limits": "External source availability can vary by network; no iPhone or WeChat real-device acceptance. Full dataset binding is audited separately."
+}

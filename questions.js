@@ -269,6 +269,7 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast,navigate=
   const explanation=el('details','qa-explanation');explanation.id='qa-reader-explanation';explanation.open=!!attempt;explanation.append(el('summary','','查看答案与解析'));content.append(explanation);
   if(a.summary)explanation.append(paragraph(a.summary,'qa-notice'));
   explanation.append(el('h3','','答案 / 作答要点'),paragraph(a.answer));for(const s of a.sections)explanation.append(el('h3','',s.heading),paragraph(s.body));
+  if(a.question){const ask=el('a','quiet-btn','还没懂？问 AI');ask.href='./ai.html?question='+encodeURIComponent(a.id);explanation.append(ask);}
   const attempts=state().reviewAttempts?.[a.id]||[];
   if(attempts.length){
    const history=el('details','qa-attempt-history');history.append(el('summary','','本机作答记录（最近5次）'));

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#176c5e">
+  <meta name="description" content="把题目和困惑说清楚，逐步理解选项、解题方法与申论表达。">
+  <meta name="referrer" content="same-origin">
+  <title>AI 答疑 · 国考精选</title>
+  <link rel="icon" href="./apple-touch-icon.png">
+  <link rel="stylesheet" href="./ai.css?v=20261029">
+  <script src="./ai.js?v=20261029" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#question">跳到提问框</a>
+  <header class="topbar">
+    <a class="back-link" href="./#home"><span aria-hidden="true">‹</span> 返回做题</a>
+    <a class="brand" href="./#home"><span class="brand-icon">知</span><span>国考精选</span></a>
+    <button id="lock-button" class="text-button" type="button" hidden>退出答疑</button>
+  </header>
+  <main class="tutor-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="title-row"><span class="eyebrow">一道一道，把不懂的弄懂</span><span class="private-badge">专属答疑</span></div>
+      <h1 id="page-title">这道题，卡在哪里？</h1>
+      <p>贴上完整题目和选项，再说说你卡在哪里。</p>
+      <p class="intro-small">选项辨析、解题步骤、申论表达，都可以问。</p>
+    </section>
+
+    <section id="access-panel" class="access-card" aria-labelledby="access-title">
+      <div class="access-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg></div>
+      <div class="access-copy"><h2 id="access-title">输入口令，开始答疑</h2><p>仅供你们两人使用。口令由张菁伟提供。</p></div>
+      <form id="login-form" class="login-form">
+        <label for="passphrase">访问口令</label>
+        <div class="login-row"><input id="passphrase" type="password" autocomplete="current-password" maxlength="200" required placeholder="输入访问口令" disabled><button id="login-button" class="primary-button" type="submit" disabled>进入答疑 <span aria-hidden="true">→</span></button></div>
+      </form>
+      <div id="health-notice" class="health-notice" role="status" aria-live="polite"><p id="health-message">正在检查答疑服务…</p><button id="health-retry" class="text-button" type="button" hidden>重新检查</button></div>
+      <p id="login-feedback" class="feedback" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="chat-panel" hidden aria-label="AI 答疑对话">
+      <div class="chat-toolbar">
+        <div class="budget-summary"><span class="status-dot" aria-hidden="true"></span><span id="budget-label">正在检查答疑状态…</span></div>
+        <button id="new-question" class="text-button" type="button">换一道题</button>
+      </div>
+      <div id="service-notice" class="service-notice" role="status" hidden></div>
+      <section id="empty-state" class="empty-state">
+        <div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4V4ZM8 8h8M8 12h5"/></svg></div>
+        <h2>不只告诉你答案，帮你弄懂思路。</h2>
+        <p>比如：“我选 B，答案是 C。B 明明也提到了，为什么不选？”</p>
+        <div class="starter-tags" aria-label="提问方向"><button type="button" data-starter="请逐项解释这道题，重点说清楚我选的选项为什么不对。\n\n题目：\n\n我的答案：\n参考答案：">辨析选项</button><button type="button" data-starter="这道题我不会，请先用最简单的方法一步一步讲，再总结考试时怎么快速做。\n\n题目：">讲解步骤</button><button type="button" data-starter="请帮我修改下面这段申论表达，适合行政执法卷，语言平实、考场上能写出来，不要太空。\n\n我的原文：">申论表达</button></div>
+      </section>
+      <div id="messages" class="messages" role="log" aria-label="答疑记录" aria-live="polite" aria-relevant="additions"></div>
+      <div id="waiting" class="waiting" role="status" hidden><span class="waiting-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>正在梳理解题思路，请稍等…</span></div>
+      <div id="followups" class="followups" aria-label="继续追问" hidden><button type="button" data-followup="为什么我选的选项不对？请和正确选项对比讲。">为什么我选的选项不对</button><button type="button" data-followup="我还是有点没懂，请用更简单的话讲，举一个生活中的例子。">用更简单的话讲</button><button type="button" data-followup="请给我一道考查同样知识点的原创练习题，先不要公布答案，等我回答。">给我一个类似例子</button></div>
+    </section>
+
+    <section class="composer-wrap" aria-label="填写问题">
+      <form id="question-form" class="composer">
+        <div class="composer-heading"><label for="question">题目与疑问</label><span id="question-count">0 / 6000</span></div>
+        <textarea id="question" rows="5" maxlength="6000" placeholder="粘贴题干和全部选项，然后写下：&#10;我选了……，答案是……，我不懂的是……" aria-describedby="composer-help"></textarea>
+        <div id="import-notice" class="import-notice" hidden></div>
+        <div class="composer-bottom"><p id="composer-help">先输入口令，再发送问题。</p><button id="send-button" class="primary-button send-button" type="submit" disabled><span id="send-label">发送问题</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7M12 5v15"/></svg></button></div>
+      </form>
+      <p id="question-feedback" class="feedback" role="status" aria-live="polite"></p>
+      <button id="retry-question" class="text-button" type="button" hidden>重新提问</button>
+      <p class="privacy-note">问题会发送给 OpenAI 用于回答。答疑记录仅保留在当前标签页，不会自动加入错题库。AI 可能出错，请对照题干核验。</p>
+    </section>
+    <details class="usage-detail"><summary>使用与额度</summary><p>两人共享 28 美元总预算，用完停止；不设每日额度。页面显示本功能记录的预计剩余额度，实际账单以 OpenAI 为准。遇到网络问题时不会自动重发。</p><p>第一版支持文字提问。图片题请先用手机的文字识别复制题目；图形题需把关键图形信息补充清楚。</p></details>
+  </main>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

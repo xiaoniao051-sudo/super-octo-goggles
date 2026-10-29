@@ -630,7 +630,7 @@ body.large-reading .reader-section>summary{font-size:18px}
 #home-screen .home-hero{padding:22px 0 18px;min-height:0}
 #home-screen .home-hero h1{font-size:30px;margin:5px 0 7px}
 #home-screen .home-hero p{max-width:none;font-size:14px}
-.home-task-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 16px}
+.home-task-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 16px}
 .home-task{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;min-width:0;min-height:112px;padding:17px 20px;border:1px solid #dce6df;border-radius:14px;background:#fff;color:var(--ink);text-align:left;transition:background-color .12s,border-color .12s}
 .home-task>svg{width:25px;height:25px;margin-bottom:4px;color:var(--accent)}
 .home-task strong{font-size:17px;line-height:1.5;font-weight:650}

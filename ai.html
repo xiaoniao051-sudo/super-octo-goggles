@@ -8,7 +8,7 @@
   <meta name="referrer" content="same-origin">
   <title>AI 答疑 · 国考精选</title>
   <link rel="icon" href="./apple-touch-icon.png">
-  <link rel="stylesheet" href="./ai.css?v=20261029">
+  <link rel="stylesheet" href="./ai.css?v=20261030-photo">
   <script id="ai-page-loader">
     if (location.hostname === 'xiaoniao051-sudo.github.io') {
       const target = new URL('https://guokao-2027-pocket.xiaoniao051.chatgpt.site/ai.html');
@@ -20,7 +20,7 @@
       document.addEventListener('DOMContentLoaded', () => {
         const script = document.createElement('script');
         script.type = 'module';
-        script.src = './ai.js?v=20261030-routing';
+        script.src = './ai.js?v=20261030-photo';
         document.head.append(script);
       }, { once: true });
     }
@@ -37,7 +37,7 @@
     <section class="intro" aria-labelledby="page-title">
       <div class="title-row"><span class="eyebrow">一道一道，把不懂的弄懂</span><span class="private-badge">专属答疑</span></div>
       <h1 id="page-title">这道题，卡在哪里？</h1>
-      <p>贴上完整题目和选项，再说说你卡在哪里。</p>
+      <p>拍下题目，或贴上题干和选项，再说说你卡在哪里。</p>
       <p class="intro-small">选项辨析、解题步骤、申论表达，都可以问。</p>
     </section>
 
@@ -73,15 +73,23 @@
       <form id="question-form" class="composer">
         <div class="composer-heading"><label for="question">题目与疑问</label><span id="question-count">0 / 6000</span></div>
         <textarea id="question" rows="5" maxlength="6000" placeholder="粘贴题干和全部选项，然后写下：&#10;我选了……，答案是……，我不懂的是……" aria-describedby="composer-help"></textarea>
+        <div class="photo-toolbar"><button id="take-photo" class="photo-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h4l2-3h4l2 3h4v15H4Z"/><circle cx="12" cy="13" r="4"/></svg>拍照</button><button id="add-photos" class="photo-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m4 17 5-5 4 4 3-3 5 5"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>添加图片</button><span id="photo-count">一段对话最多 3 张</span></div>
+        <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+        <input id="album-input" type="file" accept="image/*" multiple hidden>
+        <p class="photo-hint">只拍这道题，题干、图表和选项要完整；字要清楚，避开反光。</p>
+        <div id="photo-previews" class="photo-previews" aria-label="待发送的图片"></div>
+        <p id="photo-feedback" class="feedback" role="status" aria-live="polite"></p>
+        <div id="missing-photo-notice" class="missing-photo-notice" hidden><p>页面已刷新，之前的图片没有保留。为避免按不完整的题目回答，请重新上传图片并开始新对话，或点击“换一道题”。</p><button id="restore-photos" class="text-button" type="button">重新上传并开始新对话</button></div>
         <div id="import-notice" class="import-notice" hidden></div>
         <div class="composer-bottom"><p id="composer-help">先输入口令，再发送问题。</p><button id="send-button" class="primary-button send-button" type="submit" disabled><span id="send-label">发送问题</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7M12 5v15"/></svg></button></div>
       </form>
       <p id="question-feedback" class="feedback" role="status" aria-live="polite"></p>
       <button id="retry-question" class="text-button" type="button" hidden>重新提问</button>
-      <p class="privacy-note">问题会发送给 OpenAI 用于回答。答疑记录仅保留在当前标签页，不会自动加入错题库。AI 可能出错，请对照题干核验。</p>
+      <p class="privacy-note">发送后，题目和图片会交给 OpenAI 用于回答，不会自动加入错题库。图片只在当前页面保留，刷新后需重新上传；文字可在当前标签页恢复。AI 可能出错，请对照题干核验。</p>
     </section>
-    <details class="usage-detail"><summary>使用与额度</summary><p>两人共享 28 美元总预算，用完停止；不设每日额度。页面显示本功能记录的预计剩余额度，实际账单以 OpenAI 为准。遇到网络问题时不会自动重发。</p><p>第一版支持文字提问。图片题请先用手机的文字识别复制题目；图形题需把关键图形信息补充清楚。</p></details>
+    <details class="usage-detail"><summary>使用与额度</summary><p>两人共享 28 美元总预算，用完停止；不设每日额度。页面显示本功能记录的预计剩余额度，实际账单以 OpenAI 为准。遇到网络问题时不会自动重发。</p><p>一段对话最多 3 张图片。照片会在手机上转成 JPEG，去除附带的拍摄信息，再发送；只需图片也能提问，补充具体疑惑会更有帮助。图片识别可能看错数字、符号或图形，请核对回答。</p></details>
   </main>
+  <dialog id="photo-dialog" class="photo-dialog"><div class="photo-dialog-header"><strong>查看图片</strong><button id="close-photo-dialog" class="text-button" type="button">关闭 ×</button></div><img id="photo-dialog-image" alt="题目图片放大预览"></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
 </body>
 </html>

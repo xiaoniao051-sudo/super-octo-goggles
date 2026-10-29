@@ -4,9 +4,14 @@ const SESSION_KEY = 'guokao-ai-session-v1';
 const CHAT_KEY = 'guokao-ai-chat-v1';
 const DRAFT_KEY = 'guokao-ai-draft-v1';
 const PENDING_KEY = 'guokao-ai-pending-v1';
+const IMAGE_DRAFT_KEY = 'guokao-ai-image-draft-v1';
 const MAX_QUESTION = 6000;
 const MAX_CONTEXT = 24000;
 const MAX_TURNS = 8;
+const MAX_IMAGES = 3;
+const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+const MAX_IMAGE_EDGE = 2048;
+const IMAGE_QUESTION = '请先识别图片中的题干、图表和全部选项，再用通俗的话解释解题过程。看不清的地方请先问我，不要猜。';
 const $ = id => document.getElementById(id);
 if (location.hostname === 'guokao-2027-pocket.xiaoniao051.chatgpt.site' && new URLSearchParams(location.search).get('from') === 'github') {
   const studyHome = 'https://xiaoniao051-sudo.github.io/super-octo-goggles/#home';
@@ -21,8 +26,15 @@ let healthReady = false;
 let healthChecking = false;
 let loginBusy = false;
 let pendingRequest = readStored(PENDING_KEY, null);
+let selectedImages = [];
+let imageBusy = false;
+let missingDraftImages = Boolean(readStored(IMAGE_DRAFT_KEY, false));
+let reattachingPhotos = false;
 let toastTimer;
-messages = Array.isArray(messages) ? messages.filter(validMessage) : [];
+messages = Array.isArray(messages) ? messages.filter(validMessage).map(message => ({
+  role: message.role, content: message.content, ...(message.incomplete === true ? { incomplete: true } : {}),
+  ...(message.role === 'user' && (message.hadImages || message.images?.length) ? { hadImages: true } : {}),
+})) : [];
 if (!pendingRequest || typeof pendingRequest.fingerprint !== 'string' || pendingRequest.fingerprint.length > 200000
   || typeof pendingRequest.requestId !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(pendingRequest.requestId)) {
   setPendingRequest(null);
@@ -41,6 +53,158 @@ function writeStored(key, value) {
 function setPendingRequest(value) {
   pendingRequest = value;
   writeStored(PENDING_KEY, value);
+}
+function persistConversation() {
+  writeStored(CHAT_KEY, messages.map(message => ({
+    role: message.role, content: message.content, ...(message.incomplete === true ? { incomplete: true } : {}),
+    ...(message.role === 'user' && (message.images?.length || message.hadImages) ? { hadImages: true } : {}),
+  })));
+}
+function hasMissingImages() {
+  return missingDraftImages || messages.some(message => message.hadImages && !message.images?.length);
+}
+function conversationImageCount() {
+  return messages.reduce((count, message) => count + (message.role === 'user' ? message.images?.length || 0 : 0), 0);
+}
+function clearPhotos() {
+  selectedImages = [];
+  missingDraftImages = false;
+  reattachingPhotos = false;
+  writeStored(IMAGE_DRAFT_KEY, null);
+  $('photo-feedback').textContent = '';
+  const dialog = $('photo-dialog');
+  if (dialog.open && typeof dialog.close === 'function') dialog.close();
+  $('photo-dialog-image').removeAttribute('src');
+  renderPhotoPreviews();
+}
+function photoButton(photo, label) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'photo-open';
+  button.setAttribute('aria-label', `放大查看${label}`);
+  const image = document.createElement('img');
+  image.src = photo.dataUrl;
+  image.alt = label;
+  button.append(image);
+  button.addEventListener('click', () => {
+    $('photo-dialog-image').src = photo.dataUrl;
+    const dialog = $('photo-dialog');
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
+  });
+  return button;
+}
+function renderPhotoPreviews() {
+  $('photo-previews').replaceChildren(...selectedImages.map((photo, index) => {
+    const figure = document.createElement('figure');
+    figure.className = 'photo-preview';
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'photo-remove';
+    remove.textContent = '×';
+    remove.disabled = busy || imageBusy;
+    remove.setAttribute('aria-label', `移除图片 ${index + 1}`);
+    remove.addEventListener('click', () => {
+      if (busy || imageBusy) return;
+      selectedImages.splice(index, 1);
+      writeStored(IMAGE_DRAFT_KEY, selectedImages.length ? true : null);
+      $('photo-feedback').textContent = '';
+      $('retry-question').hidden = true;
+      renderPhotoPreviews();
+      updateButtons();
+    });
+    const caption = document.createElement('figcaption');
+    caption.textContent = `图片 ${index + 1} · 点图放大`;
+    figure.append(photoButton(photo, `待发送图片 ${index + 1}`), remove, caption);
+    return figure;
+  }));
+}
+function fittedPhotoSize(width, height, maxEdge = MAX_IMAGE_EDGE) {
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width < 1 || height < 1 || width * height > 80_000_000) throw new Error('图片尺寸异常或过大，请截取这一道题后重试。');
+  const scale = Math.min(1, maxEdge / Math.max(width, height));
+  return { width: Math.max(1, Math.round(width * scale)), height: Math.max(1, Math.round(height * scale)) };
+}
+function blobDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('图片读取失败，请重新选择。'));
+    reader.readAsDataURL(blob);
+  });
+}
+async function convertPhoto(file) {
+  const acceptedType = /^image\/(jpeg|png|webp|heic|heif)$/i.test(file.type);
+  if (!acceptedType && !(file.type === '' && /\.(jpe?g|png|webp|heic|heif)$/i.test(file.name))) throw new Error('请选择照片或截图；若相册格式无法读取，请先截屏再添加。');
+  if (!file.size || file.size > 25 * 1024 * 1024) throw new Error('单张原图过大或为空，请截取题目区域后再添加。');
+  const objectUrl = URL.createObjectURL(file);
+  const image = new Image();
+  try {
+    await new Promise((resolve, reject) => {
+      image.onload = resolve;
+      image.onerror = () => reject(new Error('这张图片暂时无法读取，请换成截图或 JPEG、PNG 图片。'));
+      image.src = objectUrl;
+    });
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('当前浏览器无法处理图片，请用 Safari 打开后重试。');
+    let size = fittedPhotoSize(image.naturalWidth, image.naturalHeight);
+    let blob;
+    for (let round = 0; round < 3; round++) {
+      canvas.width = size.width;
+      canvas.height = size.height;
+      context.fillStyle = '#ffffff';
+      context.fillRect(0, 0, size.width, size.height);
+      context.drawImage(image, 0, 0, size.width, size.height);
+      for (const quality of [0.92, 0.84, 0.76, 0.68]) {
+        blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+        if (blob && blob.type === 'image/jpeg' && blob.size <= MAX_IMAGE_BYTES) break;
+      }
+      if (blob && blob.type === 'image/jpeg' && blob.size <= MAX_IMAGE_BYTES) break;
+      size = fittedPhotoSize(size.width, size.height, Math.max(640, Math.floor(Math.max(size.width, size.height) * 0.8)));
+    }
+    if (!blob || blob.type !== 'image/jpeg' || blob.size > MAX_IMAGE_BYTES) throw new Error('图片处理后仍过大，请裁掉无关区域再添加。');
+    const dataUrl = await blobDataUrl(blob);
+    if (typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/jpeg;base64,')) throw new Error('图片处理失败，请重新添加。');
+    return { dataUrl, width: canvas.width, height: canvas.height };
+  } finally { URL.revokeObjectURL(objectUrl); }
+}
+async function addPhotos(files) {
+  if (busy || imageBusy || (hasMissingImages() && !reattachingPhotos)) return;
+  const list = Array.from(files || []);
+  if (!list.length) return;
+  const slots = MAX_IMAGES - conversationImageCount() - selectedImages.length;
+  if (list.length > slots) {
+    $('photo-feedback').textContent = slots > 0 ? `这段对话还可以添加 ${slots} 张，请重新选择。` : '这段对话已添加 3 张图片。需要换题时，请点“换一道题”。';
+    return;
+  }
+  imageBusy = true;
+  $('photo-feedback').textContent = '正在处理图片，请稍等…';
+  updateButtons();
+  renderPhotoPreviews();
+  const added = [];
+  try {
+    for (const file of list) added.push(await convertPhoto(file));
+    selectedImages.push(...added);
+    missingDraftImages = false;
+    reattachingPhotos = false;
+    writeStored(IMAGE_DRAFT_KEY, true);
+    $('photo-feedback').textContent = '已添加。可以点图检查清晰度，再发送。';
+    $('retry-question').hidden = true;
+  } catch (error) { $('photo-feedback').textContent = error.message || '图片处理失败，请重新选择。'; }
+  finally { imageBusy = false; renderPhotoPreviews(); updateButtons(); }
+}
+async function fingerprintContext(context) {
+  const compact = [];
+  for (const message of context) {
+    const images = [];
+    for (const photo of message.images || []) {
+      const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(photo.dataUrl));
+      images.push(Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join(''));
+    }
+    compact.push({ role: message.role, content: message.content, ...(images.length ? { images } : {}) });
+  }
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(compact)));
+  return Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('');
 }
 function toast(text) {
   clearTimeout(toastTimer);
@@ -61,19 +225,25 @@ function updateCounter() {
   updateButtons();
 }
 function updateButtons() {
+  const missing = hasMissingImages();
+  const imagesCount = conversationImageCount() + selectedImages.length;
   $('login-button').disabled = !healthReady || healthChecking || loginBusy;
   $('passphrase').disabled = !healthReady || healthChecking || loginBusy;
   $('health-retry').disabled = healthChecking;
-  $('send-button').disabled = busy || !ready || !session || !$('question').value.trim();
+  $('send-button').disabled = busy || imageBusy || missing || !ready || !session || (!$('question').value.trim() && !selectedImages.length);
   $('send-label').textContent = busy ? '正在回答…' : messages.length ? '继续追问' : '发送问题';
   $('question').disabled = busy;
-  $('new-question').disabled = busy;
-  $('lock-button').disabled = busy;
-  $('retry-question').disabled = busy || !ready || !session;
-  document.querySelectorAll('[data-followup],[data-starter]').forEach(button => { button.disabled = busy; });
-  $('composer-help').textContent = !healthReady ? '答疑暂不可用，问题可以先留在这里。' : !session ? '先输入口令，再发送问题。'
+  $('new-question').disabled = busy || imageBusy;
+  $('lock-button').disabled = busy || imageBusy;
+  $('retry-question').disabled = busy || imageBusy || missing || !ready || !session;
+  $('take-photo').disabled = $('add-photos').disabled = busy || imageBusy || (missing && !reattachingPhotos) || imagesCount >= MAX_IMAGES;
+  $('restore-photos').disabled = busy || imageBusy;
+  $('photo-count').textContent = imageBusy ? '正在处理…' : imagesCount ? `本段对话 ${imagesCount} / ${MAX_IMAGES} 张` : '一段对话最多 3 张';
+  $('missing-photo-notice').hidden = !missing;
+  document.querySelectorAll('[data-followup],[data-starter]').forEach(button => { button.disabled = busy || missing; });
+  $('composer-help').textContent = missing ? '图片已丢失，请重新上传后再问。' : imageBusy ? '图片处理完成后即可发送。' : !healthReady ? '答疑暂不可用，问题可以先留在这里。' : !session ? '先输入口令，再发送问题。'
     : !ready ? '答疑暂不可用，问题可以先留在这里。'
-    : messages.length ? '可以直接追问；换题请点“换一道题”。' : '支持文字提问；写清困惑，回答更有针对性。';
+    : messages.length ? '可以直接追问；换题请点“换一道题”。' : selectedImages.length ? '也可直接发图片，或写下你不懂的地方。' : '文字或图片都可以，写清困惑更有帮助。';
 }
 function showAccess() {
   $('access-panel').hidden = Boolean(session) && healthReady;
@@ -221,6 +391,17 @@ function messageElement(message) {
   body.className = 'message-body';
   body.textContent = message.content;
   article.append(header, body);
+  if (message.role === 'user' && message.images?.length) {
+    const photos = document.createElement('div');
+    photos.className = 'message-photos';
+    photos.append(...message.images.map((photo, index) => photoButton(photo, `题目图片 ${index + 1}`)));
+    article.append(photos);
+  } else if (message.hadImages) {
+    const missing = document.createElement('p');
+    missing.className = 'message-photo-missing';
+    missing.textContent = '这条提问原来附有图片，刷新后未保留。';
+    article.append(missing);
+  }
   if (message.role === 'assistant') {
     if (message.incomplete === true) {
       const lengthNote = document.createElement('p');
@@ -245,27 +426,28 @@ function renderMessages() {
   $('empty-state').hidden = messages.length > 0;
   $('followups').hidden = messages.length === 0 || busy;
 }
-function nextContext(question) {
-  if (!messages.length) return [{ role: 'user', content: question }];
-  const original = messages.find(message => message.role === 'user');
-  if (!original) return [{ role: 'user', content: question }];
-  const firstIndex = messages.indexOf(original);
-  const firstAnswer = messages[firstIndex + 1]?.role === 'assistant' ? messages[firstIndex + 1] : null;
-  const followupPairs = [];
-  for (let index = firstIndex + (firstAnswer ? 2 : 1); index < messages.length - 1; index++) {
+function nextContext(question, photos = selectedImages) {
+  if (hasMissingImages()) throw new Error('之前的图片未保留，请重新上传图片并开始新对话。');
+  if (conversationImageCount() + photos.length > MAX_IMAGES) throw new Error('一段对话最多 3 张图片，请换一道题后重新添加。');
+  const current = { role: 'user', content: question, ...(photos.length ? { images: photos.map(photo => ({ dataUrl: photo.dataUrl })) } : {}) };
+  const pairs = [];
+  for (let index = 0; index < messages.length - 1; index++) {
     if (messages[index].role === 'user' && messages[index + 1].role === 'assistant') {
-      followupPairs.push([messages[index], messages[index + 1]]);
+      pairs.push({ messages: [messages[index], messages[index + 1]], pinned: pairs.length === 0 || Boolean(messages[index].images?.length) });
       index++;
     }
   }
-  const context = [original, ...(firstAnswer ? [firstAnswer] : []), ...followupPairs.slice(-(MAX_TURNS - 2)).flat()]
-    .map(message => ({ role: message.role, content: message.role === 'assistant' ? message.content.slice(0, MAX_QUESTION) : message.content }));
-  context.push({ role: 'user', content: question });
-  const pinnedCount = firstAnswer ? 2 : 1;
-  while (context.reduce((sum, message) => sum + message.content.length, 0) > MAX_CONTEXT && context.length > pinnedCount + 1) {
-    context.splice(pinnedCount, 2);
+  let kept = pairs.filter((pair, index) => pair.pinned || index >= pairs.length - (MAX_TURNS - 1));
+  const requestMessages = () => [...kept.flatMap(pair => pair.messages).map(message => ({
+    role: message.role, content: message.role === 'assistant' ? message.content.slice(0, MAX_QUESTION) : message.content,
+    ...(message.role === 'user' && message.images?.length ? { images: message.images.map(photo => ({ dataUrl: photo.dataUrl })) } : {}),
+  })), current];
+  while (kept.length > MAX_TURNS - 1 || requestMessages().reduce((sum, message) => sum + message.content.length, 0) > MAX_CONTEXT) {
+    const removable = kept.findIndex(pair => !pair.pinned);
+    if (removable < 0) throw new Error('这段对话的题目材料较长，请换一道题后，只添加本题需要的文字和图片。');
+    kept.splice(removable, 1);
   }
-  return context;
+  return requestMessages();
 }
 function uuid() {
   if (crypto.randomUUID) return crypto.randomUUID();
@@ -313,30 +495,37 @@ $('login-form').addEventListener('submit', async event => {
 });
 $('question-form').addEventListener('submit', async event => {
   event.preventDefault();
-  const question = $('question').value.trim();
-  if (busy || !ready || !session || !question) return;
+  const question = $('question').value.trim() || (selectedImages.length ? IMAGE_QUESTION : '');
+  if (busy || imageBusy || hasMissingImages() || !ready || !session || !question) return;
   if (question.length > MAX_QUESTION) { $('question-feedback').textContent = '题目较长，请缩短到 6000 字以内。'; return; }
-  const context = nextContext(question);
-  const fingerprint = JSON.stringify(context);
-  if (!pendingRequest || pendingRequest.fingerprint !== fingerprint) setPendingRequest({ fingerprint, requestId: uuid() });
+  let context;
+  try { context = nextContext(question); }
+  catch (error) { $('question-feedback').textContent = error.message; return; }
+  const userMessage = { role: 'user', content: question, ...(selectedImages.length ? { images: [...selectedImages], hadImages: true } : {}) };
   busy = true;
   $('question-feedback').textContent = '';
   $('retry-question').hidden = true;
   $('waiting').hidden = false;
   $('followups').hidden = true;
   $('empty-state').hidden = true;
-  const pendingBubble = messageElement({ role: 'user', content: question });
+  const pendingBubble = messageElement(userMessage);
   $('messages').append(pendingBubble);
   updateButtons();
+  renderPhotoPreviews();
   $('waiting').scrollIntoView({ behavior: 'smooth', block: 'center' });
   try {
+    const fingerprint = await fingerprintContext(context);
+    const legacyMatch = !context.some(message => message.images?.length) && pendingRequest?.fingerprint === JSON.stringify(context);
+    if (legacyMatch) setPendingRequest({ ...pendingRequest, fingerprint });
+    else if (!pendingRequest || pendingRequest.fingerprint !== fingerprint) setPendingRequest({ fingerprint, requestId: uuid() });
     const result = await api('ask', { body: { requestId: pendingRequest.requestId, messages: context }, timeout: 120000 });
     if (typeof result.answer !== 'string' || !result.answer.trim()) throw new Error('这次没有收到完整回答，问题已保留。');
-    messages = [...messages, { role: 'user', content: question }, { role: 'assistant', content: result.answer, incomplete: result.incomplete === true }];
-    writeStored(CHAT_KEY, messages);
+    messages = [...messages, userMessage, { role: 'assistant', content: result.answer, incomplete: result.incomplete === true }];
+    persistConversation();
     setPendingRequest(null);
     $('question').value = '';
     writeStored(DRAFT_KEY, '');
+    clearPhotos();
     $('import-notice').hidden = true;
     updateBudget(result.budget);
     renderMessages();
@@ -358,12 +547,50 @@ $('question-form').addEventListener('submit', async event => {
     $('waiting').hidden = true;
     $('followups').hidden = messages.length === 0;
     updateCounter();
+    renderPhotoPreviews();
   }
 });
 $('question').addEventListener('input', () => { $('retry-question').hidden = true; updateCounter(); });
+$('take-photo').addEventListener('click', () => { if (!$('take-photo').disabled) $('camera-input').click(); });
+$('add-photos').addEventListener('click', () => { if (!$('add-photos').disabled) $('album-input').click(); });
+for (const id of ['camera-input', 'album-input']) {
+  $(id).addEventListener('change', async () => {
+    const files = Array.from($(id).files || []);
+    $(id).value = '';
+    await addPhotos(files);
+  });
+}
+$('restore-photos').addEventListener('click', () => {
+  if (busy || imageBusy) return;
+  const warning = pendingRequest ? '上次请求可能已经提交，再次发送会使用额度。' : '';
+  if (!confirm(`重新上传将保留当前题目文字，并开始一段新对话。${warning}继续吗？`)) return;
+  const text = $('question').value || messages.find(message => message.role === 'user')?.content || '';
+  messages = [];
+  selectedImages = [];
+  missingDraftImages = true;
+  reattachingPhotos = true;
+  setPendingRequest(null);
+  writeStored(CHAT_KEY, null);
+  writeStored(IMAGE_DRAFT_KEY, true);
+  $('question').value = text;
+  $('retry-question').hidden = true;
+  $('question-feedback').textContent = '';
+  $('photo-feedback').textContent = '请重新选择本题图片。选好后才可发送。';
+  renderMessages();
+  renderPhotoPreviews();
+  updateCounter();
+  $('album-input').click();
+});
+$('close-photo-dialog').addEventListener('click', () => {
+  const dialog = $('photo-dialog');
+  if (typeof dialog.close === 'function') dialog.close();
+  else dialog.removeAttribute('open');
+  $('photo-dialog-image').removeAttribute('src');
+});
+$('photo-dialog').addEventListener('close', () => $('photo-dialog-image').removeAttribute('src'));
 $('health-retry').addEventListener('click', checkHealth);
 $('retry-question').addEventListener('click', () => {
-  if (busy || !ready || !session || !$('question').value.trim()) return;
+  if (busy || imageBusy || hasMissingImages() || !ready || !session || (!$('question').value.trim() && !selectedImages.length)) return;
   if (!confirm('重新提问会再次使用额度，是否继续？')) return;
   setPendingRequest(null);
   $('retry-question').hidden = true;
@@ -379,6 +606,7 @@ $('lock-button').addEventListener('click', () => {
   session = null;
   ready = false;
   messages = [];
+  clearPhotos();
   setPendingRequest(null);
   writeStored(SESSION_KEY, null);
   writeStored(CHAT_KEY, null);
@@ -392,9 +620,10 @@ $('lock-button').addEventListener('click', () => {
   updateCounter();
 });
 $('new-question').addEventListener('click', () => {
-  if (busy) return;
-  if ((messages.length || $('question').value.trim()) && !confirm('开始新问题会清空本页对话，重要回答可以先复制。继续吗？')) return;
+  if (busy || imageBusy) return;
+  if ((messages.length || $('question').value.trim() || selectedImages.length || hasMissingImages()) && !confirm('开始新问题会清空本页对话和已选图片，重要回答可以先复制。继续吗？')) return;
   messages = [];
+  clearPhotos();
   setPendingRequest(null);
   writeStored(CHAT_KEY, []);
   $('import-notice').hidden = true;
@@ -415,8 +644,9 @@ function consumeQuestionLink() {
   return id;
 }
 function applyImportedQuestion(text) {
-  if (busy) return;
+  if (busy || imageBusy) return;
   messages = [];
+  clearPhotos();
   setPendingRequest(null);
   writeStored(CHAT_KEY, null);
   $('question').value = text;
@@ -436,7 +666,7 @@ function offerQuestionImport(text) {
   button.className = 'text-button';
   button.textContent = '带入新题';
   button.addEventListener('click', () => {
-    if (busy) { toast('请等当前回答结束后再换题'); return; }
+    if (busy || imageBusy) { toast('请等当前处理结束后再换题'); return; }
     if (!confirm('将新题作为一段新对话，替换当前草稿并清空本页对话。需要保留的内容请先复制。继续吗？')) return;
     applyImportedQuestion(text);
   });
@@ -455,7 +685,7 @@ async function importQuestion() {
     const options = Array.isArray(question.options) ? question.options.map(option => `${option.label}. ${option.text}`).join('\n') : '';
     const text = [`${item.paper} · 第 ${item.number} 题`, question.stem, question.prompt, options, item.correctOption ? `页面参考答案：${item.correctOption}（请结合题干独立核对）` : '', '\n我的疑问：'].filter(Boolean).join('\n\n');
     if (text.length > MAX_QUESTION) throw new Error();
-    if (messages.length || $('question').value.trim() || busy) offerQuestionImport(text);
+    if (messages.length || $('question').value.trim() || selectedImages.length || hasMissingImages() || busy || imageBusy) offerQuestionImport(text);
     else applyImportedQuestion(text);
   } catch {
     $('import-notice').hidden = false;
@@ -468,6 +698,7 @@ const draft = readStored(DRAFT_KEY, '');
 $('question').value = typeof draft === 'string' ? draft.slice(0, MAX_QUESTION) : '';
 showAccess();
 renderMessages();
+renderPhotoPreviews();
 updateCounter();
 checkHealth();
 importQuestion();

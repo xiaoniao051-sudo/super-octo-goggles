@@ -9,13 +9,28 @@
   <title>AI 答疑 · 国考精选</title>
   <link rel="icon" href="./apple-touch-icon.png">
   <link rel="stylesheet" href="./ai.css?v=20261029">
-  <script src="./ai.js?v=20261029" type="module"></script>
+  <script id="ai-page-loader">
+    if (location.hostname === 'xiaoniao051-sudo.github.io') {
+      const target = new URL('https://guokao-2027-pocket.xiaoniao051.chatgpt.site/ai.html');
+      target.search = location.search;
+      target.searchParams.set('from', 'github');
+      target.hash = location.hash;
+      location.replace(target.href);
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = './ai.js?v=20261030-routing';
+        document.head.append(script);
+      }, { once: true });
+    }
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#question">跳到提问框</a>
   <header class="topbar">
-    <a class="back-link" href="./#home"><span aria-hidden="true">‹</span> 返回做题</a>
-    <a class="brand" href="./#home"><span class="brand-icon">知</span><span>国考精选</span></a>
+    <a id="back-to-study" class="back-link" href="./#home"><span aria-hidden="true">‹</span> 返回做题</a>
+    <a id="brand-home" class="brand" href="./#home"><span class="brand-icon">知</span><span>国考精选</span></a>
     <button id="lock-button" class="text-button" type="button" hidden>退出答疑</button>
   </header>
   <main class="tutor-shell">

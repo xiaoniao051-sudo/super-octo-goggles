@@ -8,6 +8,11 @@ const MAX_QUESTION = 6000;
 const MAX_CONTEXT = 24000;
 const MAX_TURNS = 8;
 const $ = id => document.getElementById(id);
+if (location.hostname === 'guokao-2027-pocket.xiaoniao051.chatgpt.site' && new URLSearchParams(location.search).get('from') === 'github') {
+  const studyHome = 'https://xiaoniao051-sudo.github.io/super-octo-goggles/#home';
+  $('back-to-study').href = studyHome;
+  $('brand-home').href = studyHome;
+}
 let session = readStored(SESSION_KEY, null);
 let messages = readStored(CHAT_KEY, []);
 let busy = false;

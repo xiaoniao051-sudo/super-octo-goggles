@@ -4,7 +4,7 @@ import {parseVerbalSource,rawSourceUrl} from './verbal-source-parser.js?v=202610
 import {adaptSourceQuestion,submissionResult,hasMistake,plainQuestion,persistPracticeRound,retryPendingRounds,hasPendingRounds,reconcileNoteDraft} from './verbal-practice-model.js?v=20261028-explanations';
 import {withExplanation} from './verbal-explanations.js?v=20261028-explanations';
 import {parseFigureSource,rawFigureSourceUrl} from './figure-source-parser.js?v=20261030';
-import {createMistakeButton} from './mistake-client.js?v=20261030';
+import {createMistakeButton} from './mistake-client.js?v=20261030-nopass';
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const btn=(text,cls,fn)=>{const n=el('button',cls,text);n.type='button';n.onclick=fn;return n;};
 const sourceUrl=value=>{try{return rawSourceUrl(value);}catch{try{return rawFigureSourceUrl(value);}catch{return null;}}};

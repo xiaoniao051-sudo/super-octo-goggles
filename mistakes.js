@@ -1,4 +1,4 @@
-import {mistakeApi,clearStudySession} from './mistake-client.js?v=20261030';
+import {mistakeApi,acceptNotebookRecovery,showNotebookRecovery,notebookRecoveryLink} from './mistake-client.js?v=20261030-nopass';
 import {submissionResult} from './verbal-practice-model.js?v=20261030-notebook1';
 const $=id=>document.getElementById(id),el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;},button=(text,cls,fn)=>{const b=el('button',cls,text);b.type='button';b.onclick=fn;return b;};
 let kind='all',offset=0,sequence=0,entry=null,noteField=null,dirty=false;
@@ -36,7 +36,7 @@ function drawDetail(){
 }
 document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{if(!canLeave())return;dirty=false;kind=b.dataset.kind;offset=0;document.querySelectorAll('[data-kind]').forEach(n=>n.setAttribute('aria-pressed',String(n===b)));load();});
 $('mistake-state').onchange=()=>{offset=0;load();};$('mistake-search-btn').onclick=()=>{offset=0;load();};$('mistake-search').onkeydown=e=>{if(e.key==='Enter'){offset=0;load();}};$('mistake-refresh').onclick=()=>entry?open(entry.id):load();
-$('mistake-logout').onclick=()=>{if(!canLeave())return;sequence++;dirty=false;entry=null;clearStudySession();$('mistake-list').replaceChildren();$('mistake-detail').replaceChildren();$('mistake-pager').replaceChildren();status('已退出。云端记录仍保留，刷新记录后可重新输入口令。');};
-$('mistake-export').onclick=async()=>{const b=$('mistake-export');b.disabled=true;try{status('正在准备备份，请保持页面打开…');const rows=[];for(const state of ['all','archived']){let page=0;while(true){const data=await mistakeApi('?full=1&state='+state+'&offset='+page);rows.push(...data.items);if(!data.hasMore)break;page+=30;}}const url=URL.createObjectURL(new Blob([JSON.stringify({schema:1,exportedAt:new Date().toISOString(),items:rows},null,2)],{type:'application/json'})),a=el('a');a.href=url;a.download='我的错题本-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);status('已导出 '+rows.length+' 道错题。');}catch(e){status(e.message);}finally{b.disabled=false;}};
+$('mistake-recovery').onclick=()=>{try{showNotebookRecovery();}catch(e){status(e.message);}};
+$('mistake-export').onclick=async()=>{const b=$('mistake-export');b.disabled=true;try{status('正在准备备份，请保持页面打开…');const rows=[];for(const state of ['all','archived']){let page=0;while(true){const data=await mistakeApi('?full=1&state='+state+'&offset='+page);rows.push(...data.items);if(!data.hasMore)break;page+=30;}}const url=URL.createObjectURL(new Blob([JSON.stringify({schema:2,exportedAt:new Date().toISOString(),recoveryLink:notebookRecoveryLink(),items:rows},null,2)],{type:'application/json'})),a=el('a');a.href=url;a.download='我的错题本-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);status('已导出 '+rows.length+' 道错题。');}catch(e){status(e.message);}finally{b.disabled=false;}};
 addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
-const initialId=new URLSearchParams(location.search).get('id');initialId?open(initialId):load();
+try{await acceptNotebookRecovery();const initialId=new URLSearchParams(location.search).get('id');initialId?open(initialId):load();}catch(e){status(e.message);}

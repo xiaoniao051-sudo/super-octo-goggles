@@ -1,7 +1,7 @@
-import {createPractice} from './verbal-practice.js?v=20261030-notebook1';
-import {createExplanationIndex} from './verbal-explanations.js?v=20261030-notebook1';
+import {createPractice} from './verbal-practice.js?v=20261030-notebook2';
+import {createExplanationIndex} from './verbal-explanations.js?v=20261030-notebook2';
 import {fetchJson} from './network.js?v=20261027-ux';
-import {PARTS,EXAMS,GUIDES,safeUrl,validateBank,numberLabel,filterItems,sourceLink,requestText,toCsv} from './verbal-model.js?v=20261030-notebook1';
+import {PARTS,EXAMS,GUIDES,safeUrl,validateBank,numberLabel,filterItems,sourceLink,requestText,toCsv} from './verbal-model.js?v=20261030-notebook2';
 const $=s=>document.querySelector(s),el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const button=(text,cls,fn)=>{const n=el('button',cls,text);n.type='button';n.onclick=fn;return n;};
 const link=(text,url)=>{const n=el('a','',text);n.href=url;if(/^https?:/.test(url)){n.target='_blank';n.rel='noopener noreferrer';}return n;};

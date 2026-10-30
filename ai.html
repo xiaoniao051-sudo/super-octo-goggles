@@ -8,7 +8,7 @@
   <meta name="referrer" content="same-origin">
   <title>AI 答疑 · 国考精选</title>
   <link rel="icon" href="./apple-touch-icon.png">
-  <link rel="stylesheet" href="./ai.css?v=20261030-photo">
+  <link rel="stylesheet" href="./ai.css?v=20261030-navigation">
   <script id="ai-page-loader">
     if (location.hostname === 'xiaoniao051-sudo.github.io') {
       const target = new URL('https://guokao-2027-pocket.xiaoniao051.chatgpt.site/ai.html');
@@ -38,7 +38,8 @@
       <div class="title-row"><span class="eyebrow">一道一道，把不懂的弄懂</span><span class="private-badge">专属答疑</span></div>
       <h1 id="page-title">这道题，卡在哪里？</h1>
       <p>拍下题目，或贴上题干和选项，再说说你卡在哪里。</p>
-      <p class="intro-small">选项辨析、解题步骤、申论表达，都可以问。</p>
+      <p class="intro-small">国考精选里的答疑专区，讲完随时返回做题。</p>
+      <ol class="ask-steps" aria-label="提问步骤"><li>拍照或贴题</li><li>说说哪里不懂</li><li>看解析，继续追问</li></ol>
     </section>
 
     <section id="access-panel" class="access-card" aria-labelledby="access-title">
@@ -49,6 +50,7 @@
         <div class="login-row"><input id="passphrase" type="password" autocomplete="current-password" maxlength="200" required placeholder="输入访问口令" disabled><button id="login-button" class="primary-button" type="submit" disabled>进入答疑 <span aria-hidden="true">→</span></button></div>
       </form>
       <div id="health-notice" class="health-notice" role="status" aria-live="polite"><p id="health-message">正在检查答疑服务…</p><button id="health-retry" class="text-button" type="button" hidden>重新检查</button></div>
+      <details class="connection-help"><summary>页面能打开，但答疑连不上？</summary><p>做题和知识库仍可正常使用。答疑需要单独连接服务；可在 Safari 中打开后点“重新检查”，或先返回做题。不会自动重发问题。</p><a href="./#home">返回网站首页 →</a></details>
       <p id="login-feedback" class="feedback" role="status" aria-live="polite"></p>
     </section>
 
@@ -72,8 +74,8 @@
     <section class="composer-wrap" aria-label="填写问题">
       <form id="question-form" class="composer">
         <div class="composer-heading"><label for="question">题目与疑问</label><span id="question-count">0 / 6000</span></div>
-        <textarea id="question" rows="5" maxlength="6000" placeholder="粘贴题干和全部选项，然后写下：&#10;我选了……，答案是……，我不懂的是……" aria-describedby="composer-help"></textarea>
         <div class="photo-toolbar"><button id="take-photo" class="photo-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h4l2-3h4l2 3h4v15H4Z"/><circle cx="12" cy="13" r="4"/></svg>拍照</button><button id="add-photos" class="photo-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m4 17 5-5 4 4 3-3 5 5"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>添加图片</button><span id="photo-count">一段对话最多 3 张</span></div>
+        <textarea id="question" rows="3" maxlength="6000" placeholder="有图片可以不填文字。也可以补一句：&#10;我选 B，答案是 C，为什么不选 B？&#10;纯文字提问请贴上完整题干和选项。" aria-describedby="composer-help"></textarea>
         <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
         <input id="album-input" type="file" accept="image/*" multiple hidden>
         <p class="photo-hint">只拍这道题，题干、图表和选项要完整；字要清楚，避开反光。</p>

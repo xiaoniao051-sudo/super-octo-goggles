@@ -3,14 +3,16 @@ import {getVerification} from './review.js?v=20261020-review2';
 import {parseVerbalSource,rawSourceUrl} from './verbal-source-parser.js?v=20261023-audit1';
 import {adaptSourceQuestion,submissionResult,hasMistake,plainQuestion,persistPracticeRound,retryPendingRounds,hasPendingRounds,reconcileNoteDraft} from './verbal-practice-model.js?v=20261028-explanations';
 import {withExplanation} from './verbal-explanations.js?v=20261028-explanations';
+import {parseFigureSource,rawFigureSourceUrl} from './figure-source-parser.js?v=20261030';
+import {createMistakeButton} from './mistake-client.js?v=20261030';
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 const btn=(text,cls,fn)=>{const n=el('button',cls,text);n.type='button';n.onclick=fn;return n;};
-const sourceUrl=value=>{try{return rawSourceUrl(value);}catch{return null;}};
+const sourceUrl=value=>{try{return rawSourceUrl(value);}catch{try{return rawFigureSourceUrl(value);}catch{return null;}}};
 const matches=(q,s)=>q.part===s.part&&(s.exam==='all'||q.exam===s.exam)&&(s.year==='all'||q.year===Number(s.year))&&(!s.query||(/^第?\s*\d+\s*题?$/.test(s.query.trim())?Number(q.number)===Number(s.query.replace(/\D/g,'')):[q.paper,q.question.stem,q.subtype].join(' ').toLowerCase().includes(s.query.trim().toLowerCase())));
-function appendSegments(node,segments){for(const s of segments||[]){if(s.type==='image'){const img=el('img','practice-material-image');img.src=s.url;img.alt=s.alt||'题目配图';img.loading='lazy';img.referrerPolicy='no-referrer';node.append(img);}else node.append(el('p','practice-text',s.text));}}
+function appendSegments(node,segments){for(const s of segments||[]){if(s.type==='image'){const img=el('img','practice-material-image');img.src=s.url;img.alt=s.alt||'题目配图';img.loading='lazy';img.referrerPolicy='no-referrer';img.title='双击查看原图';img.ondblclick=e=>{e.stopPropagation();window.open(s.url,'_blank','noopener,noreferrer');};img.onerror=()=>{if(img.dataset.failed)return;img.dataset.failed='true';const error=el('p','practice-image-failure','配图加载失败，请检查网络。'),retry=btn('重试图片','text-btn',()=>{img.dataset.failed='';error.remove();img.src=s.url;});error.append(retry);img.after(error);};node.append(img);}else node.append(el('p','practice-text',s.text));}}
 export function createPractice({bank,answers,explanations,mount,toast,onCount}){
  const known=bank.explained.map(m=>({...answers.get(m.answerId),part:m.part,exam:m.exam,year:m.year,subtype:m.subtype})).filter(q=>q.question?.stem&&q.question.options?.length>=2);
- const loaded=new Map(),rounds=new Map();let filters,selected='known',queue=[],position=0,sequence=0,study,storageError='',noteDraft=null,noteEditor=null,loadingPaper=null;
+ const loaded=new Map(),rounds=new Map();const loadKey=id=>id+':'+(filters?.part==='图形推理'?'figure':'verbal');let filters,selected='known',queue=[],position=0,sequence=0,study,storageError='',noteDraft=null,noteEditor=null,loadingPaper=null;
  function read(){try{study=loadStudy(localStorage);storageError='';}catch(e){study=null;storageError=e.message;}}
  function count(text){onCount(text);}
  const availablePapers=()=>bank.papers.filter(p=>sourceUrl(p.url)&&(filters.exam==='all'||p.exam===filters.exam)&&(filters.year==='all'||p.year===Number(filters.year))&&bank.items.some(q=>q.part===filters.part&&q.occurrences.some(o=>o.paperId===p.id)));
@@ -35,11 +37,11 @@ export function createPractice({bank,answers,explanations,mount,toast,onCount}){
  }
  const hasUnsaved=()=>!!noteDraft||hasPendingRounds(rounds.values());
  function picker(){
-  const box=el('section','practice-picker'),source=bank.papers.find(p=>p.id===selected),papers=availablePapers(),isLoading=loadingPaper?.id===selected;
+  const box=el('section','practice-picker'),source=bank.papers.find(p=>p.id===selected),papers=availablePapers(),isLoading=loadingPaper?.key===loadKey(selected);
   const shortTitle=p=>p.exam==='guokao'?p.year+' 国考 · '+(p.title.includes('行政执法')?'行政执法':p.title.includes('副省')?'副省级':p.title.includes('地市')?'地市级':'综合卷'):p.year+' 福建省考';
   const title=selected==='known'?'精选练习':source?shortTitle(source):'请选择试卷';
   const paperCount=id=>bank.items.reduce((total,item)=>total+(item.part===filters.part?item.occurrences.filter(o=>o.paperId===id).length:0),0);
-  const currentCount=selected==='known'?options().length:loaded.has(selected)?loaded.get(selected).filter(q=>matches(q,filters)).length:paperCount(selected);
+  const currentCount=selected==='known'?options().length:loaded.has(loadKey(selected))?loaded.get(loadKey(selected)).filter(q=>matches(q,filters)).length:paperCount(selected);
   const heading=el('div','practice-paper-heading'),info=el('div','practice-paper-info');
   const label=el('span','practice-paper-label','当前试卷'),currentTitle=el('h2','practice-paper-title',title);if(source)currentTitle.title=source.title;info.append(label,currentTitle);
   info.append(el('p','practice-paper-meta',(source?source.year+' 年 · ':'')+filters.part+' · '+currentCount+' 题'));
@@ -56,21 +58,21 @@ export function createPractice({bank,answers,explanations,mount,toast,onCount}){
   function setOpen(open){panel.hidden=!open;switcher.setAttribute('aria-expanded',String(open));switcher.textContent=open?'收起选卷':'切换试卷';if(open){drawPapers();search.focus();}else switcher.focus();}
   function selectPaper(id){
    if(!flush())return;
-   if(id===selected){setOpen(false);if(id!=='known'&&!loaded.has(id)&&!isLoading)startPaperLoad(id);return;}
+   if(id===selected){setOpen(false);if(id!=='known'&&!loaded.has(loadKey(id))&&!isLoading)startPaperLoad(id);return;}
    ++sequence;loadingPaper=null;selected=id;position=0;rounds.clear();render();mount.querySelector('.practice-paper-switch')?.focus({preventScroll:true});
-   if(id!=='known'&&!loaded.has(id))startPaperLoad(id);
+   if(id!=='known'&&!loaded.has(loadKey(id)))startPaperLoad(id);
   }
   function drawPapers(){
    results.replaceChildren();const words=search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
    const visible=papers.filter(p=>(exam.value==='all'||exam.value===p.exam)&&(year.value==='all'||Number(year.value)===p.year)&&words.every(w=>[p.title,p.year,p.exam==='guokao'?'国考':'福建省考'].join(' ').toLowerCase().includes(w)));
-   const addPaper=(id,name,detail)=>{const button=btn('','practice-paper-choice'+(selected===id?' is-current':''),()=>selectPaper(id));button.setAttribute('aria-pressed',String(selected===id));button.append(el('strong','',name),el('span','',detail),el('b','practice-paper-action',selected===id?'继续做':loaded.has(id)||id==='known'?'开始做':'选择并载入'));results.append(button);};
-   if(!words.length&&exam.value==='all'&&year.value==='all')addPaper('known','精选练习',filters.part+' · '+options().length+' 题');
+   const addPaper=(id,name,detail)=>{const button=btn('','practice-paper-choice'+(selected===id?' is-current':''),()=>selectPaper(id));button.setAttribute('aria-pressed',String(selected===id));button.append(el('strong','',name),el('span','',detail),el('b','practice-paper-action',selected===id?'继续做':loaded.has(loadKey(id))||id==='known'?'开始做':'选择并载入'));results.append(button);};
+   if(filters.part!=='图形推理'&&!words.length&&exam.value==='all'&&year.value==='all')addPaper('known','精选练习',filters.part+' · '+options().length+' 题');
    for(const p of visible)addPaper(p.id,shortTitle(p),filters.part+' '+paperCount(p.id)+' 题 · 公开回忆版');
    status.textContent='找到 '+visible.length+' 份试卷 · 点选后直接开始';
    if(!results.childElementCount)results.append(el('p','muted','没有匹配的试卷，试试缩短关键词或更换年份。'));
   }
   search.oninput=drawPapers;exam.onchange=drawPapers;year.onchange=drawPapers;panel.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();setOpen(false);}};
-  if(selected!=='known'&&!loaded.has(selected)){
+  if(selected!=='known'&&!loaded.has(loadKey(selected))){
    const state=el('p','practice-paper-state',isLoading?'正在载入题目，请稍候…':'初次载入需要网络。没有显示题目时，可点击下方重新载入。');state.setAttribute('role','status');box.append(state);
    const load=btn(isLoading?'正在载入…':'载入题目','quiet-btn practice-load-button',()=>startPaperLoad(selected));load.disabled=isLoading;box.append(load);
   }else box.append(el('span','practice-paper-ready',selected==='known'?'可直接开始':'已载入 · 可直接开始'));
@@ -78,15 +80,17 @@ export function createPractice({bank,answers,explanations,mount,toast,onCount}){
   return box;
  }
  async function startPaperLoad(id){
-  if(loadingPaper?.id===id)return;
-  if(!flush())return;const ticket={id};loadingPaper=ticket;render();mount.querySelector('.practice-paper-switch')?.focus({preventScroll:true});
+  if(loadingPaper?.key===loadKey(id))return;
+  if(!flush())return;const ticket={id,key:loadKey(id)};loadingPaper=ticket;render();mount.querySelector('.practice-paper-switch')?.focus({preventScroll:true});
   try{await loadPaper(id);}finally{if(loadingPaper===ticket){const restoreFocus=document.activeElement===document.body||document.activeElement?.classList.contains('practice-paper-switch');loadingPaper=null;render();if(restoreFocus)mount.querySelector('.practice-paper-switch')?.focus({preventScroll:true});}}
  }
- async function loadPaper(id){if(!flush())return;const token=++sequence,paper=bank.papers.find(p=>p.id===id),url=sourceUrl(paper?.url);if(!url)return;count('正在载入题干与选项…');const loadButton=mount.querySelector('.practice-load-button');if(loadButton)loadButton.disabled=true;
-  try{const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),22000);let md;try{const response=await fetch(url,{signal:controller.signal,credentials:'omit',referrerPolicy:'no-referrer'});if(!response.ok)throw Error('来源返回 '+response.status);md=await response.text();}finally{clearTimeout(timeout);}if(md.length>2000000)throw Error('试卷文件过大');const rows=bank.items.flatMap(item=>item.occurrences.filter(o=>o.paperId===id).map(o=>({item,o}))).sort((a,b)=>a.o.moduleNumber-b.o.moduleNumber);
-   const bindings=rows.map(({o})=>({qid:String(o.qid),moduleNumber:o.moduleNumber,materialGroupId:o.materialGroupId}));const result=parseVerbalSource(md,{sourceUrl:url,expectedTitle:paper.title,expectedYear:paper.year,expectedCount:rows.length,bindings});const qs=[];
-   for(const row of rows){const q=result.questions.find(q=>String(q.qid)===String(row.o.qid)&&q.moduleNumber===row.o.moduleNumber);if(q?.sourceTextComplete&&q.referenceAnswer?.value)qs.push(withExplanation(adaptSourceQuestion(q,row.item,row.o,paper),explanations));}
-   if(!qs.length)throw Error('没有识别到完整题面与答案，已停止载入');if(token!==sequence)return;if(!flush()){if(loadButton)loadButton.disabled=false;return;}loaded.set(id,qs);position=0;toast('已载入 '+qs.length+' 道；不完整或答案冲突的题已跳过。');render();
+ async function loadPaper(id){if(!flush())return;const token=++sequence,paper=bank.papers.find(p=>p.id===id),figure=filters.part==='图形推理',url=sourceUrl(figure?paper?.figureUrl:paper?.url);if(!url)return;count('正在载入题干与选项…');const loadButton=mount.querySelector('.practice-load-button');if(loadButton)loadButton.disabled=true;
+  try{const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),22000);let md;try{const response=await fetch(url,{signal:controller.signal,credentials:'omit',referrerPolicy:'no-referrer'});if(!response.ok)throw Error('来源返回 '+response.status);md=await response.text();}finally{clearTimeout(timeout);}if(md.length>2000000)throw Error('试卷文件过大');const rows=bank.items.filter(item=>figure?item.part==='图形推理':item.part!=='图形推理').flatMap(item=>item.occurrences.filter(o=>o.paperId===id).map(o=>({item,o}))).sort((a,b)=>a.o.moduleNumber-b.o.moduleNumber);
+   const bindings=rows.map(({o})=>({qid:String(o.qid),moduleNumber:o.moduleNumber,materialGroupId:o.materialGroupId}));const result=(figure?parseFigureSource:parseVerbalSource)(md,{sourceUrl:url,expectedTitle:paper.title,expectedYear:paper.year,expectedCount:figure?paper.figureCount:rows.length,...(figure?{standaloneKeys:rows.map(({o})=>String(o.qid)+':'+o.moduleNumber)}:{bindings})});const qs=[];
+   let figureNotes=new Map();if(figure){try{const response=await fetch('./figure-rationales.json');if(response.ok){const data=await response.json();figureNotes=new Map(data.items.map(x=>[String(x.qid),x]));}}catch{}}
+
+   for(const row of rows){const q=result.questions.find(q=>String(q.qid)===String(row.o.qid)&&q.moduleNumber===row.o.moduleNumber);if(q?.sourceTextComplete&&q.referenceAnswer?.value){let adapted=adaptSourceQuestion(q,row.item,row.o,figure?{...paper,url:paper.figureUrl}:paper);if(figure){adapted.question.versionNote='来源判断推理模块序号；未核官方原卷。';adapted.sourceVersion='figure-content-v1:'+row.item.contentHash;const note=figureNotes.get(String(q.qid));if(note?.answer===adapted.correctOption){if(note.status==='disputed'){adapted.explanation={status:'disputed'};adapted.verification={status:'disputed',note:note.caution||'来源存在多种解释，请比较依据。'};}adapted.sections=[{heading:'来源思路摘要（非独立核验）',body:note.reason||note.tip||note.summary}];if(note.caution)adapted.sections.push({heading:'核对提醒',body:note.caution});}}else adapted=withExplanation(adapted,explanations);qs.push(adapted);}}
+   if(!qs.length)throw Error('没有识别到完整题面与答案，已停止载入');if(token!==sequence)return;if(!flush()){if(loadButton)loadButton.disabled=false;return;}loaded.set(loadKey(id),qs);position=0;toast('已载入 '+qs.length+' 道；不完整或答案冲突的题已跳过。');render();
   }catch(e){if(token!==sequence)return;count('题目未载入');toast('暂时无法读取原卷：'+(e.name==='AbortError'?'网络超时':e.message)+'。可先做“精选练习”。');if(loadButton)loadButton.disabled=false;}
  }
  function mistakeList(){read();const box=el('section','practice-mistakes');if(!study){box.append(el('p','warning','无法读取本机记录：'+storageError));return box;}const all=[...known,...[...loaded.values()].flat()],unique=[...new Map(all.map(q=>[q.id,q])).values()];const wrong=[...new Map(all.filter(q=>matches(q,filters)&&hasMistake(q,study)).map(q=>[q.id,q])).values()];count(wrong.length+' 道已载入错题');box.append(el('p','muted','保留曾经答错的题，复测通过后仍可回看。历年卷按来源参考答案比较；精选题中的已核对题按本站答案判分，有争议题不判对错。'));
@@ -94,18 +98,20 @@ export function createPractice({bank,answers,explanations,mount,toast,onCount}){
   const remoteIds=new Set(bank.items.map(q=>q.id)),unloaded=Object.keys(study.reviewAttempts).filter(id=>remoteIds.has(id)&&!unique.some(q=>q.id===id));if(unloaded.length){box.append(el('h2','','以前练过的试卷'));const paperIds=[...new Set(bank.items.filter(q=>unloaded.includes(q.id)&&q.part===filters.part).flatMap(q=>q.occurrences.map(o=>o.paperId)))];for(const id of paperIds){const p=bank.papers.find(p=>p.id===id);if(p&&sourceUrl(p.url)&&(filters.exam==='all'||p.exam===filters.exam)&&(filters.year==='all'||p.year===Number(filters.year)))box.append(btn('读取记录对应试卷：'+p.title,'quiet-btn',()=>loadPaper(id)));}}
   if(!wrong.length)box.append(el('p','','当前范围暂无已载入的错题。先做题；刷新后可点击上方对应试卷重新读取题面，记录仍保存在此设备。'));return box;
  }
- function questionView(){const q=queue[position],box=el('article','practice-question');if(!q){box.append(el('h2','','这里暂时没有可做的题'),el('p','','请选择其他试卷或调整筛选。只有题干和选项完整的题才会进入练习。'));count('0 道可做');return box;}
+ function questionView(){const q=queue[position],box=el('article','practice-question'+(q?.part==='图形推理'?' practice-figure':''));if(!q){box.append(el('h2','','这里暂时没有可做的题'),el('p','','请选择其他试卷或调整筛选。只有题干和选项完整的题才会进入练习。'));count('0 道可做');return box;}
   let r=rounds.get(q.id);if(!r){r={answer:q,choice:null,submitted:false,saved:false,attemptId:'attempt-'+crypto.randomUUID(),at:null};rounds.set(q.id,r);}count('第 '+(position+1)+' / '+queue.length+' 题');
   const progress=el('div','practice-progress'),track=el('progress');track.max=queue.length;track.value=position+1;track.setAttribute('aria-label','当前题目位置');progress.append(el('strong','','第 '+(position+1)+' / '+queue.length+' 题'),track);box.append(progress);
   if(queue.length>1){const jump=el('details','practice-jump'),grid=el('div','practice-jump-grid');jump.append(el('summary','','选题 · '+queue.filter(item=>rounds.get(item.id)?.submitted).length+' 题已提交'));grid.setAttribute('aria-label','题目导航');for(const[itemIndex,item]of queue.entries()){const b=btn(String(itemIndex+1),'quiet-btn'+(rounds.get(item.id)?.submitted?' answered':''),()=>{if(!flush())return;position=itemIndex;draw();mount.querySelector('.practice-question')?.scrollIntoView({block:'start'});});b.setAttribute('aria-label','跳到第 '+(itemIndex+1)+' 题'+(rounds.get(item.id)?.submitted?'，已提交':''));if(itemIndex===position)b.setAttribute('aria-current','step');grid.append(b);}jump.append(grid);box.append(jump);}
-  box.append(el('div','practice-qmeta',q.part+' · '+q.subtype),el('h2','',q.paper+' · '+(q.sourceOnly?'言语模块第 ':'第 ')+q.number+' 题'));
+  box.append(el('div','practice-qmeta',q.part+' · '+q.subtype),el('h2','',q.paper+' · '+(q.sourceOnly?(q.part==='图形推理'?'判断推理模块第 ':'言语模块第 '):'第 ')+q.number+' 题'));
+  const collection=el('div','bank-actions');collection.append(createMistakeButton(q,()=>r.choice,()=>noteDraft?.id===q.id?noteDraft.value:study?.answerNotes[q.id]?.note||'',toast));box.append(collection);
   if(q.sourceOnly&&sourceUrl(q.sourceUrl)){const original=el('a','muted','当前试卷来源 ↗');original.href=q.sourceUrl;original.target='_blank';original.rel='noopener noreferrer';box.append(original);}
+  if(q.part==='图形推理')box.append(btn('放大本题图片','text-btn',()=>{const dialog=el('dialog','figure-zoom'),close=btn('关闭大图','quiet-btn',()=>{dialog.close();dialog.remove();}),title=el('h2','','本题图片');const images=[...(q.displayStem||[]),...(q.displayOptions||[]).flatMap(o=>o.segments)].filter(s=>s.type==='image');dialog.append(close,title);for(const item of images){const img=el('img');img.src=item.url;img.alt=item.alt||'原题图片';img.referrerPolicy='no-referrer';dialog.append(img);}dialog.addEventListener('cancel',()=>dialog.remove());document.body.append(dialog);dialog.showModal();}));
   if(q.sourceOnly)box.append(el('p','muted','模块序号不等于原卷题号 · 回忆版'));if(q.displayMaterial?.length){const material=el('section','practice-material');material.append(el('h3','','阅读材料'));appendSegments(material,q.displayMaterial);box.append(material);}if(q.displayStem)appendSegments(box,q.displayStem);else box.append(el('p','practice-text',q.question.stem));if(q.question.prompt)box.append(el('p','practice-prompt',q.question.prompt));
   const choices=el('div','practice-options');choices.setAttribute('role','radiogroup');choices.setAttribute('aria-label','选择答案');for(const o of q.question.options){const b=btn('','practice-option'+(r.choice===o.label?' selected':''),()=>{r.choice=o.label;draw();});b.setAttribute('role','radio');b.setAttribute('aria-checked',String(r.choice===o.label));b.disabled=r.submitted;const letter=el('b','practice-letter',o.label),text=el('div');const display=q.displayOptions?.find(x=>x.label===o.label);if(display)appendSegments(text,display.segments);else text.append(el('span','',o.text));b.append(letter,text);choices.append(b);}box.append(choices);
-  const save=()=>{if(!r.choice)return;try{const result=persistPracticeRound(localStorage,q,r);if(result.state)study=result.state;}catch(e){r.at=r.at||new Date();r.submitted=true;r.saved=false;r.error=e.message;}draw();mount.querySelector('.practice-feedback')?.scrollIntoView({block:'start'});};
+  const save=()=>{if(!r.choice)return;if(q.part==='图形推理'&&[...box.querySelectorAll('img')].some(img=>!img.complete||!img.naturalWidth)){toast('题图还没完整载入，请等图片显示后再提交。');return;}try{const result=persistPracticeRound(localStorage,q,r);if(result.state)study=result.state;}catch(e){r.at=r.at||new Date();r.submitted=true;r.saved=false;r.error=e.message;}draw();mount.querySelector('.practice-feedback')?.scrollIntoView({block:'start'});};
   if(!r.submitted){if(storageError)box.append(el('p','warning','本机记录无法读取，提交后可能无法保存：'+storageError));}
-  else{const result=submissionResult(q,r.choice),panel=el('section','practice-feedback '+result.kind);const headings={correct:'答对了',incorrect:'这题答错了','reference-match':'与来源参考答案一致','reference-different':'与来源参考答案不同',disputed:'答案有争议，先看依据',ungraded:'本题暂不判分'};panel.append(el('h3','',headings[result.kind]),el('p','','你的选择：'+r.choice+(q.correctOption?'；'+(q.sourceOnly?'来源参考答案':'本站核对答案')+'：'+q.correctOption:'')));if(q.sourceOnly)panel.append(el('p','muted',q.explanation?'下面是本站整理的逐题讲解，非官方答案；争议题不判对错，其余按来源参考比较，不计入已核对正确率。':'来源答案尚未完成核验，只记录选择，不计入本站已核对正确率。'));
-   if(!r.saved){panel.append(el('p','warning','未保存到设备：'+r.error),btn('重试保存','quiet-btn',save));}else panel.append(el('p','muted',['incorrect','reference-different'].includes(result.kind)?'已记录在本板块“我的错题”。':'作答已保存到此设备。'));
+  else{const result=submissionResult(q,r.choice),panel=el('section','practice-feedback '+result.kind);const headings={correct:'答对了',incorrect:'这题答错了','reference-match':'与来源参考答案一致','reference-different':'与来源参考答案不同',disputed:'答案有争议，先看依据',ungraded:'本题暂不判分'};panel.append(el('h3','',headings[result.kind]),el('p','','你的选择：'+r.choice+(q.correctOption?'；'+(q.sourceOnly?'来源参考答案':'本站核对答案')+'：'+q.correctOption:'')));if(q.sourceOnly)panel.append(el('p','muted',q.part==='图形推理'?'图推按回忆版参考答案比较；思路摘要仅帮助复习，尚未逐题独立核验。':q.explanation?'下面是本站整理的逐题讲解，非官方答案；争议题不判对错，其余按来源参考比较，不计入已核对正确率。':'来源答案尚未完成核验，只记录选择，不计入本站已核对正确率。'));
+   if(!r.saved){panel.append(el('p','warning','未保存到设备：'+r.error),btn('重试保存','quiet-btn',save));}else panel.append(el('p','muted',['incorrect','reference-different'].includes(result.kind)?'已记录本机作答；要收入云端，请点“加入错题本”。':'作答已保存到此设备。'));
    if(q.sections?.length){panel.append(el('h3','','解析'));if(q.answer)panel.append(el('p','practice-text',q.answer));for(const s of q.sections){panel.append(el('h4','',s.heading),el('p','practice-text',s.body));}}
    else panel.append(el('p','','当前题面版本未匹配到解析。请刷新后重试，或把这一题发给张菁伟核对。'));
    if(q.verification.status==='disputed')panel.append(el('p','warning',getVerification(q).note));
@@ -121,8 +127,8 @@ export function createPractice({bank,answers,explanations,mount,toast,onCount}){
  function move(delta){if(!flush())return;position+=delta;draw();mount.querySelector('.practice-question')?.scrollIntoView({block:'start'});}
  function draw(){const old=mount.querySelector('.practice-question');if(old)old.replaceWith(questionView());else mount.append(questionView());}
  function renderQuestionOnly(){noteEditor=null;mount.replaceChildren(picker(),questionView());}
- function render(){read();noteEditor=null;mount.replaceChildren();if(filters.view==='mistakes'){mount.append(mistakeList());return;}const remote=loaded.get(selected)||[];queue=(selected==='known'?known:remote).filter(q=>matches(q,filters));position=Math.min(position,Math.max(0,queue.length-1));mount.append(picker());if(selected!=='known'&&!loaded.has(selected)){count('选择试卷后载入题目');return;}mount.append(questionView());}
- function show(state){if(!flush())return false;filters={...state};++sequence;position=0;const allowed=availablePapers();if(selected!=='known'&&!allowed.some(p=>p.id===selected))selected='known';render();return true;}
+ function render(){read();noteEditor=null;mount.replaceChildren();if(filters.view==='mistakes'){mount.append(mistakeList());return;}const remote=loaded.get(loadKey(selected))||[];queue=(selected==='known'?known:remote).filter(q=>matches(q,filters));position=Math.min(position,Math.max(0,queue.length-1));mount.append(picker());if(selected!=='known'&&!loaded.has(loadKey(selected))){count('选择试卷后载入题目');return;}mount.append(questionView());}
+ function show(state){if(!flush())return false;filters={...state};++sequence;position=0;const allowed=availablePapers();if(selected!=='known'&&!allowed.some(p=>p.id===selected))selected='known';if(filters.part==='图形推理'&&selected==='known'&&allowed.length)selected=allowed[0].id;render();if(filters.view==='practice'&&selected!=='known'&&!loaded.has(loadKey(selected)))startPaperLoad(selected);return true;}
  const refresh=()=>{read();refreshNoteEditor();};
  addEventListener('beforeunload',e=>{if(hasUnsaved()&&!flush(true)){e.preventDefault();e.returnValue='';}});
  addEventListener('pagehide',()=>{if(hasUnsaved())flush(true);});

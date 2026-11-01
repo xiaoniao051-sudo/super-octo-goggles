@@ -1,4 +1,4 @@
-import {STORE_KEY,emptyState,dayKey,grade,recordCard,recordQuestion,shuffle,cardQueue,reconcileSession} from './model.js';
+import {STORE_KEY,emptyState,dayKey,grade,recordCard,recordQuestion,shuffle,cardQueue,reconcileSession} from './model.js?v=exam2';
 const $=s=>document.querySelector(s),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icons={home:'<path d="m3 10 9-7 9 7v10H3ZM9 20v-7h6v7"/>',review:'<path d="M4 8a9 9 0 1 1-1 8M4 3v5h5M12 7v5l3 2"/>',search:'<circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/>',me:'<circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>'};
 const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[k]||icons.home}</svg>`;

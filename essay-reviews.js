@@ -4,7 +4,7 @@ export function validateReviews(data){
  if(!data||data.schema!==1||!Array.isArray(data.reviews))throw Error('批改记录格式不正确');
  const seen=new Set();
  for(const r of data.reviews){
-  if(!r||typeof r!=='object'||!/^[-a-z0-9]{1,100}$/.test(r.id)||seen.has(r.id)||!REQUIRED_TEXT.every(k=>typeof r[k]==='string')||!['graded','historical'].includes(r.status)||!/^\d{4}-\d{2}-\d{2}$/.test(r.date)||!['string','number'].includes(typeof r.questionNumber)||!Array.isArray(r.sources)||!r.sources.every(s=>s&&typeof s.title==='string'&&typeof s.url==='string')||(r.sections!==undefined&&(!Array.isArray(r.sections)||!r.sections.every(s=>s&&typeof s.heading==='string'&&typeof s.body==='string'))))throw Error('批改记录字段不完整，请重新加载或联系整理者');
+  if(!r||typeof r!=='object'||!/^[-a-z0-9]{1,100}$/.test(r.id)||seen.has(r.id)||!REQUIRED_TEXT.every(k=>typeof r[k]==='string')||!['graded','historical','coaching'].includes(r.status)||!/^\d{4}-\d{2}-\d{2}$/.test(r.date)||!['string','number'].includes(typeof r.questionNumber)||!Array.isArray(r.sources)||!r.sources.every(s=>s&&typeof s.title==='string'&&typeof s.url==='string')||(r.sections!==undefined&&(!Array.isArray(r.sections)||!r.sections.every(s=>s&&typeof s.heading==='string'&&typeof s.body==='string'))))throw Error('批改记录字段不完整，请重新加载或联系整理者');
   seen.add(r.id);
  }
  return [...data.reviews].sort((a,b)=>b.date.localeCompare(a.date));
@@ -25,7 +25,8 @@ export function reportBlocks(text,sections=[]){
  }
  flush();return blocks;
 }
-export function plainReview(r){return [r.title,`${r.paper}${r.questionNumber?' · 第 '+r.questionNumber+' 题':''}`,r.date,r.status==='historical'?'历史批改归档（本次未重新评分）':'申论批改',r.scoreLabel,'\n【原题】',r.questionText||'未留存原题文字。','\n【原作答】',r.userAnswer||'未留存原作答文字。','\n【完整批改】',r.reportText||'未留存完整批改文字。','\n【归档说明】',r.provenance,'\n【出处】',...r.sources.filter(s=>safeSourceUrl(s.url)).map(s=>s.title+'\n'+s.url)].filter(Boolean).join('\n');}
+export function reviewLabels(r){return r.status==='coaching'?{badge:'论证训练',report:'诊断与训练',notice:'本篇重点训练论证，不作正式评分。题干与材料核对情况见正文；改写中的补充条件和对策为教学建议。'}:r.status==='historical'?{badge:'历史批改',report:'完整批改',notice:'历史批改归档：保留当时的评语和分数，本次没有重新评分。'}:{badge:'本次批改',report:'完整批改',notice:'建议分用于复盘学习，不等同于官方阅卷分；完整评点、修改方法和定档依据见正文。'};}
+export function plainReview(r){return [r.title,`${r.paper}${r.questionNumber?' · 第 '+r.questionNumber+' 题':''}`,r.date,r.status==='historical'?'历史批改归档（本次未重新评分）':r.status==='coaching'?'论证训练（不评分）':'申论批改',r.scoreLabel,'\n【原题】',r.questionText||'未留存原题文字。','\n【原作答】',r.userAnswer||'未留存原作答文字。','\n【'+reviewLabels(r).report+'】',r.reportText||'未留存完整批改文字。','\n【归档说明】',r.provenance,'\n【出处】',...r.sources.filter(s=>safeSourceUrl(s.url)).map(s=>s.title+'\n'+s.url)].filter(Boolean).join('\n');}
 
 function start(){
  const $=selector=>document.querySelector(selector);
@@ -38,7 +39,7 @@ function start(){
  const makeButton=(text,action)=>{const b=el('button','primary-btn',text);b.type='button';b.onclick=action;return b;};
  const empty=(title,message,action,label)=>{const n=el('section','empty');n.append(el('h2','',title),el('p','',message));if(action)n.append(makeButton(label,action));return n;};
  const meta=r=>[r.paper,r.questionNumber?'第 '+r.questionNumber+' 题':''].filter(Boolean).join(' · ');
- function badges(r){const nodes=[el('span','badge'+(r.status==='historical'?' historical':''),r.status==='historical'?'历史批改':'本次批改')];if(r.scoreLabel)nodes.push(el('span','badge score',r.scoreLabel));return nodes;}
+ function badges(r){const nodes=[el('span','badge'+(r.status==='historical'?' historical':''),reviewLabels(r).badge)];if(r.scoreLabel)nodes.push(el('span','badge score',r.scoreLabel));return nodes;}
  function listState(){return {kind:'list',query,y:window.scrollY};}
  function rememberList(){history.replaceState({essayBoard:listState()},'',location.href);}
  function renderList(){
@@ -47,7 +48,7 @@ function start(){
   if(loadState==='error'){$('#essay-count').textContent='暂未加载';status.append(empty('批改记录暂时没加载出来','可以重新加载；这不会修改已有的学习笔记。',load,'重新加载'));return;}
   const matches=matchingReviews(reviews,query);$('#essay-count').textContent=matches.length+' 篇 / 共 '+reviews.length+' 篇';
   if(!matches.length){list.append(empty(reviews.length?'没有找到相关批改':'还没有收录批改',reviews.length?'换个关键词，或清除搜索查看全部文章。':'整理好的原作答与批改会显示在这里。',reviews.length?resetSearch:null,'清除搜索'));return;}
-  for(const r of matches){const card=el('button','review-card');card.type='button';card.dataset.reviewId=r.id;const badgeBox=el('div','badges');badgeBox.append(...badges(r));const foot=el('div','card-foot');foot.append(el('span','',r.date),el('span','open-label','查看完整批改 →'));card.append(badgeBox,el('h2','',r.title),el('p','',meta(r)));if(r.summary)card.append(el('p','card-summary',r.summary));card.append(foot);card.onclick=()=>openReview(r.id);list.append(card);}
+  for(const r of matches){const card=el('button','review-card');card.type='button';card.dataset.reviewId=r.id;const badgeBox=el('div','badges');badgeBox.append(...badges(r));const foot=el('div','card-foot');foot.append(el('span','',r.date),el('span','open-label','查看'+reviewLabels(r).report+' →'));card.append(badgeBox,el('h2','',r.title),el('p','',meta(r)));if(r.summary)card.append(el('p','card-summary',r.summary));card.append(foot);card.onclick=()=>openReview(r.id);list.append(card);}
  }
  function resetSearch(){query='';renderList();rememberList();$('#essay-search').focus();}
  function openReview(id){rememberList();history.pushState({essayBoard:{kind:'review',id,query,listY:window.scrollY,fromList:true,tab:'report'}},'','#review='+encodeURIComponent(id));positions={};route();}
@@ -78,8 +79,9 @@ function start(){
   if(id){
    $('#archive-view').hidden=true;$('#reader-view').hidden=false;current=reviews.find(r=>r.id===id);$('#action-status').hidden=true;
    if(!current){$('#review-title').textContent=loadState==='loading'?'正在加载批改…':'没有找到这篇批改';$('#review-paper').textContent='';$('#reader-badges').replaceChildren();$('#review-notice').hidden=true;$('#download-review').disabled=true;$('.reader-tabs').hidden=true;$('#review-content').replaceChildren(empty(loadState==='loading'?'请稍等':loadState==='error'?'批改暂时无法加载':'这篇记录暂未收录',loadState==='loading'?'正在读取已归档记录。':'可以返回列表重新查找，或重新加载。',loadState==='loading'?null:load,'重新加载'));return;}
-   document.title=current.title+' · 申论批改';$('#download-review').disabled=false;$('.reader-tabs').hidden=false;$('#review-title').textContent=current.title;$('#review-paper').textContent=meta(current)+' · '+current.date;$('#reader-label').textContent='申论批改';$('#reader-badges').replaceChildren(...badges(current));
-   const notice=$('#review-notice');notice.hidden=false;notice.className='notice'+(current.status==='historical'?' historical':'');notice.textContent=current.status==='historical'?'历史批改归档：保留当时的评语和分数，本次没有重新评分。':'建议分用于复盘学习，不等同于官方阅卷分；完整评点、修改方法和定档依据见正文。';
+   const labels=reviewLabels(current);
+   document.title=current.title+' · 申论批改';$('#download-review').disabled=false;$('.reader-tabs').hidden=false;$('#review-title').textContent=current.title;$('#review-paper').textContent=meta(current)+' · '+current.date;$('#reader-label').textContent=current.status==='coaching'?'论证训练':'申论批改';$('#reader-badges').replaceChildren(...badges(current));$('[data-review-tab="report"]').textContent=labels.report;
+   const notice=$('#review-notice');notice.hidden=false;notice.className='notice'+(current.status==='historical'?' historical':'');notice.textContent=labels.notice;
    tab=['report','answer','question'].includes(saved?.tab)?saved.tab:'report';renderContent();window.scrollTo({top:0,left:0,behavior:'instant'});
   }else{
    current=null;document.title='申论批改 · 国考精选';$('#reader-view').hidden=true;$('#archive-view').hidden=false;renderList();requestAnimationFrame(()=>window.scrollTo({top:saved?.kind==='list'?saved.y||0:0,left:0,behavior:'instant'}));

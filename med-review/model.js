@@ -1,5 +1,12 @@
 export const STORE_KEY='med-study-room-v1';
 export const emptyState=()=>({version:1,cards:{},questions:{},notes:{},stars:[],reads:{},activity:{},last:null,session:null,largeText:false});
+export function reconcileSession(session,cardIds,questionIds){
+ if(!session||!Array.isArray(session.ids))return null;
+ const valid=session.kind==='cards'?cardIds:questionIds;
+ const index=session.ids.slice(0,session.index||0).filter(id=>valid.has(id)).length;
+ const ids=session.ids.filter(id=>valid.has(id));
+ return ids.length?{...session,ids,index}:null;
+}
 export function dayKey(now=new Date()){return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;}
 export function grade(question,answer){
  if(question.question_type==='short_answer')return null;

@@ -8,8 +8,8 @@ export function rubricScore(q,values=[]){
  return q.rubric.reduce((total,r,i)=>total+Math.max(0,Math.min(r.points,Number.isFinite(Number(values[i]))?Math.floor(Number(values[i])):0)),0);
 }
 export function currentRecord(q,records){const r=records[q.id];return r&&r.version===q.version?r:null;}
-export function selectPractice(bank,records,{course='all',mode='daily',minutes=20,count=3}={},now=Date.now()){
- let pool=bank.filter(q=>course==='all'||q.course===course);
+export function selectPractice(bank,records,{course='all',mode='daily',minutes=20,count=3,type='all'}={},now=Date.now()){
+ let pool=bank.filter(q=>(course==='all'||q.course===course)&&(type==='all'||q.type===type));
  if(mode==='wrong')pool=pool.filter(q=>{const r=currentRecord(q,records);return r&&r.score<q.points;});
  const priority=q=>{const r=currentRecord(q,records);return !r?1:r.score<q.points&&r.due<=now?0:r.due<=now?2:r.score<q.points?3:4;};
  const selected=[],types=new Set(),usedCourses=new Set();let used=0;

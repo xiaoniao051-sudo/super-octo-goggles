@@ -17,7 +17,8 @@ export function grade(question,answer){
 export function recordCard(state,id,rating,now=Date.now()){
  if(!['again','familiar','known'].includes(rating))throw Error('Invalid rating');
  const previous=state.cards[id]||{};
- const interval=rating==='again'?0:rating==='familiar'?1:Math.min(30,Math.max(3,(previous.interval||1)*2));
+ const sameDay=previous.at!==undefined&&dayKey(new Date(previous.at))===dayKey(new Date(now));
+ const interval=rating==='again'?0:rating==='familiar'?1:sameDay?Math.max(1,previous.interval||1):Math.min(14,Math.max(3,(previous.interval||1)*2));
  state.cards[id]={rating,interval,due:now+interval*86400000,at:now,reviews:(previous.reviews||0)+1};
  const day=dayKey(new Date(now));state.activity[day]??={cards:[],questions:[]};
  if(!state.activity[day].cards.includes(id))state.activity[day].cards.push(id);

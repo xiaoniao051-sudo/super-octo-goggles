@@ -10,7 +10,17 @@ const label=q=>`${q.paper} · 第 ${q.number.replace(/^第\s*|\s*题$/g,'')} 题
 const identity=q=>[q.paper,q.number,q.subject,q.source].join('\n');
 const numberedQuery=value=>{const match=String(value).trim().normalize('NFKC').match(/^(?:第\s*)?(\d+)\s*(?:题)?$/);return match?match[1].replace(/^0+(?=\d)/,''):null;};
 const hasNote=value=>typeof value==='string'&&!!value.trim();
-const validQuestion=q=>q&&typeof q==='object'&&!Array.isArray(q)&&typeof q.stem==='string'&&q.stem.trim()&&['prompt','versionNote','sourceUrl'].every(k=>typeof q[k]==='string')&&Array.isArray(q.options)&&q.options.length<=8&&q.options.every(o=>o&&typeof o.label==='string'&&/^[A-H]$/.test(o.label)&&typeof o.text==='string'&&o.text.trim())&&new Set(q.options.map(o=>o.label)).size===q.options.length;
+const validQuestionImage=q=>q.imageUrl===undefined||(typeof q.imageUrl==='string'&&/^\.\/figure-assets\/[a-z0-9-]+\.(?:svg|png|webp)$/.test(q.imageUrl)&&typeof q.imageAlt==='string'&&q.imageAlt.trim());
+const validQuestion=q=>q&&typeof q==='object'&&!Array.isArray(q)&&typeof q.stem==='string'&&q.stem.trim()&&['prompt','versionNote','sourceUrl'].every(k=>typeof q[k]==='string')&&Array.isArray(q.options)&&q.options.length<=8&&q.options.every(o=>o&&typeof o.label==='string'&&/^[A-H]$/.test(o.label)&&typeof o.text==='string'&&o.text.trim())&&new Set(q.options.map(o=>o.label)).size===q.options.length&&validQuestionImage(q);
+
+function appendQuestionImage(parent,q){
+ if(!q.imageUrl||!validQuestionImage(q))return;
+ const link=el('a','qa-question-image-link','放大本题图片 ↗'),img=el('img','qa-question-image');
+ link.href=q.imageUrl;link.target='_blank';link.rel='noopener noreferrer';
+ img.src=q.imageUrl;img.alt=q.imageAlt;img.decoding='async';img.setAttribute('style','display:block;width:100%;max-width:900px;height:auto;margin:12px auto;background:#fff');
+ img.onerror=()=>{if(!parent.querySelector?.('.qa-image-error'))parent.append(el('p','qa-image-error','题图未加载，请点击放大图片重试；看清完整图形后再作答。'));};
+ link.append(img);parent.append(link);
+}
 
 // Copy only fields the learner explicitly entered for this question.
 export function questionMessage(id,q){
@@ -213,6 +223,7 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast,navigate=
   if(!q||!q.options?.length){content.append(paragraph('题面或选项尚未补齐，暂不能独立作答。'),button('阅读现有解析','quiet-btn',()=>openAnswer(a)));return;}
   const form=el('form','qa-practice-form'),question=el('section','qa-original');form.id='qa-practice-form';
   question.append(paragraph(q.stem,'qa-copy qa-original-stem'));if(q.prompt)question.append(paragraph(q.prompt,'qa-copy qa-question-prompt'));
+  appendQuestionImage(question,q);
   const options=el('fieldset','qa-choice-list');options.append(el('legend','','选择本次答案'));
   let selectedOption=null,confidence=null;
   for(const option of q.options){
@@ -262,6 +273,7 @@ export function createQuestionBoard({getStudy,setStudy,openModal,toast,navigate=
   if(a.question){
    const q=a.question,question=el('section','qa-original');question.append(el('h3','','题目'),paragraph(q.stem,'qa-copy qa-original-stem'));
    if(q.prompt)question.append(paragraph(q.prompt,'qa-copy qa-question-prompt'));
+   appendQuestionImage(question,q);
    if(q.options.length){const options=el('ol','qa-options');options.setAttribute('aria-label','题目选项');for(const option of q.options){const item=el('li','qa-option');item.append(el('span','qa-option-label',option.label),el('span','qa-option-text',option.text));options.append(item);}question.append(options);}
    if(q.versionNote)question.append(paragraph(q.versionNote,'muted qa-version-note'));
    content.append(question);

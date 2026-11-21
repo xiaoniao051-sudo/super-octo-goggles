@@ -1,0 +1,55 @@
+.sprint-home{margin-bottom:26px;border:1px solid #dbe6de;border-radius:24px;background:#f0f5ef;padding:clamp(17px,4vw,34px);font-size:1rem}
+.sprint-kicker{margin:0 0 6px;color:#28604e;font-size:.875rem;font-weight:700;letter-spacing:.06em}
+.sprint-intro h1{font-family:var(--serif);font-size:clamp(2rem,6.5vw,3.25rem);line-height:1.18;margin:0;letter-spacing:-.045em}
+.sprint-intro>p:last-child{margin:.65rem 0 1.25rem;color:#4f6358}
+.sprint-exams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sprint-exam{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;min-width:0;background:#fffefa;border:1px solid #dde7df;border-radius:15px;padding:13px 14px}
+.sprint-date{white-space:nowrap;display:flex;flex-direction:column;min-width:max-content;align-self:start;padding-right:10px;border-right:1px solid #dbe4db;color:#245543}
+.sprint-date strong{font-size:.9rem}
+.sprint-date span{font-size:.875rem;color:#4f6358}
+.sprint-exam-main h2{font-size:1.03rem;line-height:1.4;margin:0 0 6px}
+.sprint-links{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.sprint-exam .sprint-links{margin:0;gap:5px}
+.sprint-links a{display:inline-flex;align-items:center;min-height:36px;padding:.25rem .55rem;background:#edf3ee;border:1px solid #d7e2d9;border-radius:8px;color:#235641;font-weight:650;font-size:.875rem}
+.sprint-links a:hover,.sprint-links a[aria-current=page]{background:#dceadd}
+.sprint-later{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;padding:10px 3px 0;border-top:1px solid #d8e3da}
+.sprint-later p{margin:0;color:#506057;font-size:.875rem}
+.sprint-heading{margin-bottom:18px}
+.sprint-heading p,.sprint-question,.sprint-vocab,.sprint-groups,.sprint-original{font-size:1rem}
+.sprint-vocab{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.sprint-vocab .panel{margin:0;min-width:0}
+.sprint-vocab h2,.sprint-original h2{font-size:1.125rem;margin:0 0 9px}
+.sprint-vocab .panel p{margin:.5em 0}
+.sprint-words details,.sprint-original details{border-bottom:1px solid var(--line);padding:2px 0}
+.sprint-words details:last-child,.sprint-original details:last-child{border-bottom:0}
+.sprint-words summary,.sprint-original summary{min-height:39px;padding:7px 3px;cursor:pointer;color:#243e33;font-weight:650;overflow-wrap:anywhere}
+.sprint-words p{padding-left:16px}
+.sprint-words p span{display:block;color:#51685c}
+.sprint-original img{display:block;max-width:min(100%,640px);height:auto;margin:8px 0;border:1px solid var(--line)}
+.sprint-groups{display:grid;gap:9px}
+.sprint-count{margin:0;color:#4e6358}
+.sprint-group{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border:1px solid #dbe5dc;background:#fffefa;border-radius:14px}
+.sprint-group:hover{background:#eef5ef}
+.sprint-group h2{font-size:1.04rem;margin:0}
+.sprint-group p{font-size:.875rem;margin:2px 0 0;color:#506057}
+.sprint-group>span{white-space:nowrap;color:#235641;font-size:.875rem}
+.sprint-questions{display:grid;gap:12px}
+.sprint-question{margin:0;padding:14px 17px}
+.sprint-question fieldset{min-width:0;margin:0;padding:0;border:none}
+.sprint-question legend{padding:0;max-width:100%}
+.sprint-q-type,.sprint-stem{display:block}
+.sprint-q-type{color:#52645a;font-size:.875rem}
+.sprint-stem{font-weight:650;margin:4px 0 9px;overflow-wrap:anywhere}
+.sprint-option{display:flex;align-items:flex-start;gap:10px;padding:7px 8px;min-height:42px;cursor:pointer;border:1px solid transparent;border-radius:8px;overflow-wrap:anywhere}
+.sprint-option:has(input:checked){background:#e9f2ea;border-color:#a8c5af}
+.sprint-option input{flex:0 0 auto;width:1.1rem;height:1.1rem;margin:.28em 0 0;accent-color:#236c59}
+.sprint-feedback{margin-top:8px;padding:9px 10px;background:#f5ede3;border-radius:8px;display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+.sprint-feedback.is-correct{background:#e9f2ea}
+.sprint-feedback small{font-size:.875rem;color:#4a5d50}
+.sprint-feedback .button{margin-left:auto}
+.sprint-player{padding:12px 15px}
+.sprint-player audio{display:block;width:100%;min-width:0}
+.sprint-submit{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.sprint-submit .button{min-height:44px}
+@media(max-width:760px){.sprint-exams,.sprint-vocab{grid-template-columns:minmax(0,1fr)}.sprint-intro>p:last-child{display:none}}
+@media(max-width:390px){.sprint-exam{gap:8px;padding:11px 9px}.sprint-date{padding-right:7px}.sprint-exam .sprint-links a{padding-inline:.4rem}.sprint-question{padding:13px 11px}}

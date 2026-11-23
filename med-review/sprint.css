@@ -12,6 +12,9 @@
 .sprint-exam .sprint-links{margin:0;gap:5px}
 .sprint-links a{display:inline-flex;align-items:center;min-height:36px;padding:.25rem .55rem;background:#edf3ee;border:1px solid #d7e2d9;border-radius:8px;color:#235641;font-weight:650;font-size:.875rem}
 .sprint-links a:hover,.sprint-links a[aria-current=page]{background:#dceadd}
+.sprint-type-filters a{min-height:44px;gap:6px}
+.sprint-type-filters a span{font-variant-numeric:tabular-nums;color:#456659}
+.sprint-type-filters a[aria-current=page]{border-color:#51866d}
 .sprint-later{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;padding:10px 3px 0;border-top:1px solid #d8e3da}
 .sprint-later p{margin:0;color:#506057;font-size:.875rem}
 .sprint-heading{margin-bottom:18px}

@@ -5,9 +5,19 @@ const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({
 const tracks = {
   vocabulary: '英语词汇',
   listening: '英语听力',
-  politics: '政治原题',
+  politics: '政治客观题',
   critical: '危重症',
 };
+
+const politicsKinds = {
+  all: '全部题型',
+  single: '单选题',
+  multiple: '多选题',
+  judge: '判断题',
+};
+
+const itemsOfKind = (items, kind) =>
+  kind === 'all' ? items : items.filter(item => item.type === politicsKinds[kind]);
 
 const examRows = [
   ['11 月 28 日', '09:00–11:00', '英语', [
@@ -17,7 +27,7 @@ const examRows = [
     ['公式速查', '#sprint?area=statistics'], ['混合练考', '#exam?course=01']
   ]],
   ['11 月 29 日', '14:30–16:30', '政治 · 新思想', [
-    ['分章刷题', '#sprint?area=politics'], ['待订正', '#sprint?area=politics&mode=wrong']
+    ['客观题练习', '#sprint?area=politics'], ['政治错题', '#sprint?area=politics&mode=wrong']
   ]],
   ['12 月 27 日', '09:00–11:00', '临床思维与人际沟通', [
     ['知识卡', '#subject?id=11'], ['案例练习', '#exam?course=11']
@@ -72,11 +82,22 @@ const stats = [
   ['回归与二项、泊松分布', '回归先算预测值，残差 = 实测值 − 预测值。预测均值区间用预测均值的 SE。', '固定次数的独立等概率试验用二项分布。稳定、独立到达的计数可用 Poisson。至少一次 = 1 − P(0)。'],
 ];
 
-function route(area, group, mode) {
+function route(area, group, mode, kind = 'all') {
   const params = new URLSearchParams({area});
   if (group) params.set('group',group);
   if (mode && mode!=='all') params.set('mode',mode);
+  if (area === 'politics' && kind !== 'all') params.set('kind',kind);
   return `sprint?${params}`;
+}
+
+function politicsFilters({group, mode, kind, items}) {
+  const counts = Object.fromEntries(
+    Object.keys(politicsKinds).map(key => [key, itemsOfKind(items,key).length])
+  );
+  return `<nav class="sprint-links sprint-type-filters" aria-label="按政治题型筛选">
+    ${Object.entries(politicsKinds).map(([key, label]) => `
+      <a href="#${route('politics',group,mode,key)}" ${kind===key?'aria-current="page"':''}>${label} <span>${counts[key]}</span></a>`).join('')}
+  </nav>`;
 }
 
 function heading(title, subtitle) {
@@ -134,20 +155,23 @@ export function createSprintController({state,persist,go,render,toast}) {
     return packs[area];
   }
 
-  function list(area, groups, mode) {
-    const lead = area==='politics' ? '导论至第十章。每章含单选、多选和判断题。'
+  function list(area, groups, mode, kind) {
+    const lead = area==='politics' ? '导论至第十章。卷面客观题共 80 分：单选 40 题、多选 20 题、判断 20 题。'
       : area==='listening' ? '8 组共 40 题。边听边选，交卷后显示参考答案。'
       : '577 道单选、67 道多选，另有 50 道摸底题。';
-    const tabs = `<div class="sprint-links"><a href="#${route(area)}" ${mode==='all'?'aria-current="page"':''}>全部题组</a><a href="#${route(area,null,'wrong')}" ${mode==='wrong'?'aria-current="page"':''}>待订正</a></div>`;
-    const summary = groups.flatMap(g=>g.items);
+    const tabs = `<div class="sprint-links"><a href="#${route(area,null,'all',kind)}" ${mode==='all'?'aria-current="page"':''}>全部题组</a><a href="#${route(area,null,'wrong',kind)}" ${mode==='wrong'?'aria-current="page"':''}>待订正</a></div>`;
+    const allItems = groups.flatMap(g=>g.items);
+    const filters = area === 'politics' ? politicsFilters({mode,kind,items:allItems}) : '';
+    const summary = itemsOfKind(allItems,kind);
     const completed = summary.filter(q=>records[q.id]).length;
     const groupCards = groups.map(group=>{
-      const seen=group.items.filter(q=>records[q.id]).length;
-      const wrong=group.items.filter(q=>records[q.id]?.correct===false).length;
-      if(mode==='wrong'&&!wrong)return '';
-      return `<a class="sprint-group" href="#${route(area,group.id,mode)}"><div><h2>${escape(group.title)}</h2><p>${group.items.length} 题 · 已核对 ${seen}${wrong?` · 待订正 ${wrong}`:''}</p></div><span>${area==='listening'?(group.track?'有配套音频':'待配音频'):mode==='wrong'?'订正':'开始'}</span></a>`;
+      const items = itemsOfKind(group.items,kind);
+      const seen=items.filter(q=>records[q.id]).length;
+      const wrong=items.filter(q=>records[q.id]?.correct===false).length;
+      if(!items.length || (mode==='wrong'&&!wrong))return '';
+      return `<a class="sprint-group" href="#${route(area,group.id,mode,kind)}"><div><h2>${escape(group.title)}</h2><p>${items.length} 题 · 已核对 ${seen}${wrong?` · 待订正 ${wrong}`:''}</p></div><span>${area==='listening'?(group.track?'有配套音频':'待配音频'):mode==='wrong'?'订正':'开始'}</span></a>`;
     }).join('');
-    return heading(tracks[area],lead)+tabs+
+    return heading(tracks[area],lead)+tabs+filters+
       `<section class="sprint-groups" aria-label="题组列表"><p class="sprint-count">已核对 ${completed} / ${summary.length} 题</p>${groupCards || '<p class="panel">目前没有待订正的题。</p>'}</section>`;
   }
 
@@ -159,24 +183,36 @@ export function createSprintController({state,persist,go,render,toast}) {
     if(area==='statistics')return statistics();
     if(!Object.hasOwn(tracks,area))return heading('考前练习','从首页选择科目。');
     const mode=params.get('mode')==='wrong'?'wrong':'all';
+    const requestedKind = params.get('kind');
+    const kind = area === 'politics' && Object.hasOwn(politicsKinds,requestedKind)
+      ? requestedKind : 'all';
     const groups=await load(area);
     if(id!==viewId)return null;
     const group=groups.find(g=>g.id===params.get('group'));
-    if(!group)return list(area,groups,mode);
-    const items=group.items.filter(q=>mode==='all'||records[q.id]?.correct===false||drafts[q.id]?.length);
-    context = {area,group,items,mode};
-    const previous=groups[groups.indexOf(group)-1], next=groups[groups.indexOf(group)+1];
-    const correct=group.items.filter(q=>records[q.id]?.correct===true).length;
-    const done=group.items.filter(q=>records[q.id]).length;
+    if(!group)return list(area,groups,mode,kind);
+    const allItems = itemsOfKind(group.items,kind);
+    const items=allItems.filter(q=>mode==='all'||records[q.id]?.correct===false||
+      (area!=='politics'&&drafts[q.id]?.length));
+    context = {area,group,items,mode,kind};
+    const chapters=area==='politics'&&mode==='wrong'
+      ? groups.filter(chapter=>chapter===group||itemsOfKind(chapter.items,kind).some(q=>records[q.id]?.correct===false))
+      : groups;
+    const adjacent=chapters.indexOf(group);
+    const previous=chapters[adjacent-1], next=chapters[adjacent+1];
+    const correct=allItems.filter(q=>records[q.id]?.correct===true).length;
+    const done=allItems.filter(q=>records[q.id]).length;
+    const filters = area === 'politics'
+      ? politicsFilters({group:group.id,mode,kind,items:group.items}) : '';
     const audio=group.track?`<div class="panel sprint-player"><audio controls preload="none" src="./audio/english-2026/${escape(group.track)}" aria-label="${escape(group.title)}录音"></audio></div>`
       : group.mediaNote?`<p class="notice">${escape(group.mediaNote)}</p>`:'';
-    return `<a class="back" href="#${route(area,null,mode)}">返回${tracks[area]}</a>
-    <div class="page-heading sprint-heading"><p class="sprint-kicker">${tracks[area]}</p><h1>${escape(group.title)}</h1><p>已核对 ${done} / ${group.items.length} 题 · 答对 ${correct} 题</p></div>
+    return `<a class="back" href="#${route(area,null,mode,kind)}">返回${tracks[area]}</a>
+    <div class="page-heading sprint-heading"><p class="sprint-kicker">${tracks[area]}</p><h1>${escape(group.title)}</h1><p>已核对 ${done} / ${allItems.length} 题 · 答对 ${correct} 题</p></div>
     ${area==='critical'?'<p class="notice">按原练习资料的参考答案核对，临床处置以课程要求及现行规范为准。</p>':''}${audio}
     ${mode==='wrong'?'<p class="notice">点击题目下方的「重做这题」后重新作答。</p>':''}
+    ${filters}
     <div class="sprint-questions">${items.map(item=>questionHtml(item,records[item.id],drafts[item.id])).join('') || '<p class="panel">这组没有待订正题。</p>'}</div>
-    <div class="sprint-submit"><button class="button primary" data-action="sprint-submit">核对本组已答题</button><a class="button" href="#${route(area,null,mode)}">查看全部题组</a></div>
-    <div class="sprint-links sprint-group-nav">${previous?`<a href="#${route(area,previous.id,mode)}">上一组</a>`:''}${next?`<a href="#${route(area,next.id,mode)}">下一组</a>`:''}</div>`;
+    <div class="sprint-submit"><button class="button primary" data-action="sprint-submit" ${area==='politics'&&items.every(item=>records[item.id])?'disabled':''}>核对本组已答题</button><a class="button" href="#${route(area,null,mode,kind)}">${area==='politics'?'返回题组列表':'查看全部题组'}</a></div>
+    <div class="sprint-links sprint-group-nav">${previous?`<a href="#${route(area,previous.id,mode,kind)}">上一组</a>`:''}${next?`<a href="#${route(area,next.id,mode,kind)}">下一组</a>`:''}</div>`;
   }
 
   function change(input) {
@@ -195,7 +231,7 @@ export function createSprintController({state,persist,go,render,toast}) {
       if(!context.items.some(q=>q.id===id))return;
       drafts[id]=[];
       delete records[id];
-      if (context.mode==='wrong') go(route(context.area,context.group.id));
+      if (context.mode==='wrong') go(route(context.area,context.group.id,'all',context.kind));
       else render();
     }
     if(el.dataset.action==='sprint-submit') {
